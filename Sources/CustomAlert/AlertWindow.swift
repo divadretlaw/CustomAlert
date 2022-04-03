@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-class AlertWindow {
+enum AlertWindow {
     static var window: UIWindow?
     
     static func present<Content>(_ view: Content) where Content: View {

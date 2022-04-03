@@ -15,7 +15,7 @@ public extension View {
     /// All actions in an alert dismiss the alert after the action runs.
     ///
     /// - Parameters:
-    ///   - title: The title of the alert.
+    ///   - title: The optional title of the alert.
     ///   - isPresented: A binding to a Boolean value that determines whether to
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Custom Alert
 struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     var title: Text?
     @Binding var isPresented: Bool
@@ -16,7 +17,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
     @State private var contentSize: CGSize = .zero
-    @State private var buttonSize: CGSize = .zero
+    @State private var actionsSize: CGSize = .zero
     
     @State private var fitInScreen = false
     
@@ -47,21 +48,26 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     }
     
     var height: CGFloat {
-        // View height - padding top and bottom - button height
-        let maxHeight = viewSize.height - 60 - buttonSize.height
+        // View height - padding top and bottom - actions height
+        let maxHeight = viewSize.height - 60 - actionsSize.height
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
     }
     
     var minWidth: CGFloat {
+        // View width - padding leading and trailing
         let maxWidth = viewSize.width - 60
+        // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
         return max(min, 0)
     }
     
     var maxWidth: CGFloat {
+        // View width - padding leading and trailing
         let maxWidth = viewSize.width - 60
+        // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
+        // Smallest AlertView should be 270
         return max(min, 270)
     }
     
@@ -72,15 +78,14 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                     VStack(spacing: 4) {
                         title?
                             .font(.headline)
-                            .foregroundColor(.primary)
-                            .padding(.horizontal, 8)
+                            .multilineTextAlignment(.center)
                         
                         content()
                             .font(.footnote)
-                            .foregroundColor(.primary)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 8)
                     }
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 8)
                     .padding(.vertical, 20)
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
@@ -95,7 +100,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
             
             _VariadicView.Tree(ContentLayout(isPresented: $isPresented), content: actions)
                 .buttonStyle(.alert)
-                .captureSize($buttonSize)
+                .captureSize($actionsSize)
         }
         .frame(minWidth: minWidth, maxWidth: maxWidth)
         .background(BlurView(style: .systemMaterial))
@@ -103,16 +108,6 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
         .padding(30)
         .transition(.opacity.combined(with: .scale(scale: 1.1)))
         .animation(.default, value: isPresented)
-    }
-    
-    init(title: Text? = nil,
-         isPresented: Binding<Bool>,
-         @ViewBuilder content: @escaping () -> Content,
-         @ViewBuilder actions: @escaping () -> Actions) {
-        self.title = title
-        self._isPresented = isPresented
-        self.content = content
-        self.actions = actions
     }
 }
 

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AlertButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) var colorScheme
+    
     func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
             Spacer()
@@ -48,7 +50,14 @@ struct AlertButtonStyle: ButtonStyle {
     @ViewBuilder
     func background(configuration: Self.Configuration) -> some View {
         if configuration.isPressed {
-            Color.black.opacity(0.08)
+            switch colorScheme {
+            case .dark:
+                Color.white.opacity(0.135)
+            case .light:
+                Color.black.opacity(0.085)
+            @unknown default:
+                Color.primary.opacity(0.085)
+            }
         } else {
             Color.almostClear
         }

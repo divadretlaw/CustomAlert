@@ -26,6 +26,8 @@ enum AlertWindow {
         window.rootViewController = UIViewController(nibName: nil, bundle: nil)
         window.windowLevel = .alert
         window.backgroundColor = .clear
+        window.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
+
         window.subviews.forEach { $0.isHidden = true }
         window.makeKeyAndVisible()
         

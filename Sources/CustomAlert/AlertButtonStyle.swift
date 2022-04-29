@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct AlertButtonStyle: ButtonStyle {
+public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     
-    func makeBody(configuration: Self.Configuration) -> some View {
+    public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
             Spacer()
             label(configuration: configuration)
@@ -20,6 +20,7 @@ struct AlertButtonStyle: ButtonStyle {
             Spacer()
         }
         .padding(12)
+        .frame(maxHeight: .infinity)
         .background(background(configuration: configuration))
     }
     
@@ -65,7 +66,8 @@ struct AlertButtonStyle: ButtonStyle {
 }
 
 extension ButtonStyle where Self == AlertButtonStyle {
-    static var alert: Self {
+    public static var alert: Self {
         AlertButtonStyle()
     }
 }
+

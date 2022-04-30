@@ -9,6 +9,7 @@ import SwiftUI
 
 public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
+    var maxHeight: CGFloat?
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
@@ -20,7 +21,7 @@ public struct AlertButtonStyle: ButtonStyle {
             Spacer()
         }
         .padding(12)
-        .frame(maxHeight: .infinity)
+        .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
     }
     
@@ -69,5 +70,8 @@ extension ButtonStyle where Self == AlertButtonStyle {
     public static var alert: Self {
         AlertButtonStyle()
     }
+    
+    static func alert(maxHeight: CGFloat?) -> Self {
+        AlertButtonStyle(maxHeight: maxHeight)
+    }
 }
-

@@ -23,6 +23,7 @@ public struct SideBySideButton<LeftContent, RightContent>: View where LeftConten
                 .frame(maxWidth: .infinity)
         }
         .fixedSize(horizontal: false, vertical: true)
+        .buttonStyle(.alert(maxHeight: .infinity))
     }
     
     /// Creates two buttons with the specified roles that displays custom labels.

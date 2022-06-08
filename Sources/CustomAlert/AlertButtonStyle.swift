@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/// A button style that applies standard alert styling
+///
+/// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     var maxHeight: CGFloat?
@@ -23,6 +26,14 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(12)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+    }
+    
+    public init() {
+        maxHeight = nil
+    }
+    
+    init(maxHeight: CGFloat?) {
+        self.maxHeight = maxHeight
     }
     
     @ViewBuilder
@@ -67,6 +78,10 @@ public struct AlertButtonStyle: ButtonStyle {
 }
 
 extension ButtonStyle where Self == AlertButtonStyle {
+    /// A button style that applies standard alert styling
+    ///
+    /// To apply this style to a button, or to a view that contains buttons, use
+    /// the ``View/buttonStyle(_:)`` modifier.
     public static var alert: Self {
         AlertButtonStyle()
     }

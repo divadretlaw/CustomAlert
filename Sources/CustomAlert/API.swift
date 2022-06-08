@@ -35,6 +35,10 @@ public extension View {
                 }
             }
             .disabled(isPresented.wrappedValue)
+            .onAppear {
+                guard isPresented.wrappedValue else { return }
+                AlertWindow.present(CustomAlert(title: title, isPresented: isPresented, content: content, actions: actions))
+            }
             .onDisappear {
                 AlertWindow.dismiss()
             }

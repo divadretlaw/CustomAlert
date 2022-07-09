@@ -13,6 +13,7 @@ enum AlertWindow {
     
     static func present<Content>(_ view: Content) where Content: View {
         guard let window = createWindow() else {
+            print("The hosting window could not be created. This is a bug.")
             return
         }
         

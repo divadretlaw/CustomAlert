@@ -12,8 +12,13 @@ enum AlertWindow {
     static var window: UIWindow?
     
     static func present<Content>(_ view: Content) where Content: View {
+        guard window == nil else {
+            print("[CustomAlert] Attempt to present an alert while the AlertWindow is already presenting another alert.")
+            return
+        }
+        
         guard let window = createWindow() else {
-            print("The hosting window could not be created. This is a bug.")
+            print("[CustomAlert] The hosting window could not be created.")
             return
         }
         

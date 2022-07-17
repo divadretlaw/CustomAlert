@@ -7,6 +7,39 @@
 
 import SwiftUI
 
+/// A control that wraps multiple actions horizontally.
+///
+/// Used to create side by side buttons on a `.customAlert`
+public struct MultiButton<Content>: View where Content: View {
+    @ViewBuilder public var content: () -> Content
+    
+    public var body: some View {
+        _VariadicView.Tree(ContentLayout(), content: content)
+    }
+    
+    /// Creates multiple buttons within the MultiButton Layout.
+    ///
+    /// - Parameters:
+    ///   - content: The `ViewBuilder` with multiple `Button`s
+    public init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content
+    }
+    
+    struct ContentLayout: _VariadicView_ViewRoot {
+        func body(children: _VariadicView.Children) -> some View {
+            HStack(spacing: 0) {
+                children.first
+                ForEach(children.dropFirst()) { child in
+                    Divider()
+                    child
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .buttonStyle(.alert(maxHeight: .infinity))
+        }
+    }
+}
+
 /// A control that initiates two actions. One left and one right
 ///
 /// Used to create side by side buttons on a `.customAlert`
@@ -55,7 +88,7 @@ public struct SideBySideButton<LeftContent, RightContent>: View where LeftConten
     ///   - actionRight: The action to perform when the user interacts with the right button.
     ///   - labelLeft: A view that describes the purpose of the left button's `action`.
     ///   - labelRight: A view that describes the purpose of the right button's `action`.
-    public init(actionLeft: @escaping () -> Void,
+    @_disfavoredOverload public init(actionLeft: @escaping () -> Void,
                 actionRight: @escaping () -> Void,
                 @ViewBuilder labelLeft: @escaping () -> LeftContent,
                 @ViewBuilder labelRight: @escaping () -> RightContent) {

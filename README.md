@@ -16,7 +16,13 @@ If the content is too large because the text is too long or the text doesn't fit
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 
+Something simple with an image
+
 ![Custom Alert](Resources/Fancy.png)
+
+Or more complex layouts
+
+![Custom Alert](Resources/Complex.png)
 
 The API is very similar to the SwiftUI Alerts
 
@@ -41,6 +47,40 @@ The API is very similar to the SwiftUI Alerts
     } label: {
         Text("Cancel")
     }
+}
+```
+
+You can create Side by Side Buttons using `MultiButton`
+
+```swift
+.customAlert("Alert with Side by Side Buttons", isPresented: $showAlert) {
+    Text("Choose left or right")
+} actions: {
+	MultiButton {
+	    Button {
+	        // some Action
+	    } label: {
+	        Text("Left")
+	    }
+	    
+	    Button {
+	        // some Action
+	    } label: {
+	        Text("Right")
+	    }
+    }
+}
+```
+
+You can also display an Alert inline, within a `List` for example
+
+![Inline Alert](Resources/InlineAlert.png)
+
+```swift
+InlineAlert {
+    // Content
+} actions: {
+    // Actions
 }
 ```
 

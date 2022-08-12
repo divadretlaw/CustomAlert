@@ -7,24 +7,21 @@
 
 import UIKit
 import SwiftUI
+import os
 
 enum AlertWindow {
-    static var window: UIWindow?
+    static var allWindows: [UIWindowScene: UIWindow] = [:]
     
-    static func present<Content>(_ view: Content) where Content: View {
-        guard window == nil else {
-            print("[CustomAlert] Attempt to present an alert while the AlertWindow is already presenting another alert.")
+    static func present<Content>(on windowScene: UIWindowScene, view: () -> Content) where Content: View {
+        guard allWindows[windowScene] == nil else {
+            os_log(.error, "Attempt to present an alert while the AlertWindow is already presenting another alert.")
             return
         }
         
-        guard let window = createWindow() else {
-            print("[CustomAlert] The hosting window could not be created.")
-            return
-        }
+        let window = UIWindow(windowScene: windowScene)
+        allWindows[windowScene] = window
         
-        self.window = window
-        
-        let hostingController = UIHostingController(rootView: view)
+        let hostingController = UIHostingController(rootView: view())
         hostingController.view.backgroundColor = .clear
         hostingController.modalTransitionStyle = .crossDissolve
         hostingController.modalPresentationStyle = .fullScreen
@@ -42,18 +39,19 @@ enum AlertWindow {
         }
     }
     
-    static func dismiss() {
-        window?.isHidden = true
-        window = nil
+    static func dismiss(on windowScene: UIWindowScene?) {
+        if let windowScene = windowScene {
+            guard let window = allWindows[windowScene] else { return }
+            window.isHidden = true
+            allWindows[windowScene] = nil
+        } else {
+            dismiss()
+        }
     }
     
-    static func createWindow() -> UIWindow? {
-        let scene = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first { $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive }
-        
-        guard let windowScene = scene else { return nil }
-        return UIWindow(windowScene: windowScene)
+    static func dismiss() {
+        allWindows.forEach { key, value in
+            dismiss(on: key)
+        }
     }
 }
-

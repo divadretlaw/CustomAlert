@@ -30,6 +30,7 @@ public extension View {
         background(WindowSceneReader { windowScene in
             customAlert(title, isPresented: isPresented, on: windowScene, content: content, actions: actions)
         })
+        .disabled(isPresented.wrappedValue)
     }
     
     /// Presents an alert when a given condition is true, using
@@ -122,7 +123,6 @@ public extension View {
                     AlertWindow.dismiss(on: windowScene)
                 }
             }
-            .disabled(isPresented.wrappedValue)
             .onAppear {
                 guard isPresented.wrappedValue else { return }
                 AlertWindow.present(on: windowScene) {
@@ -144,7 +144,6 @@ public extension View {
                     // causing all alerts to be hidden immediately after appearing
                 }
             }
-            .disabled(isPresented.wrappedValue)
             .onDisappear {
                 AlertWindow.dismiss(on: windowScene)
             }

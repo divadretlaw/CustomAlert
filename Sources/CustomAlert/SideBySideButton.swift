@@ -35,7 +35,8 @@ public struct MultiButton<Content>: View where Content: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-            .buttonStyle(.alert(maxHeight: .infinity))
+            .buttonStyle(.alert)
+            .environment(\.alertButtonHeight, .infinity)
         }
     }
 }
@@ -43,6 +44,7 @@ public struct MultiButton<Content>: View where Content: View {
 /// A control that initiates two actions. One left and one right
 ///
 /// Used to create side by side buttons on a `.customAlert`
+@available(*, deprecated, message: "Prefer using `MultiButton` instead.")
 public struct SideBySideButton<LeftContent, RightContent>: View where LeftContent: View, RightContent: View {
     var buttonLeft: Button<LeftContent>
     var buttonRight: Button<RightContent>
@@ -56,7 +58,8 @@ public struct SideBySideButton<LeftContent, RightContent>: View where LeftConten
                 .frame(maxWidth: .infinity)
         }
         .fixedSize(horizontal: false, vertical: true)
-        .buttonStyle(.alert(maxHeight: .infinity))
+        .buttonStyle(.alert)
+        .environment(\.alertButtonHeight, .infinity)
     }
     
     /// Creates two buttons with the specified roles that displays custom labels.

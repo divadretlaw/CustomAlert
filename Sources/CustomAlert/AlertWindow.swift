@@ -7,14 +7,12 @@
 
 import UIKit
 import SwiftUI
-import os
 
 enum AlertWindow {
     static var allWindows: [UIWindowScene: UIWindow] = [:]
     
     static func present<Content>(on windowScene: UIWindowScene, view: () -> Content) where Content: View {
         guard allWindows[windowScene] == nil else {
-            os_log(.error, "Attempt to present an alert while the AlertWindow is already presenting another alert.")
             return
         }
         

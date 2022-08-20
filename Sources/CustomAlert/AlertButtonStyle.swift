@@ -12,7 +12,7 @@ import SwiftUI
 /// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
-    var maxHeight: CGFloat?
+    @Environment(\.alertButtonHeight) var maxHeight
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
@@ -26,14 +26,6 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(12)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
-    }
-    
-    public init() {
-        maxHeight = nil
-    }
-    
-    init(maxHeight: CGFloat?) {
-        self.maxHeight = maxHeight
     }
     
     @ViewBuilder
@@ -85,8 +77,21 @@ extension ButtonStyle where Self == AlertButtonStyle {
     public static var alert: Self {
         AlertButtonStyle()
     }
-    
-    static func alert(maxHeight: CGFloat?) -> Self {
-        AlertButtonStyle(maxHeight: maxHeight)
+}
+
+struct AlertButtonHeightKey: EnvironmentKey {
+    static var defaultValue: CGFloat? {
+        nil
+    }
+}
+
+extension EnvironmentValues {
+    var alertButtonHeight: CGFloat? {
+        get {
+            self[AlertButtonHeightKey.self]
+        }
+        set {
+            self[AlertButtonHeightKey.self] = newValue
+        }
     }
 }

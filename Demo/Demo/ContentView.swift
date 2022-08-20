@@ -43,6 +43,7 @@ struct ContentView: View {
                     } label: {
                         Text("Simple MultiButton")
                     }
+                    
                     Button {
                         showComplexMultiButton = true
                     } label: {
@@ -64,7 +65,6 @@ struct ContentView: View {
                     Text("Custom")
                 }
             }
-            .navigationTitle("Custom Alert")
             .alert("Native Alert", isPresented: $showSimpleNative) {
                 Button(role: .cancel) {
                     
@@ -123,7 +123,7 @@ struct ContentView: View {
                     }
                 }
                 
-                Button {
+                Button(role: .cancel) {
                     
                 } label: {
                     Text("Cancel")
@@ -178,6 +178,7 @@ struct ContentView: View {
                     Text("Cancel")
                 }
             }
+            .navigationTitle("Custom Alert")
         }
     }
 }

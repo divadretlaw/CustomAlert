@@ -12,7 +12,6 @@ let package = Package(
             targets: ["CustomAlert"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/divadretlaw/WindowSceneReader", from: "1.0.0")
     ],
     targets: [

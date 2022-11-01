@@ -12,17 +12,17 @@ If the content is too large because the text is too long or the text doesn't fit
 
 | SwiftUI Alert | Custom Alert |
 |:-:|:-:|
-| ![Native Alert](Resources/SwiftUI.png) | ![Custom Alert](Resources/Custom.png) |
+| ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom.png) |
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 
 Something simple with an image
 
-![Custom Alert](Resources/Fancy.png)
+![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Fancy.png)
 
 Or more complex layouts
 
-![Custom Alert](Resources/Complex.png)
+![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Complex.png)
 
 The API is very similar to the SwiftUI Alerts
 
@@ -74,7 +74,7 @@ You can create Side by Side Buttons using `MultiButton`
 
 You can also display an Alert inline, within a `List` for example
 
-![Inline Alert](Resources/InlineAlert.png)
+![Inline Alert](Sources/CustomAlert/Documentation.docc/Resources/InlineAlert.png)
 
 ```swift
 InlineAlert {

@@ -89,6 +89,8 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                     .padding(.vertical, 20)
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
+                    // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
+                    .environment(\.isEnabled, true)
                 }
                 .frame(height: height)
                 .onUpdate(of: contentSize) { contentSize in

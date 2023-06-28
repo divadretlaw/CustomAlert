@@ -22,13 +22,14 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Content, Actions>(_ title: Text? = nil,
-                                       isPresented: Binding<Bool>,
-                                       @ViewBuilder content: @escaping () -> Content,
-                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Content, Actions>(_ title: Text? = nil,
+                                                                isPresented: Binding<Bool>,
+                                                                @ViewBuilder content: @escaping () -> Content,
+                                                                @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
-        background(WindowSceneReader { windowScene in
-            customAlert(title, isPresented: isPresented, on: windowScene, content: content, actions: actions)
+        self.background(WindowSceneReader { windowScene in
+            Color.clear
+                .customAlert(title, isPresented: isPresented, on: windowScene, content: content, actions: actions)
         })
         .disabled(isPresented.wrappedValue)
     }
@@ -45,12 +46,12 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Content, Actions>(_ title: LocalizedStringKey,
-                                       isPresented: Binding<Bool>,
-                                       @ViewBuilder content: @escaping () -> Content,
-                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Content, Actions>(_ title: LocalizedStringKey,
+                                                                isPresented: Binding<Bool>,
+                                                                @ViewBuilder content: @escaping () -> Content,
+                                                                @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
+        self.customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
     }
     
     /// Presents an alert when a given condition is true
@@ -64,12 +65,12 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Title, Content, Actions>(_ title: Title,
-                                              isPresented: Binding<Bool>,
-                                              @ViewBuilder content: @escaping () -> Content,
-                                              @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Title, Content, Actions>(_ title: Title,
+                                                                       isPresented: Binding<Bool>,
+                                                                       @ViewBuilder content: @escaping () -> Content,
+                                                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Title: StringProtocol, Content: View, Actions: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
+        self.customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -84,12 +85,12 @@ public extension View {
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Content, Actions>(isPresented: Binding<Bool>,
-                                       title: @escaping () -> Text?,
-                                       @ViewBuilder content: @escaping () -> Content,
-                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Content, Actions>(isPresented: Binding<Bool>,
+                                                                title: @escaping () -> Text?,
+                                                                @ViewBuilder content: @escaping () -> Content,
+                                                                @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
-        customAlert(title(), isPresented: isPresented, content: content, actions: actions)
+        self.customAlert(title(), isPresented: isPresented, content: content, actions: actions)
     }
 }
 
@@ -107,14 +108,14 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @ViewBuilder func customAlert<Content, Actions>(_ title: Text? = nil,
-                                                    isPresented: Binding<Bool>,
-                                                    on windowScene: UIWindowScene,
-                                                    @ViewBuilder content: @escaping () -> Content,
-                                                    @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @ViewBuilder @warn_unqualified_access func customAlert<Content, Actions>(_ title: Text? = nil,
+                                                                             isPresented: Binding<Bool>,
+                                                                             on windowScene: UIWindowScene,
+                                                                             @ViewBuilder content: @escaping () -> Content,
+                                                                             @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
         if #available(iOS 14, *) {
-            onChange(of: isPresented.wrappedValue) { value in
+            self.onChange(of: isPresented.wrappedValue) { value in
                 if value {
                     AlertWindow.present(on: windowScene) {
                         CustomAlert(title: title, isPresented: isPresented, content: content, actions: actions)
@@ -133,7 +134,7 @@ public extension View {
                 AlertWindow.dismiss(on: windowScene)
             }
         } else {
-            onReceive(Just(isPresented.wrappedValue)) { value in
+            self.onReceive(Just(isPresented.wrappedValue)) { value in
                 if value {
                     AlertWindow.present(on: windowScene) {
                         CustomAlert(title: title, isPresented: isPresented, content: content, actions: actions)
@@ -163,11 +164,11 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Content, Actions>(_ title: LocalizedStringKey,
-                                       isPresented: Binding<Bool>,
-                                       on windowScene: UIWindowScene,
-                                       @ViewBuilder content: @escaping () -> Content,
-                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Content, Actions>(_ title: LocalizedStringKey,
+                                                                isPresented: Binding<Bool>,
+                                                                on windowScene: UIWindowScene,
+                                                                @ViewBuilder content: @escaping () -> Content,
+                                                                @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
         self.customAlert(Text(title), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
@@ -184,11 +185,11 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Title, Content, Actions>(_ title: Title,
-                                              isPresented: Binding<Bool>,
-                                              on windowScene: UIWindowScene,
-                                              @ViewBuilder content: @escaping () -> Content,
-                                              @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Title, Content, Actions>(_ title: Title,
+                                                                       isPresented: Binding<Bool>,
+                                                                       on windowScene: UIWindowScene,
+                                                                       @ViewBuilder content: @escaping () -> Content,
+                                                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Title: StringProtocol, Content: View, Actions: View {
         self.customAlert(Text(title), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
@@ -206,13 +207,13 @@ public extension View {
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    func customAlert<Content, Actions>(isPresented: Binding<Bool>,
-                                       on windowScene: UIWindowScene,
-                                       title: @escaping () -> Text?,
-                                       @ViewBuilder content: @escaping () -> Content,
-                                       @ViewBuilder actions: @escaping () -> Actions) -> some View
+    @warn_unqualified_access func customAlert<Content, Actions>(isPresented: Binding<Bool>,
+                                                                on windowScene: UIWindowScene,
+                                                                title: @escaping () -> Text?,
+                                                                @ViewBuilder content: @escaping () -> Content,
+                                                                @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
-        customAlert(title(), isPresented: isPresented, on: windowScene, content: content, actions: actions)
+        self.customAlert(title(), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
 }
 
@@ -228,11 +229,11 @@ public extension View {
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    func customAlert<Content>(_ title: Text? = nil,
-                              isPresented: Binding<Bool>,
-                              @ViewBuilder content: @escaping () -> Content) -> some View
+    @warn_unqualified_access func customAlert<Content>(_ title: Text? = nil,
+                                                       isPresented: Binding<Bool>,
+                                                       @ViewBuilder content: @escaping () -> Content) -> some View
     where Content: View {
-        customAlert(title, isPresented: isPresented, content: content, actions: { /* no actions */ })
+        self.customAlert(title, isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using
@@ -246,11 +247,11 @@ public extension View {
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    func customAlert<Content>(_ title: LocalizedStringKey,
-                              isPresented: Binding<Bool>,
-                              @ViewBuilder content: @escaping () -> Content) -> some View
+    @warn_unqualified_access func customAlert<Content>(_ title: LocalizedStringKey,
+                                                       isPresented: Binding<Bool>,
+                                                       @ViewBuilder content: @escaping () -> Content) -> some View
     where Content: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
+        self.customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true
@@ -263,11 +264,11 @@ public extension View {
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    func customAlert<Title, Content>(_ title: Title,
-                                     isPresented: Binding<Bool>,
-                                     @ViewBuilder content: @escaping () -> Content) -> some View
+    @warn_unqualified_access func customAlert<Title, Content>(_ title: Title,
+                                                              isPresented: Binding<Bool>,
+                                                              @ViewBuilder content: @escaping () -> Content) -> some View
     where Title: StringProtocol, Content: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
+        self.customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -281,10 +282,10 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    func customAlert<Content>(isPresented: Binding<Bool>,
-                              title: @escaping () -> Text?,
-                              @ViewBuilder content: @escaping () -> Content) -> some View
+    @warn_unqualified_access func customAlert<Content>(isPresented: Binding<Bool>,
+                                                       title: @escaping () -> Text?,
+                                                       @ViewBuilder content: @escaping () -> Content) -> some View
     where Content: View {
-        customAlert(title(), isPresented: isPresented, content: content, actions: { /* no actions */ })
+        self.customAlert(title(), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
 }

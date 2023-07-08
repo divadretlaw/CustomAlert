@@ -27,11 +27,8 @@ public extension View {
                                                                 @ViewBuilder content: @escaping () -> Content,
                                                                 @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
-        self.background(WindowSceneReader { windowScene in
-            Color.clear
-                .customAlert(title, isPresented: isPresented, on: windowScene, content: content, actions: actions)
-        })
-        .disabled(isPresented.wrappedValue)
+        self.disabled(isPresented.wrappedValue)
+            .background(WrappedCustomAlert(title: title, isPresented: isPresented, content: content, actions: actions))
     }
     
     /// Presents an alert when a given condition is true, using
@@ -114,41 +111,7 @@ public extension View {
                                                                              @ViewBuilder content: @escaping () -> Content,
                                                                              @ViewBuilder actions: @escaping () -> Actions) -> some View
     where Content: View, Actions: View {
-        if #available(iOS 14, *) {
-            self.onChange(of: isPresented.wrappedValue) { value in
-                if value {
-                    AlertWindow.present(on: windowScene) {
-                        CustomAlert(title: title, isPresented: isPresented, content: content, actions: actions)
-                    }
-                } else {
-                    AlertWindow.dismiss(on: windowScene)
-                }
-            }
-            .onAppear {
-                guard isPresented.wrappedValue else { return }
-                AlertWindow.present(on: windowScene) {
-                    CustomAlert(title: title, isPresented: isPresented, content: content, actions: actions)
-                }
-            }
-            .onDisappear {
-                AlertWindow.dismiss(on: windowScene)
-            }
-        } else {
-            self.onReceive(Just(isPresented.wrappedValue)) { value in
-                if value {
-                    AlertWindow.present(on: windowScene) {
-                        CustomAlert(title: title, isPresented: isPresented, content: content, actions: actions)
-                    }
-                } else {
-                    // Cannot use this to hide the alert on iOS 13 because `onReceive`
-                    // will get called for all alerts if there are multiple on a single view
-                    // causing all alerts to be hidden immediately after appearing
-                }
-            }
-            .onDisappear {
-                AlertWindow.dismiss(on: windowScene)
-            }
-        }
+        modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: windowScene, alertContent: content, alertActions: actions))
     }
     
     /// Presents an alert when a given condition is true, using

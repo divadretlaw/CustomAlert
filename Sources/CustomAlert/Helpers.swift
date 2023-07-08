@@ -81,4 +81,3 @@ struct BlurView: UIViewRepresentable {
 
     }
 }
-

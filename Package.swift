@@ -11,7 +11,8 @@ let package = Package(
     products: [
         .library(
             name: "CustomAlert",
-            targets: ["CustomAlert"]),
+            targets: ["CustomAlert"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/divadretlaw/WindowSceneReader", from: "2.0.0")

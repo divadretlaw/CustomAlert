@@ -15,7 +15,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/divadretlaw/WindowSceneReader", from: "2.0.0")
+        .package(url: "https://github.com/divadretlaw/WindowSceneReader", from: "2.1.0")
     ],
     targets: [
         .target(name: "CustomAlert", dependencies: ["WindowSceneReader"])

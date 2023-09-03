@@ -10,6 +10,8 @@ import WindowSceneReader
 import Combine
 
 struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertContent: View, AlertActions: View {
+    @Environment(\.self) private var environment
+    
     var title: Text?
     @Binding var isPresented: Bool
     var windowScene: UIWindowScene
@@ -24,6 +26,7 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
                     if value {
                         AlertWindow.present(on: windowScene) {
                             CustomAlert(title: title, isPresented: $isPresented, content: alertContent, actions: alertActions)
+                                .environment(\.self, environment)
                         }
                     } else {
                         AlertWindow.dismiss(on: windowScene)
@@ -33,6 +36,7 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
                     guard isPresented else { return }
                     AlertWindow.present(on: windowScene) {
                         CustomAlert(title: title, isPresented: $isPresented, content: alertContent, actions: alertActions)
+                            .environment(\.self, environment)
                     }
                 }
                 .onDisappear {
@@ -45,6 +49,7 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
                     if value {
                         AlertWindow.present(on: windowScene) {
                             CustomAlert(title: title, isPresented: $isPresented, content: alertContent, actions: alertActions)
+                                .environment(\.self, environment)
                         }
                     } else {
                         // Cannot use this to hide the alert on iOS 13 because `onReceive`

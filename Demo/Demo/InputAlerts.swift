@@ -25,7 +25,7 @@ struct InputAlerts: View {
                     .padding(4)
                     .background {
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white)
+                            .fill(Color(uiColor: .systemBackground))
                     }
             } actions: {
                 Button(role: .cancel) {

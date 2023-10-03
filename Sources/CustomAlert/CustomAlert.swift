@@ -96,7 +96,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                 .onUpdate(of: contentSize) { contentSize in
                     fitInScreen = contentSize.height <= proxy.size.height
                 }
-                .disabled(fitInScreen)
+                .scrollViewDisabled(fitInScreen)
             }
             .frame(height: height)
             

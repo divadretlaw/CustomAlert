@@ -19,7 +19,7 @@ If the content is too large because the text is too long or the text doesn't fit
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 
-Something simple with an image
+Something simple with an image and a text field
 
 ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Fancy.png)
 

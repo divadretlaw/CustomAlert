@@ -81,3 +81,23 @@ struct BlurView: UIViewRepresentable {
 
     }
 }
+
+// MARK: - ScrollView disabled
+
+extension View {
+    func scrollViewDisabled(_ disabled: Bool) -> some View {
+        modifier(DisabledViewModifier(isDisabled: disabled))
+    }
+}
+
+private struct DisabledViewModifier: ViewModifier {
+    var isDisabled: Bool
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 16.0, *) {
+            content.scrollDisabled(isDisabled)
+        } else {
+            content.disabled(isDisabled)
+        }
+    }
+}

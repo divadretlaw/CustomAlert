@@ -10,7 +10,7 @@ The API is very similar to the SwiftUI Alerts
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 
-Something simple with an image
+Something simple with an image and a text field
 
 ![Custom Alert](Fancy)
 

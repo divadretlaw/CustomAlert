@@ -10,7 +10,10 @@ import CustomAlert
 
 struct OtherAlerts: View {
     @State private var showStacked = false
+    @State private var showFancy = false
     @State private var showNoButton = false
+    
+    @State private var message = ""
     
     var body: some View {
         Section {
@@ -70,6 +73,50 @@ struct OtherAlerts: View {
                     
                 } label: {
                     Text("Cancel")
+                }
+            }
+            
+            Button {
+                showFancy = true
+            } label: {
+                Text("Fancy")
+            }
+            .customAlert(isPresented: $showFancy) {
+                VStack(spacing: 20) {
+                    Image("jane")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .background(.ultraThinMaterial.blendMode(.multiply))
+                        .clipShape(Circle())
+                    
+                    VStack(spacing: 4) {
+                        Text("Remind Jane")
+                            .font(.headline)
+                        
+                        Text("Send a reminder to Jane about \"Birthday Party\"")
+                            .font(.footnote)
+                    }
+                    
+                    TextField("Message", text: $message)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity)
+                        .padding(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                        .background(.ultraThinMaterial.blendMode(.multiply))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+            } actions: {
+                MultiButton {
+                    Button(role: .cancel) {
+                        message = ""
+                    } label: {
+                        Text("Cancel")
+                    }
+                    
+                    Button {
+                        message = ""
+                    } label: {
+                        Text("Send")
+                    }
                 }
             }
         } header: {

@@ -1,5 +1,5 @@
 //
-//  ViewExtensions.swift
+//  API.swift
 //  CustomAlert
 //
 //  Created by David Walter on 03.04.22.
@@ -125,8 +125,7 @@ public extension View {
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Content: View, Actions: View {
+    ) -> some View where Content: View, Actions: View {
         return modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: windowScene, alertContent: content, alertActions: actions))
     }
     
@@ -143,12 +142,13 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access func customAlert<Content, Actions>(_ title: LocalizedStringKey,
-                                                                isPresented: Binding<Bool>,
-                                                                on windowScene: UIWindowScene,
-                                                                @ViewBuilder content: @escaping () -> Content,
-                                                                @ViewBuilder actions: @escaping () -> Actions) -> some View
-    where Content: View, Actions: View {
+    @warn_unqualified_access func customAlert<Content, Actions>(
+        _ title: LocalizedStringKey,
+        isPresented: Binding<Bool>,
+        on windowScene: UIWindowScene,
+        @ViewBuilder content: @escaping () -> Content,
+        @ViewBuilder actions: @escaping () -> Actions
+    ) -> some View where Content: View, Actions: View {
         self.customAlert(Text(title), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
     
@@ -172,8 +172,7 @@ public extension View {
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Title: StringProtocol, Content: View, Actions: View {
+    ) -> some View where Title: StringProtocol, Content: View, Actions: View {
         self.customAlert(Text(title), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
     
@@ -197,8 +196,7 @@ public extension View {
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Content: View, Actions: View {
+    ) -> some View where Content: View, Actions: View {
         self.customAlert(title(), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
 }
@@ -220,8 +218,7 @@ public extension View {
         _ title: Text? = nil,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
-    ) -> some View
-    where Content: View {
+    ) -> some View where Content: View {
         self.customAlert(title, isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
@@ -241,8 +238,7 @@ public extension View {
         _ title: LocalizedStringKey,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
-    ) -> some View
-    where Content: View {
+    ) -> some View where Content: View {
         self.customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
@@ -262,8 +258,7 @@ public extension View {
         _ title: Title,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
-    ) -> some View
-    where Title: StringProtocol, Content: View {
+    ) -> some View where Title: StringProtocol, Content: View {
         self.customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
@@ -283,8 +278,7 @@ public extension View {
         isPresented: Binding<Bool>,
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content
-    ) -> some View
-    where Content: View {
+    ) -> some View where Content: View {
         self.customAlert(title(), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
 }

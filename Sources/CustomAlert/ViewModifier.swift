@@ -1,5 +1,5 @@
 //
-//  CustomAlert+ViewModifier.swift
+//  ViewModifier.swift
 //  CustomAlert
 //
 //  Created by David Walter on 28.06.23.

@@ -33,7 +33,7 @@ public struct InlineAlert<Content, Actions>: View where Content: View, Actions: 
     }
     
     /// Change the corner radius of the alert view
-    /// 
+    ///
     /// - Parameter value: The radius to use
     public func cornerRadius(_ value: CGFloat) -> Self {
         var view = self

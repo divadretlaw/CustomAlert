@@ -74,12 +74,14 @@ public struct SideBySideButton<LeftContent, RightContent>: View where LeftConten
     ///   - labelLeft: A view that describes the purpose of the left button's `action`.
     ///   - labelRight: A view that describes the purpose of the right button's `action`.
     @available(iOS 15, *)
-    public init(roleLeft: ButtonRole? = nil,
-                roleRight: ButtonRole? = nil,
-                actionLeft: @escaping () -> Void,
-                actionRight: @escaping () -> Void,
-                @ViewBuilder labelLeft: @escaping () -> LeftContent,
-                @ViewBuilder labelRight: @escaping () -> RightContent) {
+    public init(
+        roleLeft: ButtonRole? = nil,
+        roleRight: ButtonRole? = nil,
+        actionLeft: @escaping () -> Void,
+        actionRight: @escaping () -> Void,
+        @ViewBuilder labelLeft: @escaping () -> LeftContent,
+        @ViewBuilder labelRight: @escaping () -> RightContent
+    ) {
         self.buttonLeft = Button(role: roleLeft, action: actionLeft, label: labelLeft)
         self.buttonRight = Button(role: roleRight, action: actionRight, label: labelRight)
     }
@@ -91,10 +93,12 @@ public struct SideBySideButton<LeftContent, RightContent>: View where LeftConten
     ///   - actionRight: The action to perform when the user interacts with the right button.
     ///   - labelLeft: A view that describes the purpose of the left button's `action`.
     ///   - labelRight: A view that describes the purpose of the right button's `action`.
-    @_disfavoredOverload public init(actionLeft: @escaping () -> Void,
-                actionRight: @escaping () -> Void,
-                @ViewBuilder labelLeft: @escaping () -> LeftContent,
-                @ViewBuilder labelRight: @escaping () -> RightContent) {
+    @_disfavoredOverload public init(
+        actionLeft: @escaping () -> Void,
+        actionRight: @escaping () -> Void,
+        @ViewBuilder labelLeft: @escaping () -> LeftContent,
+        @ViewBuilder labelRight: @escaping () -> RightContent
+    ) {
         self.buttonLeft = Button(action: actionLeft, label: labelLeft)
         self.buttonRight = Button(action: actionRight, label: labelRight)
     }

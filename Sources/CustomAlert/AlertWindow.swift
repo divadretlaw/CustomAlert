@@ -48,7 +48,7 @@ enum AlertWindow {
     }
     
     static func dismiss() {
-        allWindows.forEach { key, value in
+        allWindows.forEach { key, _ in
             dismiss(on: key)
         }
     }

@@ -30,7 +30,15 @@ public extension View {
         @ViewBuilder actions: @escaping () -> Actions
     ) -> some View
     where Content: View, Actions: View {
-        modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: nil, alertContent: content, alertActions: actions))
+        modifier(
+            CustomAlertHandler(
+                title: title,
+                isPresented: isPresented,
+                windowScene: nil,
+                alertContent: content,
+                alertActions: actions
+            )
+        )
     }
     
     /// Presents an alert when a given condition is true, using
@@ -125,7 +133,15 @@ public extension View {
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
     ) -> some View where Content: View, Actions: View {
-        modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: windowScene, alertContent: content, alertActions: actions))
+        modifier(
+            CustomAlertHandler(
+                title: title,
+                isPresented: isPresented,
+                windowScene: windowScene,
+                alertContent: content,
+                alertActions: actions
+            )
+        )
     }
     
     /// Presents an alert when a given condition is true, using

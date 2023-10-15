@@ -26,8 +26,10 @@ public struct InlineAlert<Content, Actions>: View where Content: View, Actions: 
         .cornerRadius(cornerRadius)
     }
     
-    public init(@ViewBuilder content: @escaping () -> Content,
-         @ViewBuilder actions: @escaping () -> Actions) {
+    public init(
+        @ViewBuilder content: @escaping () -> Content,
+        @ViewBuilder actions: @escaping () -> Actions
+    ) {
         self.content = content
         self.actions = actions
     }

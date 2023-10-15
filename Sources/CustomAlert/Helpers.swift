@@ -60,9 +60,8 @@ struct BlurView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: UIView,
-                      context: UIViewRepresentableContext<BlurView>) {
-
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<BlurView>) {
+        // empty
     }
 }
 

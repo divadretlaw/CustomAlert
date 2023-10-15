@@ -103,7 +103,7 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     }
 }
 
-public extension ButtonStyle where Self == AlertButtonStyle {
+extension ButtonStyle where Self == AlertButtonStyle {
     /// A button style that applies standard alert styling
     ///
     /// To apply this style to a button, or to a view that contains buttons, use

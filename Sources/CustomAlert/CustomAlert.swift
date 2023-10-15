@@ -100,8 +100,8 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
             }
             .frame(height: height)
             
-            _VariadicView.Tree(ContentLayout(isPresented: $isPresented), content: actions)
-                .buttonStyle(.alert)
+            _VariadicView.Tree(ContentLayout(), content: actions)
+                .buttonStyle(.alert(isPresented: $isPresented))
                 .captureSize($actionsSize)
         }
         .frame(minWidth: minWidth, maxWidth: maxWidth)
@@ -113,17 +113,12 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     }
 }
 
-struct ContentLayout: _VariadicView_ViewRoot {
-    @Binding var isPresented: Bool
-    
+struct ContentLayout: _VariadicView_ViewRoot {    
     func body(children: _VariadicView.Children) -> some View {
         VStack(spacing: 0) {
             ForEach(children) { child in
                 Divider()
                 child
-                    .simultaneousGesture(TapGesture().onEnded { _ in
-                        isPresented = false
-                    })
             }
         }
     }

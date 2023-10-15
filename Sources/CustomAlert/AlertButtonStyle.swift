@@ -11,8 +11,12 @@ import SwiftUI
 ///
 /// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) var isEnabled
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.alertButtonHeight) var maxHeight
+    @Environment(\.window) var window
+    
+    @Binding var isPresented: Bool
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
@@ -26,6 +30,10 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(12)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+        .simultaneousGesture(TapGesture().onEnded { _ in
+            guard isEnabled else { return }
+            isPresented = false
+        })
     }
     
     @ViewBuilder
@@ -39,16 +47,16 @@ public struct AlertButtonStyle: ButtonStyle {
             case .some(.cancel):
                 configuration.label
                     .font(.headline)
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(color)
             default:
                 configuration.label
                     .font(.body)
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(color)
             }
         } else {
             configuration.label
                 .font(.body)
-                .foregroundColor(.accentColor)
+                .foregroundColor(color)
         }
     }
     
@@ -67,6 +75,22 @@ public struct AlertButtonStyle: ButtonStyle {
             Color.almostClear
         }
     }
+    
+    var color: Color {
+        if isEnabled {
+            guard let color = window?.tintColor else {
+                return .accentColor
+            }
+            
+            if #available(iOS 15.0, *) {
+                return Color(uiColor: color)
+            } else {
+                return Color(color)
+            }
+        } else {
+            return Color("Disabled", bundle: .module)
+        }
+    }
 }
 
 public extension ButtonStyle where Self == AlertButtonStyle {
@@ -75,7 +99,17 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     /// To apply this style to a button, or to a view that contains buttons, use
     /// the `View/buttonStyle(_:)` modifier.
     static var alert: Self {
-        AlertButtonStyle()
+        AlertButtonStyle(isPresented: .constant(true))
+    }
+}
+
+public extension ButtonStyle where Self == AlertButtonStyle {
+    /// A button style that applies standard alert styling
+    ///
+    /// To apply this style to a button, or to a view that contains buttons, use
+    /// the `View/buttonStyle(_:)` modifier.
+    static func alert(isPresented: Binding<Bool>) -> Self {
+        AlertButtonStyle(isPresented: isPresented)
     }
 }
 

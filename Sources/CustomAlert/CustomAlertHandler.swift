@@ -26,6 +26,12 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
                             isEnabled = true
                         }
                 } configure: { configuration in
+                    let traitCollection = UITraitCollection(activeAppearance: .active)
+                    if #available(iOS 15.0, *) {
+                        configuration.tintColor = .tintColor.resolvedColor(with: traitCollection)
+                    } else {
+                        configuration.tintColor = UIColor(named: "AccentColor", in: .main, compatibleWith: traitCollection) ?? .systemBlue
+                    }
                     configuration.modalPresentationStyle = .overFullScreen
                     configuration.modalTransitionStyle = .crossDissolve
                 }
@@ -38,6 +44,12 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
                             isEnabled = true
                         }
                 } configure: { configuration in
+                    let traitCollection = UITraitCollection(activeAppearance: .active)
+                    if #available(iOS 15.0, *) {
+                        configuration.tintColor = .tintColor.resolvedColor(with: traitCollection)
+                    } else {
+                        configuration.tintColor = UIColor(named: "AccentColor", in: .main, compatibleWith: traitCollection) ?? .systemBlue
+                    }
                     configuration.modalPresentationStyle = .overFullScreen
                     configuration.modalTransitionStyle = .crossDissolve
                 }

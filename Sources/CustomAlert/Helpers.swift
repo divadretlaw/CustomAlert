@@ -8,22 +8,6 @@
 import SwiftUI
 import Combine
 
-// MARK: - onUpdate
-
-extension View {
-    /// A backwards compatible wrapper for iOS 14 `onChange`
-    @ViewBuilder
-    func onUpdate<T: Equatable>(of value: T, perform onChange: @escaping (T) -> Void) -> some View {
-        if #available(iOS 14.0, *) {
-            self.onChange(of: value, perform: onChange)
-        } else {
-            onReceive(Just(value)) { value in
-                onChange(value)
-            }
-        }
-    }
-}
-
 // MARK: - Color
 
 extension Color {

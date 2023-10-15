@@ -93,7 +93,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                     .environment(\.isEnabled, true)
                 }
                 .frame(height: height)
-                .onUpdate(of: contentSize) { contentSize in
+                .onChange(of: contentSize) { contentSize in
                     fitInScreen = contentSize.height <= proxy.size.height
                 }
                 .scrollViewDisabled(fitInScreen)
@@ -123,10 +123,6 @@ struct ContentLayout: _VariadicView_ViewRoot {
                 child
                     .simultaneousGesture(TapGesture().onEnded { _ in
                         isPresented = false
-                        // Workaround for iOS 13
-                        if #available(iOS 15, *) { } else {
-                            AlertWindow.dismiss()
-                        }
                     })
             }
         }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-import WindowSceneReader
+import WindowKit
 
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -30,8 +30,7 @@ public extension View {
         @ViewBuilder actions: @escaping () -> Actions
     ) -> some View
     where Content: View, Actions: View {
-        self.disabled(isPresented.wrappedValue)
-            .background(WrappedCustomAlert(title: title, isPresented: isPresented, content: content, actions: actions))
+        modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: nil, alertContent: content, alertActions: actions))
     }
     
     /// Presents an alert when a given condition is true, using
@@ -126,7 +125,7 @@ public extension View {
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
     ) -> some View where Content: View, Actions: View {
-        return modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: windowScene, alertContent: content, alertActions: actions))
+        modifier(CustomAlertHandler(title: title, isPresented: isPresented, windowScene: windowScene, alertContent: content, alertActions: actions))
     }
     
     /// Presents an alert when a given condition is true, using

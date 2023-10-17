@@ -18,6 +18,8 @@ struct ContentView: View {
                 MultiButtonAlerts()
                 
                 OtherAlerts()
+                
+                CustomAlerts()
             }
             .navigationTitle("Custom Alert")
         }

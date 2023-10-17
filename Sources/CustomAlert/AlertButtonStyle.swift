@@ -11,6 +11,8 @@ import SwiftUI
 ///
 /// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
+    @Environment(\.customAlertConfiguration.buttonConfiguration) private var alertButtonConfiguration
+    
     @Environment(\.isEnabled) var isEnabled
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.alertButtonHeight) var maxHeight
@@ -27,7 +29,7 @@ public struct AlertButtonStyle: ButtonStyle {
                 .truncationMode(.middle)
             Spacer()
         }
-        .padding(12)
+        .padding(alertButtonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
         .simultaneousGesture(TapGesture().onEnded { _ in
@@ -42,20 +44,20 @@ public struct AlertButtonStyle: ButtonStyle {
             switch configuration.role {
             case .some(.destructive):
                 configuration.label
-                    .font(.body)
-                    .foregroundColor(.red)
+                    .font(alertButtonConfiguration.roleFont[.destructive] ?? alertButtonConfiguration.font)
+                    .foregroundColor(alertButtonConfiguration.roleColor[.destructive] ?? color)
             case .some(.cancel):
                 configuration.label
-                    .font(.headline)
-                    .foregroundColor(color)
+                    .font(alertButtonConfiguration.roleFont[.cancel] ?? alertButtonConfiguration.font)
+                    .foregroundColor(alertButtonConfiguration.roleColor[.cancel] ?? color)
             default:
                 configuration.label
-                    .font(.body)
+                    .font(alertButtonConfiguration.font)
                     .foregroundColor(color)
             }
         } else {
             configuration.label
-                .font(.body)
+                .font(alertButtonConfiguration.font)
                 .foregroundColor(color)
         }
     }
@@ -78,6 +80,10 @@ public struct AlertButtonStyle: ButtonStyle {
     
     var color: Color {
         if isEnabled {
+            if let color = alertButtonConfiguration.tintColor {
+                return color
+            }
+            
             guard let color = window?.tintColor else {
                 return .accentColor
             }
@@ -113,7 +119,7 @@ extension ButtonStyle where Self == AlertButtonStyle {
     }
 }
 
-struct AlertButtonHeightKey: EnvironmentKey {
+private struct AlertButtonHeightKey: EnvironmentKey {
     static var defaultValue: CGFloat? {
         nil
     }
@@ -121,11 +127,7 @@ struct AlertButtonHeightKey: EnvironmentKey {
 
 extension EnvironmentValues {
     var alertButtonHeight: CGFloat? {
-        get {
-            self[AlertButtonHeightKey.self]
-        }
-        set {
-            self[AlertButtonHeightKey.self] = newValue
-        }
+        get { self[AlertButtonHeightKey.self] }
+        set { self[AlertButtonHeightKey.self] = newValue }
     }
 }

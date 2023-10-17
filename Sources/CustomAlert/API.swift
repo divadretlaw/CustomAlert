@@ -28,8 +28,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Content: View, Actions: View {
+    ) -> some View where Content: View, Actions: View {
         modifier(
             CustomAlertHandler(
                 title: title,
@@ -59,8 +58,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Content: View, Actions: View {
+    ) -> some View where Content: View, Actions: View {
         self.customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
     }
     
@@ -82,8 +80,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Title: StringProtocol, Content: View, Actions: View {
+    ) -> some View where Title: StringProtocol, Content: View, Actions: View {
         self.customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
     }
     
@@ -105,8 +102,7 @@ public extension View {
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View
-    where Content: View, Actions: View {
+    ) -> some View where Content: View, Actions: View {
         self.customAlert(title(), isPresented: isPresented, content: content, actions: actions)
     }
 }

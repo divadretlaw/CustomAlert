@@ -1,5 +1,5 @@
 //
-//  SideBySideButton.swift
+//  MultiButton.swift
 //  CustomAlert
 //
 //  Created by David Walter on 29.04.22.
@@ -26,11 +26,15 @@ public struct MultiButton<Content>: View where Content: View {
     }
     
     struct ContentLayout: _VariadicView_ViewRoot {
+        @Environment(\.customAlertConfiguration) private var configuration
+        
         func body(children: _VariadicView.Children) -> some View {
             HStack(spacing: 0) {
                 children.first
                 ForEach(children.dropFirst()) { child in
-                    Divider()
+                    if !configuration.buttonConfiguration.hideDivider {
+                        Divider()
+                    }
                     child
                 }
             }

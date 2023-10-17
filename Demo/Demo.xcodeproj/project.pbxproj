@@ -11,6 +11,7 @@
 		6302131F2960A4850065DBDD /* InputAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302131E2960A4850065DBDD /* InputAlerts.swift */; };
 		630213212960A4EE0065DBDD /* MultiButtonAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630213202960A4EE0065DBDD /* MultiButtonAlerts.swift */; };
 		630213232960A55B0065DBDD /* OtherAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630213222960A55B0065DBDD /* OtherAlerts.swift */; };
+		6346D7772ADF27D5008222CE /* CustomAlerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6346D7762ADF27D5008222CE /* CustomAlerts.swift */; };
 		6364916428AFEAFB00FA518B /* DemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364916328AFEAFB00FA518B /* DemoApp.swift */; };
 		6364916628AFEAFB00FA518B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364916528AFEAFB00FA518B /* ContentView.swift */; };
 		6364916828AFEAFC00FA518B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6364916728AFEAFC00FA518B /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 		6302131E2960A4850065DBDD /* InputAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAlerts.swift; sourceTree = "<group>"; };
 		630213202960A4EE0065DBDD /* MultiButtonAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiButtonAlerts.swift; sourceTree = "<group>"; };
 		630213222960A55B0065DBDD /* OtherAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherAlerts.swift; sourceTree = "<group>"; };
+		6346D7762ADF27D5008222CE /* CustomAlerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlerts.swift; sourceTree = "<group>"; };
 		6364916028AFEAFB00FA518B /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6364916328AFEAFB00FA518B /* DemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoApp.swift; sourceTree = "<group>"; };
 		6364916528AFEAFB00FA518B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				6302131C29609C620065DBDD /* SimpleAlerts.swift */,
 				6302131E2960A4850065DBDD /* InputAlerts.swift */,
 				630213202960A4EE0065DBDD /* MultiButtonAlerts.swift */,
+				6346D7762ADF27D5008222CE /* CustomAlerts.swift */,
 				630213222960A55B0065DBDD /* OtherAlerts.swift */,
 				6364916728AFEAFC00FA518B /* Assets.xcassets */,
 				6364916928AFEAFC00FA518B /* Preview Content */,
@@ -174,6 +177,7 @@
 			files = (
 				6364916628AFEAFB00FA518B /* ContentView.swift in Sources */,
 				6302131D29609C620065DBDD /* SimpleAlerts.swift in Sources */,
+				6346D7772ADF27D5008222CE /* CustomAlerts.swift in Sources */,
 				6364916428AFEAFB00FA518B /* DemoApp.swift in Sources */,
 				630213232960A55B0065DBDD /* OtherAlerts.swift in Sources */,
 				6302131F2960A4850065DBDD /* InputAlerts.swift in Sources */,

@@ -9,6 +9,8 @@ import SwiftUI
 
 /// Custom Alert
 struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
+    @Environment(\.customAlertConfiguration) private var configuration
+    
     var title: Text?
     @Binding var isPresented: Bool
     @ViewBuilder var content: () -> Content
@@ -26,8 +28,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     
     var body: some View {
         ZStack {
-            Color.black
-                .opacity(0.2)
+            BackgroundView(background: configuration.windowBackground)
                 .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 0) {
@@ -49,14 +50,19 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     
     var height: CGFloat {
         // View height - padding top and bottom - actions height
-        let maxHeight = viewSize.height - 60 - actionsSize.height
+        let maxHeight = viewSize.height
+            - configuration.alertPadding.leading
+            - configuration.alertPadding.trailing
+            - actionsSize.height
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
     }
     
     var minWidth: CGFloat {
         // View width - padding leading and trailing
-        let maxWidth = viewSize.width - 60
+        let maxWidth = viewSize.width
+            - configuration.alertPadding.leading
+            - configuration.alertPadding.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
         return max(min, 0)
@@ -64,11 +70,13 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     
     var maxWidth: CGFloat {
         // View width - padding leading and trailing
-        let maxWidth = viewSize.width - 60
+        let maxWidth = viewSize.width
+            - configuration.alertPadding.leading
+            - configuration.alertPadding.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
         // Smallest AlertView should be 270
-        return max(min, 270)
+        return max(min, configuration.minWidth)
     }
     
     var alert: some View {
@@ -85,8 +93,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                             .multilineTextAlignment(.center)
                     }
                     .foregroundColor(.primary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 20)
+                    .padding(configuration.contentPadding)
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
                     // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
@@ -105,21 +112,75 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                 .captureSize($actionsSize)
         }
         .frame(minWidth: minWidth, maxWidth: maxWidth)
-        .background(BlurView(style: .systemMaterial))
-        .cornerRadius(13.3333)
-        .padding(30)
+        .background(BackgroundView(background: configuration.background))
+        .cornerRadius(configuration.cornerRadius)
+        .padding(configuration.alertPadding)
         .transition(.opacity.combined(with: .scale(scale: 1.1)))
         .animation(.default, value: isPresented)
     }
 }
 
-struct ContentLayout: _VariadicView_ViewRoot {    
+struct ContentLayout: _VariadicView_ViewRoot {
+    @Environment(\.customAlertConfiguration) private var configuration
+    
     func body(children: _VariadicView.Children) -> some View {
         VStack(spacing: 0) {
             ForEach(children) { child in
-                Divider()
+                if !configuration.buttonConfiguration.hideDivider {
+                    Divider()
+                }
                 child
             }
         }
     }
 }
+
+struct CustomAlert_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomAlert(title: Text("Preview"), isPresented: .constant(true)) {
+            Text("Content")
+        } actions: {
+            Button {
+            } label: {
+                Text("OK")
+            }
+        }
+        .previewDisplayName("Default")
+        
+        CustomAlert(title: nil, isPresented: .constant(true)) {
+            VStack {
+                Text("Preview")
+                    .font(.title)
+                Text("Content")
+                    .font(.body)
+            }
+        } actions: {
+            MultiButton {
+                Button {
+                } label: {
+                    Text("OK")
+                }
+                Button {
+                } label: {
+                    Text("Cancel")
+                }
+            }
+        }
+        .environment(\.customAlertConfiguration, .create { configuration in
+            configuration.background = .color(.white)
+            configuration.windowBackground = .blurEffect(.dark)
+            configuration.cornerRadius = 0
+            configuration.contentPadding = EdgeInsets(top: 10, leading: 4, bottom: 10, trailing: 4)
+            configuration.alertPadding = EdgeInsets()
+            configuration.minWidth = 300
+            configuration.buttonConfiguration = .create { button in
+                button.tintColor = .green
+                button.padding = EdgeInsets(top: 15, leading: 4, bottom: 15, trailing: 4)
+                button.font = .title3.weight(.black)
+                button.hideDivider = true
+            }
+        })
+        .previewDisplayName("Custom")
+    }
+}
+

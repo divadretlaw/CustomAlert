@@ -32,7 +32,7 @@ public struct MultiButton<Content>: View where Content: View {
             HStack(spacing: 0) {
                 children.first
                 ForEach(children.dropFirst()) { child in
-                    if !configuration.buttonConfiguration.hideDivider {
+                    if !configuration.button.hideDivider {
                         Divider()
                     }
                     child

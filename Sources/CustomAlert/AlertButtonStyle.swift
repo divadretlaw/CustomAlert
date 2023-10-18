@@ -11,7 +11,7 @@ import SwiftUI
 ///
 /// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
-    @Environment(\.customAlertConfiguration.buttonConfiguration) private var alertButtonConfiguration
+    @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
     
     @Environment(\.isEnabled) var isEnabled
     @Environment(\.colorScheme) var colorScheme
@@ -29,7 +29,7 @@ public struct AlertButtonStyle: ButtonStyle {
                 .truncationMode(.middle)
             Spacer()
         }
-        .padding(alertButtonConfiguration.padding)
+        .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
         .simultaneousGesture(TapGesture().onEnded { _ in
@@ -44,20 +44,20 @@ public struct AlertButtonStyle: ButtonStyle {
             switch configuration.role {
             case .some(.destructive):
                 configuration.label
-                    .font(alertButtonConfiguration.roleFont[.destructive] ?? alertButtonConfiguration.font)
-                    .foregroundColor(alertButtonConfiguration.roleColor[.destructive] ?? color)
+                    .font(buttonConfiguration.roleFont[.destructive] ?? buttonConfiguration.font)
+                    .foregroundColor(buttonConfiguration.roleColor[.destructive] ?? color)
             case .some(.cancel):
                 configuration.label
-                    .font(alertButtonConfiguration.roleFont[.cancel] ?? alertButtonConfiguration.font)
-                    .foregroundColor(alertButtonConfiguration.roleColor[.cancel] ?? color)
+                    .font(buttonConfiguration.roleFont[.cancel] ?? buttonConfiguration.font)
+                    .foregroundColor(buttonConfiguration.roleColor[.cancel] ?? color)
             default:
                 configuration.label
-                    .font(alertButtonConfiguration.font)
+                    .font(buttonConfiguration.font)
                     .foregroundColor(color)
             }
         } else {
             configuration.label
-                .font(alertButtonConfiguration.font)
+                .font(buttonConfiguration.font)
                 .foregroundColor(color)
         }
     }
@@ -80,7 +80,7 @@ public struct AlertButtonStyle: ButtonStyle {
     
     var color: Color {
         if isEnabled {
-            if let color = alertButtonConfiguration.tintColor {
+            if let color = buttonConfiguration.tintColor {
                 return color
             }
             

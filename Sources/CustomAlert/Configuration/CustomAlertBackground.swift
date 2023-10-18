@@ -9,7 +9,10 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/// Wrapped background of the alert
 public enum CustomAlertBackground {
+    /// A `UIBlurEffect` as background
     case blurEffect(UIBlurEffect.Style)
+    /// A `Color` as background
     case color(Color)
 }

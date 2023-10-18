@@ -75,9 +75,19 @@ You can create Side by Side Buttons using `MultiButton`
 }
 ```
 
+The alert is customizable via the `Environment`
+
+<img src="Sources/CustomAlert/Documentation.docc/Resources/CustomConfiguration.png" width="300">
+
+```swift
+.environment(\.customAlertConfiguration, .create { configuration in
+    // Adapt the configuration
+})
+```
+
 You can also display an Alert inline, within a `List` for example
 
-![Inline Alert](Sources/CustomAlert/Documentation.docc/Resources/InlineAlert.png)
+<img src="Sources/CustomAlert/Documentation.docc/Resources/InlineAlert.png" width="300">
 
 ```swift
 InlineAlert {

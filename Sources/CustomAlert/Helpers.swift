@@ -8,22 +8,6 @@
 import SwiftUI
 import Combine
 
-// MARK: - onUpdate
-
-extension View {
-    /// A backwards compatible wrapper for iOS 14 `onChange`
-    @ViewBuilder
-    func onUpdate<T: Equatable>(of value: T, perform onChange: @escaping (T) -> Void) -> some View {
-        if #available(iOS 14.0, *) {
-            self.onChange(of: value, perform: onChange)
-        } else {
-            onReceive(Just(value)) { value in
-                onChange(value)
-            }
-        }
-    }
-}
-
 // MARK: - Color
 
 extension Color {
@@ -76,9 +60,8 @@ struct BlurView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: UIView,
-                      context: UIViewRepresentableContext<BlurView>) {
-
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<BlurView>) {
+        // empty
     }
 }
 
@@ -98,6 +81,47 @@ private struct DisabledViewModifier: ViewModifier {
             content.scrollDisabled(isDisabled)
         } else {
             content.disabled(isDisabled)
+        }
+    }
+}
+
+// MARK: - Tint
+
+extension View {
+    func applyTint(_ uiColor: UIColor?) -> some View {
+        modifier(TintApplier(uiColor: uiColor))
+    }
+    func applyTint(_ color: Color?) -> some View {
+        modifier(TintApplier(color: color))
+    }
+}
+
+private struct TintApplier: ViewModifier {
+    var color: Color?
+    
+    init(color: Color?) {
+        self.color = color
+    }
+    
+    init(uiColor: UIColor?) {
+        if let uiColor = uiColor {
+            if #available(iOS 15.0, *) {
+                self.color = Color(uiColor: uiColor)
+            } else {
+                self.color = Color(uiColor)
+            }
+        } else {
+            self.color = nil
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 16.0, *) {
+            content.tint(color)
+        } else if #available(iOS 15.0, *) {
+            content.tint(color)
+        } else {
+            content.foregroundColor(color)
         }
     }
 }

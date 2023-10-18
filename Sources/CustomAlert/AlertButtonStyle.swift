@@ -11,8 +11,14 @@ import SwiftUI
 ///
 /// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
+    @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
+    
+    @Environment(\.isEnabled) var isEnabled
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.alertButtonHeight) var maxHeight
+    @Environment(\.window) var window
+    
+    @Binding var isPresented: Bool
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
@@ -23,9 +29,13 @@ public struct AlertButtonStyle: ButtonStyle {
                 .truncationMode(.middle)
             Spacer()
         }
-        .padding(12)
+        .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+        .simultaneousGesture(TapGesture().onEnded { _ in
+            guard isEnabled else { return }
+            isPresented = false
+        })
     }
     
     @ViewBuilder
@@ -34,21 +44,21 @@ public struct AlertButtonStyle: ButtonStyle {
             switch configuration.role {
             case .some(.destructive):
                 configuration.label
-                    .font(.body)
-                    .foregroundColor(.red)
+                    .font(buttonConfiguration.roleFont[.destructive] ?? buttonConfiguration.font)
+                    .foregroundColor(buttonConfiguration.roleColor[.destructive] ?? color)
             case .some(.cancel):
                 configuration.label
-                    .font(.headline)
-                    .foregroundColor(.accentColor)
+                    .font(buttonConfiguration.roleFont[.cancel] ?? buttonConfiguration.font)
+                    .foregroundColor(buttonConfiguration.roleColor[.cancel] ?? color)
             default:
                 configuration.label
-                    .font(.body)
-                    .foregroundColor(.accentColor)
+                    .font(buttonConfiguration.font)
+                    .foregroundColor(color)
             }
         } else {
             configuration.label
-                .font(.body)
-                .foregroundColor(.accentColor)
+                .font(buttonConfiguration.font)
+                .foregroundColor(color)
         }
     }
     
@@ -67,6 +77,26 @@ public struct AlertButtonStyle: ButtonStyle {
             Color.almostClear
         }
     }
+    
+    var color: Color {
+        if isEnabled {
+            if let color = buttonConfiguration.tintColor {
+                return color
+            }
+            
+            guard let color = window?.tintColor else {
+                return .accentColor
+            }
+            
+            if #available(iOS 15.0, *) {
+                return Color(uiColor: color)
+            } else {
+                return Color(color)
+            }
+        } else {
+            return Color("Disabled", bundle: .module)
+        }
+    }
 }
 
 public extension ButtonStyle where Self == AlertButtonStyle {
@@ -75,11 +105,21 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     /// To apply this style to a button, or to a view that contains buttons, use
     /// the `View/buttonStyle(_:)` modifier.
     static var alert: Self {
-        AlertButtonStyle()
+        AlertButtonStyle(isPresented: .constant(true))
     }
 }
 
-struct AlertButtonHeightKey: EnvironmentKey {
+extension ButtonStyle where Self == AlertButtonStyle {
+    /// A button style that applies standard alert styling
+    ///
+    /// To apply this style to a button, or to a view that contains buttons, use
+    /// the `View/buttonStyle(_:)` modifier.
+    static func alert(isPresented: Binding<Bool>) -> Self {
+        AlertButtonStyle(isPresented: isPresented)
+    }
+}
+
+private struct AlertButtonHeightKey: EnvironmentKey {
     static var defaultValue: CGFloat? {
         nil
     }
@@ -87,11 +127,7 @@ struct AlertButtonHeightKey: EnvironmentKey {
 
 extension EnvironmentValues {
     var alertButtonHeight: CGFloat? {
-        get {
-            self[AlertButtonHeightKey.self]
-        }
-        set {
-            self[AlertButtonHeightKey.self] = newValue
-        }
+        get { self[AlertButtonHeightKey.self] }
+        set { self[AlertButtonHeightKey.self] = newValue }
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 extension CustomAlertConfiguration {
     public struct Alert {
         /// The background of the alert view
-        public var background: CustomAlertBackground = .blurEffect(.regular)
+        public var background: CustomAlertBackground = .blurEffect(.systemMaterial)
         /// The corner radius of the alert view
         public var cornerRadius: CGFloat = 13.3333
         /// The padding of the content of the alert view

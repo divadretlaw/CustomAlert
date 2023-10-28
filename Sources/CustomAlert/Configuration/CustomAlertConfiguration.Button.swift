@@ -17,7 +17,7 @@ extension CustomAlertConfiguration {
         public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
         /// The font of the alert button
         public var font: Font = .body
-        var roleFont: [ButtonType: Font] = [:]
+        var roleFont: [ButtonType: Font] = [.cancel: .headline]
         /// Whether to hide the dividers between the buttons
         public var hideDivider: Bool = false
         /// Override the button style if needed

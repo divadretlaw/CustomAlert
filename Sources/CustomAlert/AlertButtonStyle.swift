@@ -32,10 +32,6 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
-        .simultaneousGesture(TapGesture().onEnded { _ in
-            guard isEnabled else { return }
-            isPresented = false
-        })
     }
     
     @ViewBuilder

@@ -146,7 +146,7 @@ private struct AlertButton: ViewModifier {
                 guard isEnabled else { return }
                 isPresented = false
             }, including: .all)
-            .buttonStyle(.alert(isPresented: $isPresented))
+            .buttonStyle(.alert)
     }
 }
 

@@ -18,8 +18,6 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.alertButtonHeight) var maxHeight
     @Environment(\.window) var window
     
-    @Binding var isPresented: Bool
-    
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
             Spacer()
@@ -101,17 +99,7 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     /// To apply this style to a button, or to a view that contains buttons, use
     /// the `View/buttonStyle(_:)` modifier.
     static var alert: Self {
-        AlertButtonStyle(isPresented: .constant(true))
-    }
-}
-
-extension ButtonStyle where Self == AlertButtonStyle {
-    /// A button style that applies standard alert styling
-    ///
-    /// To apply this style to a button, or to a view that contains buttons, use
-    /// the `View/buttonStyle(_:)` modifier.
-    static func alert(isPresented: Binding<Bool>) -> Self {
-        AlertButtonStyle(isPresented: isPresented)
+        AlertButtonStyle()
     }
 }
 

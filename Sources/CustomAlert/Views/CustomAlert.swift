@@ -32,12 +32,18 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 0) {
-                Spacer()
+                if configuration.alignment.hasTopSpacer {
+                    Spacer()
+                }
+                
                 if isShowing {
                     alert
                         .animation(nil, value: height)
                 }
-                Spacer()
+                
+                if configuration.alignment.hasBottomSpacer {
+                    Spacer()
+                }
             }
         }
         .captureSize($viewSize)
@@ -200,3 +206,22 @@ struct CustomAlert_Previews: PreviewProvider {
     }
 }
 
+private extension VerticalAlignment {
+    var hasTopSpacer: Bool {
+        switch self {
+        case .top, .firstTextBaseline:
+            return false
+        default:
+            return true
+        }
+    }
+    
+    var hasBottomSpacer: Bool {
+        switch self {
+        case .bottom, .lastTextBaseline:
+            return false
+        default:
+            return true
+        }
+    }
+}

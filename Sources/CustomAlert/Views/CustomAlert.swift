@@ -30,6 +30,11 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
         ZStack {
             BackgroundView(background: configuration.background)
                 .edgesIgnoringSafeArea(.all)
+                .onTapGesture {
+                    if configuration.dismissOnBackgroundTap {
+                        isPresented = false
+                    }
+                }
             
             VStack(spacing: 0) {
                 if configuration.alignment.hasTopSpacer {

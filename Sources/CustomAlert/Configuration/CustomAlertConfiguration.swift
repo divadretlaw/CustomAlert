@@ -21,6 +21,8 @@ public struct CustomAlertConfiguration {
     public var transition: AnyTransition = .opacity.combined(with: .scale(scale: 1.1))
     /// The vertical alginment of the alert
     public var alignment: VerticalAlignment = .center
+    /// Allow dismissing the alert when tapping on the background
+    public var dismissOnBackgroundTap: Bool = false
     
     /// Create a custom configuration
     /// - Parameter configure: Callback to change the default configuration

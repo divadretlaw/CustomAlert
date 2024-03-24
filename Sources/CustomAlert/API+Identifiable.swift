@@ -33,16 +33,16 @@ public extension View {
     ///   - actions: A `ViewBuilder` returning the alert's actions.
     @warn_unqualified_access
     func customAlert<Item, Content, Actions>(
-        _ title: Text? = nil,
+        _ title: @autoclosure @escaping () -> Text? = nil,
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
         modifier(
             CustomAlertHandler(
-                title: title,
                 item: item,
                 windowScene: nil,
+                alertTitle: title,
                 alertContent: content,
                 alertActions: actions
             )
@@ -144,7 +144,7 @@ public extension View {
     ///   - actions: A `ViewBuilder` returning the alert's actions.
     @warn_unqualified_access
     func customAlert<Item, Content, Actions>(
-        _ title: Text? = nil,
+        _ title: @autoclosure @escaping () -> Text? = nil,
         item: Binding<Item?>,
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping (Item) -> Content,
@@ -152,9 +152,9 @@ public extension View {
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
         modifier(
             CustomAlertHandler(
-                title: title,
                 item: item,
                 windowScene: windowScene,
+                alertTitle: title,
                 alertContent: content,
                 alertActions: actions
             )

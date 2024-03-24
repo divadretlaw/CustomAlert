@@ -12,22 +12,22 @@ import WindowKit
 struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
-    var title: Text?
     @Binding var item: AlertItem?
     var windowScene: UIWindowScene?
-    var alertContent: (AlertItem) -> AlertContent
-    var alertActions: (AlertItem) -> AlertActions
+    var alertTitle: () -> Text?
+    @ViewBuilder var alertContent: (AlertItem) -> AlertContent
+    @ViewBuilder var alertActions: (AlertItem) -> AlertActions
     
     init(
-        title: Text? = nil,
         item: Binding<AlertItem?>,
         windowScene: UIWindowScene? = nil,
-        alertContent: @escaping (AlertItem) -> AlertContent,
-        alertActions: @escaping (AlertItem) -> AlertActions
+        alertTitle: @escaping () -> Text?,
+        @ViewBuilder alertContent: @escaping (AlertItem) -> AlertContent,
+        @ViewBuilder alertActions: @escaping (AlertItem) -> AlertActions
     ) {
-        self.title = title
         self._item = item
         self.windowScene = windowScene
+        self.alertTitle = alertTitle
         self.alertContent = alertContent
         self.alertActions = alertActions
     }
@@ -35,17 +35,9 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
     func body(content: Content) -> some View {
         if let windowScene = windowScene {
             content
+                .disabled(item != nil)
                 .windowCover("CustomAlert", isPresented: isPresented, on: windowScene) {
-                    if let item {
-                        CustomAlert(title: title, isPresented: isPresented) {
-                            alertContent(item)
-                        } actions: {
-                            alertActions(item)
-                        }
-                        .transformEnvironment(\.self) { environment in
-                            environment.isEnabled = true
-                        }
-                    }
+                    alert
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
                     configuration.modalPresentationStyle = .overFullScreen
@@ -55,21 +47,28 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
             content
                 .disabled(item != nil)
                 .windowCover("CustomAlert", isPresented: isPresented) {
-                    if let item {
-                        CustomAlert(title: title, isPresented: isPresented) {
-                            alertContent(item)
-                        } actions: {
-                            alertActions(item)
-                        }
-                        .transformEnvironment(\.self) { environment in
-                            environment.isEnabled = true
-                        }
-                    }
+                    alert
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
                     configuration.modalPresentationStyle = .overFullScreen
                     configuration.modalTransitionStyle = .crossDissolve
                 }
+        }
+    }
+    
+    @ViewBuilder
+    var alert: some View {
+        if let item {
+            CustomAlert(isPresented: isPresented) {
+                alertTitle()
+            } content: {
+                alertContent(item)
+            } actions: {
+                alertActions(item)
+            }
+            .transformEnvironment(\.self) { environment in
+                environment.isEnabled = true
+            }
         }
     }
     
@@ -85,15 +84,15 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
 
 extension CustomAlertHandler where AlertItem == AlertIdentifiable {
     init(
-        title: Text? = nil,
         isPresented: Binding<Bool>,
-        windowScene: UIWindowScene? = nil,
-        alertContent: @escaping () -> AlertContent,
-        alertActions: @escaping () -> AlertActions
+        windowScene: UIWindowScene?,
+        alertTitle: @escaping () -> Text?,
+        @ViewBuilder alertContent: @escaping () -> AlertContent,
+        @ViewBuilder alertActions: @escaping () -> AlertActions
     ) {
-        self.title = title
         self._item = isPresented.alert()
         self.windowScene = windowScene
+        self.alertTitle = alertTitle
         self.alertContent = { _ in alertContent() }
         self.alertActions = { _ in alertActions() }
     }

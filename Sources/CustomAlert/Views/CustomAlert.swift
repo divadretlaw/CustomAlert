@@ -11,10 +11,10 @@ import SwiftUI
 struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
-    var title: Text?
     @Binding var isPresented: Bool
-    @ViewBuilder var content: () -> Content
-    @ViewBuilder var actions: () -> Actions
+    var title: Text?
+    var content: Content
+    var actions: Actions
     
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
@@ -25,6 +25,18 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     
     // Used to animate the appearance
     @State private var isShowing = false
+    
+    init(
+        isPresented: Binding<Bool>,
+        title: @escaping () -> Text?,
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder actions: () -> Actions
+    ) {
+        self._isPresented = isPresented
+        self.title = title()
+        self.content = content()
+        self.actions = actions()
+    }
     
     var body: some View {
         ZStack {
@@ -42,8 +54,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                 }
                 
                 if isShowing {
-                    alert
-                        .animation(nil, value: height)
+                    alert.animation(nil, value: height)
                 }
                 
                 if configuration.alignment.hasBottomSpacer {
@@ -99,7 +110,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
                             .font(configuration.alert.titleFont)
                             .multilineTextAlignment(configuration.alert.textAlignment)
                         
-                        content()
+                        content
                             .font(configuration.alert.contentFont)
                             .multilineTextAlignment(configuration.alert.textAlignment)
                             .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
@@ -119,9 +130,11 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
             }
             .frame(height: height)
             
-            _VariadicView.Tree(ContentLayout(), content: actions)
-                .modifier(AlertButton(isPresented: $isPresented))
-                .captureSize($actionsSize)
+            _VariadicView.Tree(ContentLayout()) {
+                actions
+            }
+            .modifier(AlertButton(isPresented: $isPresented))
+            .captureSize($actionsSize)
         }
         .frame(minWidth: minWidth, maxWidth: maxWidth)
         .background(BackgroundView(background: configuration.alert.background))
@@ -163,7 +176,9 @@ private struct AlertButton: ViewModifier {
 
 struct CustomAlert_Previews: PreviewProvider {
     static var previews: some View {
-        CustomAlert(title: Text("Preview"), isPresented: .constant(true)) {
+        CustomAlert(isPresented: .constant(true)) {
+            Text("Preview")
+        } content:{
             Text("Content")
         } actions: {
             Button {
@@ -173,7 +188,9 @@ struct CustomAlert_Previews: PreviewProvider {
         }
         .previewDisplayName("Default")
         
-        CustomAlert(title: Text("Preview"), isPresented: .constant(true)) {
+        CustomAlert(isPresented: .constant(true)) {
+            Text("Preview")
+        } content: {
             Text("Content")
         } actions: {
             MultiButton {

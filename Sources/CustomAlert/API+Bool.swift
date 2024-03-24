@@ -24,16 +24,16 @@ public extension View {
     ///   - actions: A `ViewBuilder` returning the alert's actions.
     @warn_unqualified_access
     func customAlert<Content, Actions>(
-        _ title: Text? = nil,
+        _ title: @autoclosure @escaping () -> Text? = nil,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
     ) -> some View where Content: View, Actions: View {
         modifier(
             CustomAlertHandler(
-                title: title,
                 isPresented: isPresented,
                 windowScene: nil,
+                alertTitle: title,
                 alertContent: content,
                 alertActions: actions
             )
@@ -103,7 +103,15 @@ public extension View {
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
     ) -> some View where Content: View, Actions: View {
-        self.customAlert(title(), isPresented: isPresented, content: content, actions: actions)
+        modifier(
+            CustomAlertHandler(
+                isPresented: isPresented,
+                windowScene: nil,
+                alertTitle: title,
+                alertContent: content,
+                alertActions: actions
+            )
+        )
     }
 }
 
@@ -123,7 +131,7 @@ public extension View {
     ///   - actions: A `ViewBuilder` returning the alert's actions.
     @warn_unqualified_access
     func customAlert<Content, Actions>(
-        _ title: Text? = nil,
+        _ title: @autoclosure @escaping () -> Text? = nil,
         isPresented: Binding<Bool>,
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping () -> Content,
@@ -131,9 +139,9 @@ public extension View {
     ) -> some View where Content: View, Actions: View {
         modifier(
             CustomAlertHandler(
-                title: title,
                 isPresented: isPresented,
                 windowScene: windowScene,
+                alertTitle: title,
                 alertContent: content,
                 alertActions: actions
             )

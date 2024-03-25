@@ -38,10 +38,8 @@ struct InputAlerts: View {
     }
 }
 
-struct InputAlerts_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            InputAlerts()
-        }
+#Preview {
+    List {
+        InputAlerts()
     }
 }

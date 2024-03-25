@@ -117,6 +117,7 @@ struct OtherAlerts: View {
                     } label: {
                         Text("Send")
                     }
+                    .disabled(message.isEmpty)
                 }
             }
         } header: {
@@ -125,10 +126,8 @@ struct OtherAlerts: View {
     }
 }
 
-struct OtherAlerts_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            OtherAlerts()
-        }
+#Preview {
+    List {
+        OtherAlerts()
     }
 }

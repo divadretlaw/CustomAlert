@@ -10,6 +10,7 @@ import CustomAlert
 
 struct CustomAlerts: View {
     @State private var showAlert = false
+    
     var body: some View {
         Section {
             Button {
@@ -55,10 +56,9 @@ struct CustomAlerts: View {
     }
 }
 
-struct CustomAlerts_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            CustomAlerts()
-        }
+
+#Preview {
+    List {
+        CustomAlerts()
     }
 }

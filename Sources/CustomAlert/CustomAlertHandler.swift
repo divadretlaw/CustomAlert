@@ -37,27 +37,28 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
             content
                 .disabled(item != nil)
                 .windowCover("CustomAlert", isPresented: isPresented, on: windowScene) {
-                    alert
+                    alertView
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
                     configuration.modalPresentationStyle = .overFullScreen
                     configuration.modalTransitionStyle = .crossDissolve
                 }
+                .background(alertIdentity)
         } else {
             content
                 .disabled(item != nil)
                 .windowCover("CustomAlert", isPresented: isPresented) {
-                    alert
+                    alertView
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
                     configuration.modalPresentationStyle = .overFullScreen
                     configuration.modalTransitionStyle = .crossDissolve
                 }
+                .background(alertIdentity)
         }
     }
     
-    @ViewBuilder
-    var alert: some View {
+    @ViewBuilder var alertView: some View {
         if let item {
             CustomAlert(isPresented: isPresented) {
                 alertTitle()
@@ -69,6 +70,24 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
             .transformEnvironment(\.self) { environment in
                 environment.isEnabled = true
             }
+        }
+    }
+    
+    /// The view identity of the alert
+    /// 
+    /// The `alertIdentity` represents the individual parts of the alert but combined into a single view.
+    ///
+    /// When attached to the content of the represeting view, any changes here will propagate to the content of the window which hosts the alert.
+    @ViewBuilder var alertIdentity: some View {
+        if let item {
+            ZStack {
+                alertTitle()
+                alertContent(item)
+                alertActions(item)
+            }
+            .accessibilityHidden(true)
+            .frame(width: 0, height: 0)
+            .hidden()
         }
     }
     

@@ -12,10 +12,15 @@ struct BackgroundView: View {
     
     var body: some View {
         switch background {
-        case .blurEffect(let style):
+        case let .blurEffect(style):
             BlurView(style: style)
-        case .color(let color):
+        case let .color(color):
             color
+        case let .colorBlurEffect(color, style):
+            ZStack {
+                color
+                BlurView(style: style)
+            }
         }
     }
 }
@@ -24,5 +29,6 @@ struct BackgroundView_Previews: PreviewProvider {
     static var previews: some View {
         BackgroundView(background: .blurEffect(.regular))
         BackgroundView(background: .color(.blue))
+        BackgroundView(background: .colorBlurEffect(.blue, .regular))
     }
 }

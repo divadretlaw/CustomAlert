@@ -15,4 +15,6 @@ public enum CustomAlertBackground {
     case blurEffect(UIBlurEffect.Style)
     /// A `Color` as background
     case color(Color)
+    /// A `UIBlurEffect` as background with a `Color` as background
+    case colorBlurEffect(Color, UIBlurEffect.Style)
 }

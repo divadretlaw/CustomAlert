@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 extension CustomAlertConfiguration {
+    /// The custom alert configuration
     public struct Alert {
         /// The background of the alert view
         public var background: CustomAlertBackground = .blurEffect(.systemMaterial)
@@ -28,9 +29,10 @@ extension CustomAlertConfiguration {
         public var alignment: CustomAlertAlignment = .center
         
         /// Create a custom configuration
+        /// 
         /// - Parameter configure: Callback to change the default configuration
         ///
-        /// - Returns: The configured ``Alert`` configuration
+        /// - Returns: The customized ``CustomAlertConfiguration/Alert`` configuration
         public static func create(configure: (inout Self) -> Void) -> Self {
             var configuration = Self()
             configure(&configuration)
@@ -77,8 +79,12 @@ extension CustomAlertConfiguration {
     }
 }
 
+/// The alignment of the content of the custom alert
 public enum CustomAlertAlignment {
+    /// The content is aligned in the center
     case center
+    /// The content is aligned on the leading edge
     case leading
+    /// The content is aligned on the trailing edge
     case trailing
 }

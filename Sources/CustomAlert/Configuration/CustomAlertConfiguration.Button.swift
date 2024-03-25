@@ -12,15 +12,18 @@ extension CustomAlertConfiguration {
     public struct Button {
         /// The tint color of the alert button
         public var tintColor: Color? = nil
-        var roleColor: [ButtonType: Color] = [:]
+        internal var roleColor: [ButtonType: Color] = [:]
         /// The padding of the alert button
         public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
         /// The font of the alert button
         public var font: Font = .body
-        var roleFont: [ButtonType: Font] = [.cancel: .headline]
+        internal var roleFont: [ButtonType: Font] = [.cancel: .headline]
         /// Whether to hide the dividers between the buttons
         public var hideDivider: Bool = false
         /// Override the button style if needed
+        ///
+        /// > Note:
+        /// > Make sure to use `@Environment(\.alertDismiss)` to dismiss the button when using a custom `ButtonStyle`
         public var buttonStyle: (any ButtonStyle)?
         
         @available(iOS 15.0, *)
@@ -36,9 +39,10 @@ extension CustomAlertConfiguration {
         }
         
         /// Create a custom configuration
+        /// 
         /// - Parameter configure: Callback to change the default configuration
         ///
-        /// - Returns: The configured ``Button`` configuration
+        /// - Returns: The customized ``CustomAlertConfiguration/Button`` configuration
         public static func create(configure: (inout Self) -> Void) -> Self {
             var configuration = Self()
             configure(&configuration)

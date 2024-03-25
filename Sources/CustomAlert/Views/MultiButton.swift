@@ -11,18 +11,20 @@ import SwiftUI
 ///
 /// Used to create side by side buttons on a `.customAlert`
 public struct MultiButton<Content>: View where Content: View {
-    @ViewBuilder public var content: () -> Content
+    let content: Content
     
     public var body: some View {
-        _VariadicView.Tree(ContentLayout(), content: content)
+        _VariadicView.Tree(ContentLayout()) {
+            content
+        }
     }
     
     /// Creates multiple buttons within the MultiButton Layout.
     ///
     /// - Parameters:
     ///   - content: The `ViewBuilder` with multiple `Button`s
-    public init(@ViewBuilder content: @escaping () -> Content) {
-        self.content = content
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
     }
     
     struct ContentLayout: _VariadicView_ViewRoot {

@@ -12,6 +12,7 @@ import SwiftUI
 /// You can also use ``alert`` to construct this style.
 public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
+    @Environment(\.alertDismiss) private var alertDismiss
     
     @Environment(\.isEnabled) var isEnabled
     @Environment(\.colorScheme) var colorScheme
@@ -30,6 +31,10 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+        .simultaneousGesture(TapGesture().onEnded { _ in
+            guard isEnabled else { return }
+            alertDismiss()
+        }, including: .all)
     }
     
     @ViewBuilder

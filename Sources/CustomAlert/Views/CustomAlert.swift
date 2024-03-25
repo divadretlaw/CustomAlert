@@ -130,10 +130,13 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
             }
             .frame(height: height)
             
-            _VariadicView.Tree(ContentLayout()) {
+            _VariadicView.Tree(ActionLayout()) {
                 actions
             }
-            .modifier(AlertButton(isPresented: $isPresented))
+            .onAlertDismiss {
+                isPresented = false
+            }
+            .buttonStyle(.alert)
             .captureSize($actionsSize)
         }
         .frame(minWidth: minWidth, maxWidth: maxWidth)
@@ -145,7 +148,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     }
 }
 
-struct ContentLayout: _VariadicView_ViewRoot {
+struct ActionLayout: _VariadicView_ViewRoot {
     @Environment(\.customAlertConfiguration) private var configuration
     
     func body(children: _VariadicView.Children) -> some View {
@@ -157,20 +160,6 @@ struct ContentLayout: _VariadicView_ViewRoot {
                 child
             }
         }
-    }
-}
-
-private struct AlertButton: ViewModifier {
-    @Environment(\.isEnabled) var isEnabled
-    @Binding var isPresented: Bool
-    
-    func body(content: Content) -> some View {
-        content
-            .simultaneousGesture(TapGesture().onEnded { _ in
-                guard isEnabled else { return }
-                isPresented = false
-            }, including: .all)
-            .buttonStyle(.alert)
     }
 }
 

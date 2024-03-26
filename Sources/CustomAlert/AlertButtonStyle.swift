@@ -14,10 +14,10 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
     @Environment(\.alertDismiss) private var alertDismiss
     
-    @Environment(\.isEnabled) var isEnabled
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.alertButtonHeight) var maxHeight
-    @Environment(\.window) var window
+    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.alertButtonHeight) private var maxHeight
+    @Environment(\.window) private var window
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
@@ -105,18 +105,5 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     /// the `View/buttonStyle(_:)` modifier.
     static var alert: Self {
         AlertButtonStyle()
-    }
-}
-
-private struct AlertButtonHeightKey: EnvironmentKey {
-    static var defaultValue: CGFloat? {
-        nil
-    }
-}
-
-extension EnvironmentValues {
-    var alertButtonHeight: CGFloat? {
-        get { self[AlertButtonHeightKey.self] }
-        set { self[AlertButtonHeightKey.self] = newValue }
     }
 }

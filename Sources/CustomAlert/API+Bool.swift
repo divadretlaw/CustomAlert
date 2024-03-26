@@ -1,5 +1,5 @@
 //
-//  API.swift
+//  API+Bool.swift
 //  CustomAlert
 //
 //  Created by David Walter on 03.04.22.

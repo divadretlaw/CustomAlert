@@ -1,5 +1,5 @@
 //
-//  AlertDismissAction.swift
+//  Environment+AlertDismissAction.swift
 //  CustomAlert
 //
 //  Created by David Walter on 25.03.24.

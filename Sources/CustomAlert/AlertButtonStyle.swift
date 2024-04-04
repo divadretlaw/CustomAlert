@@ -56,8 +56,7 @@ public struct AlertButtonStyle: ButtonStyle {
         }
     }
     
-    @ViewBuilder
-    func background(configuration: Self.Configuration) -> some View {
+    @ViewBuilder func background(configuration: Self.Configuration) -> some View {
         if configuration.isPressed {
             switch colorScheme {
             case .dark:

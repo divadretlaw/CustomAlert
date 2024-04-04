@@ -9,12 +9,6 @@ import SwiftUI
 import Combine
 import WindowKit
 
-enum AlertIdentifiable: Int, Identifiable, Hashable, Equatable {
-    case present
-    
-    var id: Int { rawValue }
-}
-
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for
     /// the title.

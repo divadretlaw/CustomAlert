@@ -109,7 +109,7 @@ extension CustomAlertHandler where AlertItem == AlertIdentifiable {
         @ViewBuilder alertContent: @escaping () -> AlertContent,
         @ViewBuilder alertActions: @escaping () -> AlertActions
     ) {
-        self._item = isPresented.alert()
+        self._item = Binding(bool: isPresented)
         self.windowScene = windowScene
         self.alertTitle = alertTitle
         self.alertContent = { _ in alertContent() }

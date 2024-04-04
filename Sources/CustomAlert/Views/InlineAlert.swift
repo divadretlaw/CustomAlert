@@ -9,20 +9,22 @@ import SwiftUI
 
 /// Display a view styled like an alert inline
 public struct InlineAlert<Content, Actions>: View where Content: View, Actions: View {
-    @ViewBuilder var content: () -> Content
-    @ViewBuilder var actions: () -> Actions
+    let content: Content
+    let actions: Actions
     
     private var cornerRadius: CGFloat = 13.3333
     
     public var body: some View {
         VStack(spacing: 0) {
-            content()
+            content
             
-            _VariadicView.Tree(ContentLayout(), content: actions)
-                .buttonStyle(.alert)
+            _VariadicView.Tree(ContentLayout()) {
+                actions
+            }
+            .buttonStyle(.alert)
         }
         .background(Color(.secondarySystemGroupedBackground))
-        .listRowInsets(EdgeInsets())
+        .listRowInsets(.zero)
         .cornerRadius(cornerRadius)
     }
     
@@ -30,8 +32,8 @@ public struct InlineAlert<Content, Actions>: View where Content: View, Actions: 
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder actions: @escaping () -> Actions
     ) {
-        self.content = content
-        self.actions = actions
+        self.content = content()
+        self.actions = actions()
     }
     
     /// Change the corner radius of the alert view

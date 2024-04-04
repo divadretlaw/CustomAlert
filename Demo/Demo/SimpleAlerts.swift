@@ -38,7 +38,7 @@ struct SimpleAlerts: View {
                 Text("Some Message")
             } actions: {
                 Button(role: .cancel) {
-                    
+                    print("Cancel")
                 } label: {
                     Text("Cancel")
                 }

@@ -31,14 +31,9 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
-        .simultaneousGesture(TapGesture().onEnded { _ in
-            guard isEnabled else { return }
-            alertDismiss()
-        }, including: .all)
     }
     
-    @ViewBuilder
-    func label(configuration: Self.Configuration) -> some View {
+    @ViewBuilder func label(configuration: Self.Configuration) -> some View {
         if #available(iOS 15, *) {
             switch configuration.role {
             case .some(.destructive):

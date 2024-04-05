@@ -13,10 +13,10 @@ import SwiftUI
 public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
     @Environment(\.alertDismiss) private var alertDismiss
+    @Environment(\.alertButtonHeight) private var maxHeight
     
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.alertButtonHeight) private var maxHeight
     @Environment(\.window) private var window
     
     public func makeBody(configuration: Self.Configuration) -> some View {
@@ -31,6 +31,9 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+        .onSimultaneousTapGesture {
+            alertDismiss()
+        }
     }
     
     @ViewBuilder func label(configuration: Self.Configuration) -> some View {

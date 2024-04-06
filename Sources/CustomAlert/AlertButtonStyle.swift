@@ -61,16 +61,9 @@ public struct AlertButtonStyle: ButtonStyle {
     
     @ViewBuilder func background(configuration: Self.Configuration) -> some View {
         if configuration.isPressed {
-            switch colorScheme {
-            case .dark:
-                Color.white.opacity(0.135)
-            case .light:
-                Color.black.opacity(0.085)
-            @unknown default:
-                Color.primary.opacity(0.085)
-            }
+            BackgroundView(background: buttonConfiguration.pressedBackground)
         } else {
-            Color.almostClear
+            BackgroundView(background: buttonConfiguration.background)
         }
     }
     

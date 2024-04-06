@@ -56,6 +56,7 @@ extension CustomAlertConfiguration {
             button.padding = EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
             button.font = .callout.weight(.semibold)
             button.hideDivider = true
+            button.pressedBackground = .color(.clear)
         }
     }
 }

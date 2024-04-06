@@ -20,6 +20,10 @@ extension CustomAlertConfiguration {
         internal var roleFont: [ButtonType: Font] = [.cancel: .headline]
         /// Whether to hide the dividers between the buttons
         public var hideDivider: Bool = false
+        /// The background of the alert button
+        public var background: CustomAlertBackground = .color(.almostClear)
+        /// The pressed background of the alert button
+        public var pressedBackground: CustomAlertBackground = .color(Color(.customAlertBackgroundColor))
         
         @available(iOS 15.0, *)
         mutating func font(_ font: Font, for role: ButtonRole) {
@@ -80,6 +84,17 @@ private extension UIColor {
                 in: .main,
                 compatibleWith: traitCollection
             ) ?? .systemBlue
+        }
+    }
+    
+    static var customAlertBackgroundColor: UIColor {
+        UIColor { traitCollection in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                UIColor.white.withAlphaComponent(0.135)
+            default:
+                UIColor.black.withAlphaComponent(0.085)
+            }
         }
     }
 }

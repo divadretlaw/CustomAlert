@@ -26,9 +26,9 @@ struct CustomAlerts: View {
                     } label: {
                         Text("Cancel")
                     }
-                    Button {
+                    Button(role: .destructive) {
                     } label: {
-                        Text("OK")
+                        Text("Delete")
                     }
                 }
             }

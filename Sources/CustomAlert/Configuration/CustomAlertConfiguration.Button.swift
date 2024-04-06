@@ -14,7 +14,7 @@ extension CustomAlertConfiguration {
         public var tintColor: Color? = nil
         /// The pressed tint color of the alert button
         public var pressedTintColor: Color? = nil
-        internal var roleColor: [ButtonType: Color] = [:]
+        internal var roleColor: [ButtonType: Color] = [.destructive: .red]
         /// The padding of the alert button
         public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
         /// The font of the alert button

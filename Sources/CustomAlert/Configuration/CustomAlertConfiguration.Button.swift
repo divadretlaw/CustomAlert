@@ -20,11 +20,6 @@ extension CustomAlertConfiguration {
         internal var roleFont: [ButtonType: Font] = [.cancel: .headline]
         /// Whether to hide the dividers between the buttons
         public var hideDivider: Bool = false
-        /// Override the button style if needed
-        ///
-        /// > Note:
-        /// > Make sure to use `@Environment(\.alertDismiss)` to dismiss the button when using a custom `ButtonStyle`
-        public var buttonStyle: (any ButtonStyle)?
         
         @available(iOS 15.0, *)
         mutating func font(_ font: Font, for role: ButtonRole) {

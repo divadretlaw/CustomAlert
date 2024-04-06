@@ -41,21 +41,21 @@ public struct AlertButtonStyle: ButtonStyle {
             switch configuration.role {
             case .some(.destructive):
                 configuration.label
-                    .font(buttonConfiguration.roleFont[.destructive] ?? buttonConfiguration.font)
-                    .foregroundColor(buttonConfiguration.roleColor[.destructive] ?? color)
+                    .font(resolvedFont(role: .destructive))
+                    .foregroundColor(resolvedColor(role: .destructive, isPressed: configuration.isPressed))
             case .some(.cancel):
                 configuration.label
-                    .font(buttonConfiguration.roleFont[.cancel] ?? buttonConfiguration.font)
-                    .foregroundColor(buttonConfiguration.roleColor[.cancel] ?? color)
+                    .font(resolvedFont(role: .cancel))
+                    .foregroundColor(resolvedColor(role: .cancel, isPressed: configuration.isPressed))
             default:
                 configuration.label
-                    .font(buttonConfiguration.font)
-                    .foregroundColor(color)
+                    .font(resolvedFont())
+                    .foregroundColor(resolvedColor(isPressed: configuration.isPressed))
             }
         } else {
             configuration.label
-                .font(buttonConfiguration.font)
-                .foregroundColor(color)
+                .font(resolvedFont())
+                .foregroundColor(resolvedColor(isPressed: configuration.isPressed))
         }
     }
     
@@ -67,12 +67,17 @@ public struct AlertButtonStyle: ButtonStyle {
         }
     }
     
-    var color: Color {
+    func resolvedColor(role: ButtonType? = nil, isPressed: Bool) -> Color {
         if isEnabled {
-            if let color = buttonConfiguration.tintColor {
+            if isPressed, let color = buttonConfiguration.pressedTintColor {
+                return color
+            } else if let role, let color = buttonConfiguration.roleColor[role] {
+                return color
+            } else if let color = buttonConfiguration.tintColor {
                 return color
             }
             
+            // Fallback
             guard let color = window?.tintColor else {
                 return .accentColor
             }
@@ -84,6 +89,14 @@ public struct AlertButtonStyle: ButtonStyle {
             }
         } else {
             return Color("Disabled", bundle: .module)
+        }
+    }
+    
+    func resolvedFont(role: ButtonType? = nil) -> Font {
+        if let role, let font = buttonConfiguration.roleFont[role] {
+            return font
+        } else {
+            return buttonConfiguration.font
         }
     }
 }

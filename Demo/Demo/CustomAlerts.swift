@@ -53,10 +53,11 @@ extension CustomAlertConfiguration {
         }
         configuration.button = .create { button in
             button.tintColor = .purple
+            button.pressedTintColor = .white
             button.padding = EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
             button.font = .callout.weight(.semibold)
             button.hideDivider = true
-            button.pressedBackground = .color(.clear)
+            button.pressedBackground = .color(.purple)
         }
     }
 }

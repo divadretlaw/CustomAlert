@@ -12,6 +12,8 @@ extension CustomAlertConfiguration {
     public struct Button {
         /// The tint color of the alert button
         public var tintColor: Color? = nil
+        /// The pressed tint color of the alert button
+        public var pressedTintColor: Color? = nil
         internal var roleColor: [ButtonType: Color] = [:]
         /// The padding of the alert button
         public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)

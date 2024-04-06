@@ -80,9 +80,9 @@ The alert is customizable via the `Environment`
 <img src="Sources/CustomAlert/Documentation.docc/Resources/CustomConfiguration.png" width="300">
 
 ```swift
-.environment(\.customAlertConfiguration, .create { configuration in
-    // Adapt the configuration
-})
+.configureCustomAlert { configuration in
+    // Adapt the default configuration
+}
 ```
 
 You can also display an Alert inline, within a `List` for example

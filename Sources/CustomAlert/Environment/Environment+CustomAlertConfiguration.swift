@@ -20,13 +20,22 @@ public extension EnvironmentValues {
     }
 }
 
-extension View {
+public extension View {
     /// Create a custom alert configuration
     ///
     /// - Parameter configure: Callback to change the default configuration
     ///
     /// - Returns: The view with a customized ``CustomAlertConfiguration``
-    func customAlertStyle(style configure: (inout CustomAlertConfiguration) -> Void) -> some View {
+    func configureCustomAlert(configure: (inout CustomAlertConfiguration) -> Void) -> some View {
         environment(\.customAlertConfiguration, .create(configure: configure))
+    }
+    
+    /// Create a custom alert configuration
+    ///
+    /// - Parameter configuration: The custom alert configuration
+    ///
+    /// - Returns: The view with a customized ``CustomAlertConfiguration``
+    func configureCustomAlert(_ configuration: CustomAlertConfiguration) -> some View {
+        environment(\.customAlertConfiguration, configuration)
     }
 }

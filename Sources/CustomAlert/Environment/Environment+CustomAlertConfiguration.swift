@@ -14,6 +14,7 @@ private struct CustomAlertConfigurationKey: EnvironmentKey {
 }
 
 public extension EnvironmentValues {
+    /// The configuration values for custom alerts
     var customAlertConfiguration: CustomAlertConfiguration {
         get { self[CustomAlertConfigurationKey.self] }
         set { self[CustomAlertConfigurationKey.self] = newValue }

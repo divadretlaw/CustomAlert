@@ -33,7 +33,7 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
     }
     
     func body(content: Content) -> some View {
-        if let windowScene = windowScene {
+        if let windowScene {
             content
                 .disabled(item != nil)
                 .windowCover("CustomAlert", isPresented: isPresented, on: windowScene) {

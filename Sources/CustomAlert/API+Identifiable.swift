@@ -256,7 +256,7 @@ public extension View {
         _ title: Text? = nil,
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
-    ) -> some View where Item: Identifiable,Content: View {
+    ) -> some View where Item: Identifiable, Content: View {
         self.customAlert(title, item: item, content: content, actions: { _ in /* no actions */ })
     }
     

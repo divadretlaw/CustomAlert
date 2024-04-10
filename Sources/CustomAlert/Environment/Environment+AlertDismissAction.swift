@@ -33,6 +33,7 @@ public extension EnvironmentValues {
 }
 
 public extension View {
+    /// Perform an action when the alert dismisses
     func onAlertDismiss(action: @escaping () -> Void) -> some View {
         environment(\.alertDismiss, AlertDismissAction(action: action))
     }

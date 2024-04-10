@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Configuration values for custom alerts
 public struct CustomAlertConfiguration {
     /// The configuration of the alert view
     public var alert: Alert = .init()

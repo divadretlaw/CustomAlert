@@ -24,7 +24,7 @@ private struct TintApplier: ViewModifier {
     }
     
     init(uiColor: UIColor?) {
-        if let uiColor = uiColor {
+        if let uiColor {
             if #available(iOS 15.0, *) {
                 self.color = Color(uiColor: uiColor)
             } else {

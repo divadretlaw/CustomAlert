@@ -9,11 +9,12 @@ import Foundation
 import SwiftUI
 
 extension CustomAlertConfiguration {
+    /// Configuration values of a custom alert button 
     public struct Button {
         /// The tint color of the alert button
-        public var tintColor: Color? = nil
+        public var tintColor: Color?
         /// The pressed tint color of the alert button
-        public var pressedTintColor: Color? = nil
+        public var pressedTintColor: Color?
         internal var roleColor: [ButtonType: Color] = [.destructive: .red]
         /// The padding of the alert button
         public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)

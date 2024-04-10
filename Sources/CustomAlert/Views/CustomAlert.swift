@@ -42,6 +42,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
         ZStack {
             BackgroundView(background: configuration.background)
                 .edgesIgnoringSafeArea(.all)
+                .accessibilityAddTraits(configuration.dismissOnBackgroundTap ? [.isButton] : [])
                 .onTapGesture {
                     if configuration.dismissOnBackgroundTap {
                         isPresented = false
@@ -167,7 +168,7 @@ struct CustomAlert_Previews: PreviewProvider {
     static var previews: some View {
         CustomAlert(isPresented: .constant(true)) {
             Text("Preview")
-        } content:{
+        } content: {
             Text("Content")
         } actions: {
             Button {

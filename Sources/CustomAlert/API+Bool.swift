@@ -161,7 +161,8 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access func customAlert<Content, Actions>(
+    @warn_unqualified_access
+    func customAlert<Content, Actions>(
         _ title: LocalizedStringKey,
         isPresented: Binding<Bool>,
         on windowScene: UIWindowScene,

@@ -109,4 +109,4 @@ https://github.com/divadretlaw/CustomAlert.git
 
 See [LICENSE](LICENSE)
 
-Copyright © 2022 David Walter (www.davidwalter.at)
+Copyright © 2024 David Walter (www.davidwalter.at)

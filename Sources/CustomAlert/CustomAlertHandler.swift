@@ -36,7 +36,7 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
         if let windowScene {
             content
                 .disabled(item != nil)
-                .windowCover("CustomAlert", isPresented: isPresented, on: windowScene) {
+                .windowCover(isPresented: isPresented, on: windowScene) {
                     alertView
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
@@ -47,7 +47,7 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
         } else {
             content
                 .disabled(item != nil)
-                .windowCover("CustomAlert", isPresented: isPresented) {
+                .windowCover(isPresented: isPresented) {
                     alertView
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor

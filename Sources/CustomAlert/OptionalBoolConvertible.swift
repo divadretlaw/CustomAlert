@@ -1,5 +1,5 @@
 //
-//  AlertIdentifiable.swift
+//  OptionalBoolConvertible.swift
 //  CustomAlert
 //
 //  Created by David Walter on 31.03.24.
@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-enum AlertIdentifiable: Int, Identifiable, Hashable, Equatable {
+enum OptionalBoolConvertible {
     case present
-    
-    var id: Int { rawValue }
 }
 
-extension Binding where Value == AlertIdentifiable? {
+extension Binding where Value == OptionalBoolConvertible? {
     init(bool binding: Binding<Bool>) {
-        self = Binding<AlertIdentifiable?> {
+        self = Binding<OptionalBoolConvertible?> {
             if binding.wrappedValue {
                 return .present
             } else {

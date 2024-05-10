@@ -9,19 +9,19 @@ import SwiftUI
 import Combine
 import WindowKit
 
-struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
+struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertContent: View, AlertActions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
     @Binding var item: AlertItem?
     var windowScene: UIWindowScene?
-    var alertTitle: () -> Text?
+    var alertTitle: (AlertItem) -> Text?
     @ViewBuilder var alertContent: (AlertItem) -> AlertContent
     @ViewBuilder var alertActions: (AlertItem) -> AlertActions
     
     init(
         item: Binding<AlertItem?>,
         windowScene: UIWindowScene? = nil,
-        alertTitle: @escaping () -> Text?,
+        alertTitle: @escaping (AlertItem) -> Text?,
         @ViewBuilder alertContent: @escaping (AlertItem) -> AlertContent,
         @ViewBuilder alertActions: @escaping (AlertItem) -> AlertActions
     ) {
@@ -61,7 +61,7 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
     @ViewBuilder var alertView: some View {
         if let item {
             CustomAlert(isPresented: isPresented) {
-                alertTitle()
+                alertTitle(item)
             } content: {
                 alertContent(item)
             } actions: {
@@ -81,7 +81,7 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
     @ViewBuilder var alertIdentity: some View {
         if let item {
             ZStack {
-                alertTitle()
+                alertTitle(item)
                 alertContent(item)
                 alertActions(item)
             }
@@ -101,7 +101,7 @@ struct CustomAlertHandler<AlertItem, AlertContent, AlertActions>: ViewModifier w
     }
 }
 
-extension CustomAlertHandler where AlertItem == AlertIdentifiable {
+extension CustomAlertHandler where AlertItem == OptionalBoolConvertible {
     init(
         isPresented: Binding<Bool>,
         windowScene: UIWindowScene?,
@@ -111,7 +111,7 @@ extension CustomAlertHandler where AlertItem == AlertIdentifiable {
     ) {
         self._item = Binding(bool: isPresented)
         self.windowScene = windowScene
-        self.alertTitle = alertTitle
+        self.alertTitle = { _ in alertTitle() }
         self.alertContent = { _ in alertContent() }
         self.alertActions = { _ in alertActions() }
     }

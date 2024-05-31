@@ -19,7 +19,7 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.window) private var window
     
-    public func makeBody(configuration: Self.Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         HStack {
             Spacer()
             label(configuration: configuration)
@@ -36,7 +36,7 @@ public struct AlertButtonStyle: ButtonStyle {
         }
     }
     
-    @ViewBuilder func label(configuration: Self.Configuration) -> some View {
+    @ViewBuilder func label(configuration: Configuration) -> some View {
         if #available(iOS 15, *) {
             switch configuration.role {
             case .some(.destructive):

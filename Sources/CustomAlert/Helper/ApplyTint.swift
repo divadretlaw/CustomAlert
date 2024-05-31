@@ -17,7 +17,7 @@ extension View {
 }
 
 private struct TintApplier: ViewModifier {
-    var color: Color?
+    let color: Color?
     
     init(color: Color?) {
         self.color = color

@@ -14,7 +14,7 @@ extension View {
 }
 
 private struct DisabledViewModifier: ViewModifier {
-    var isDisabled: Bool
+    let isDisabled: Bool
     
     func body(content: Content) -> some View {
         if #available(iOS 16.0, *) {

@@ -25,7 +25,7 @@ public extension View {
     ///     using the same process.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content, Actions>(
         _ title: @autoclosure @escaping () -> Text? = nil,
         item: Binding<Item?>,
@@ -33,7 +33,8 @@ public extension View {
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
         modifier(
-            CustomAlertHandler(
+
+            CustomAlertItemHandler(
                 item: item,
                 windowScene: nil,
                 alertTitle: title,
@@ -58,14 +59,14 @@ public extension View {
     ///     using the same process.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content, Actions>(
         _ title: LocalizedStringKey,
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
-        self.customAlert(Text(title), item: item, content: content, actions: actions)
+        customAlert(Text(title), item: item, content: content, actions: actions)
     }
     
     /// Presents an alert when a given condition is true
@@ -82,7 +83,7 @@ public extension View {
     ///     using the same process.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     @_disfavoredOverload
     func customAlert<Item, Title, Content, Actions>(
         _ title: Title,
@@ -90,7 +91,7 @@ public extension View {
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Title: StringProtocol, Content: View, Actions: View {
-        self.customAlert(Text(title), item: item, content: content, actions: actions)
+        customAlert(Text(title), item: item, content: content, actions: actions)
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -108,14 +109,14 @@ public extension View {
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content, Actions>(
         item: Binding<Item?>,
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
-        self.customAlert(title(), item: item, content: content, actions: actions)
+        customAlert(title(), item: item, content: content, actions: actions)
     }
 }
 
@@ -136,7 +137,7 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content, Actions>(
         _ title: @autoclosure @escaping () -> Text? = nil,
         item: Binding<Item?>,
@@ -145,7 +146,7 @@ public extension View {
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
         modifier(
-            CustomAlertHandler(
+            CustomAlertItemHandler(
                 item: item,
                 windowScene: windowScene,
                 alertTitle: title,
@@ -171,7 +172,7 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content, Actions>(
         _ title: LocalizedStringKey,
         item: Binding<Item?>,
@@ -179,7 +180,7 @@ public extension View {
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
-        self.customAlert(Text(title), item: item, on: windowScene, content: content, actions: actions)
+        customAlert(Text(title), item: item, on: windowScene, content: content, actions: actions)
     }
     
     /// Presents an alert when a given condition is true
@@ -197,7 +198,7 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     @_disfavoredOverload
     func customAlert<Item, Title, Content, Actions>(
         _ title: Title,
@@ -206,7 +207,7 @@ public extension View {
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Title: StringProtocol, Content: View, Actions: View {
-        self.customAlert(Text(title), item: item, on: windowScene, content: content, actions: actions)
+        customAlert(Text(title), item: item, on: windowScene, content: content, actions: actions)
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -225,7 +226,7 @@ public extension View {
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
     ///   - actions: A `ViewBuilder` returning the alert's actions.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content, Actions>(
         item: Binding<Item?>,
         on windowScene: UIWindowScene,
@@ -233,7 +234,7 @@ public extension View {
         @ViewBuilder content: @escaping (Item) -> Content,
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
-        self.customAlert(title(), item: item, on: windowScene, content: content, actions: actions)
+        customAlert(title(), item: item, on: windowScene, content: content, actions: actions)
     }
 }
 
@@ -252,13 +253,13 @@ public extension View {
     ///     the system dismisses the alert and replaces it with a new one
     ///     using the same process.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content>(
         _ title: Text? = nil,
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Content: View {
-        self.customAlert(title, item: item, content: content, actions: { _ in /* no actions */ })
+        customAlert(title, item: item, content: content, actions: { _ in /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using
@@ -275,13 +276,13 @@ public extension View {
     ///     the system dismisses the alert and replaces it with a new one
     ///     using the same process.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content>(
         _ title: LocalizedStringKey,
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Content: View {
-        self.customAlert(Text(title), item: item, content: content, actions: { _ in /* no actions */ })
+        customAlert(Text(title), item: item, content: content, actions: { _ in /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true
@@ -297,14 +298,14 @@ public extension View {
     ///     the system dismisses the alert and replaces it with a new one
     ///     using the same process.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    @warn_unqualified_access
+    @MainActor
     @_disfavoredOverload
     func customAlert<Item, Title, Content>(
         _ title: Title,
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Title: StringProtocol, Content: View {
-        self.customAlert(Text(title), item: item, content: content, actions: { _ in /* no actions */ })
+        customAlert(Text(title), item: item, content: content, actions: { _ in /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -321,12 +322,12 @@ public extension View {
     ///     using the same process.
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    @warn_unqualified_access
+    @MainActor
     func customAlert<Item, Content>(
         item: Binding<Item?>,
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Content: View {
-        self.customAlert(title(), item: item, content: content, actions: { _ in /* no actions */ })
+        customAlert(title(), item: item, content: content, actions: { _ in /* no actions */ })
     }
 }

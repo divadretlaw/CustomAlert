@@ -1,31 +1,31 @@
 //
-//  CustomAlertHandler.swift
+//  CustomAlertHandler+Item.swift
 //  CustomAlert
 //
-//  Created by David Walter on 26.05.24.
+//  Created by David Walter on 28.06.23.
 //
 
 import SwiftUI
 import Combine
 import WindowKit
 
-struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertContent: View, AlertActions: View {
+struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
-    @Binding var isPresented: Bool
+    @Binding var item: AlertItem?
     var windowScene: UIWindowScene?
     var alertTitle: () -> Text?
-    @ViewBuilder var alertContent: () -> AlertContent
-    @ViewBuilder var alertActions: () -> AlertActions
+    @ViewBuilder var alertContent: (AlertItem) -> AlertContent
+    @ViewBuilder var alertActions: (AlertItem) -> AlertActions
     
     init(
-        isPresented: Binding<Bool>,
+        item: Binding<AlertItem?>,
         windowScene: UIWindowScene? = nil,
         alertTitle: @escaping () -> Text?,
-        @ViewBuilder alertContent: @escaping () -> AlertContent,
-        @ViewBuilder alertActions: @escaping () -> AlertActions
+        @ViewBuilder alertContent: @escaping (AlertItem) -> AlertContent,
+        @ViewBuilder alertActions: @escaping (AlertItem) -> AlertActions
     ) {
-        self._isPresented = isPresented
+        self._item = item
         self.windowScene = windowScene
         self.alertTitle = alertTitle
         self.alertContent = alertContent
@@ -35,9 +35,9 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
     func body(content: Content) -> some View {
         if let windowScene {
             content
-                .disabled(isPresented)
-                .windowCover(isPresented: $isPresented, on: windowScene) {
-                    alertView
+                .disabled(item != nil)
+                .windowCover(item: $item, on: windowScene) { item in
+                    alertView(for: item)
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
                     configuration.modalPresentationStyle = .overFullScreen
@@ -46,9 +46,9 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
                 .background(alertIdentity)
         } else {
             content
-                .disabled(isPresented)
-                .windowCover(isPresented: $isPresented) {
-                    alertView
+                .disabled(item != nil)
+                .windowCover(item: $item) { item in
+                    alertView(for: item)
                 } configure: { configuration in
                     configuration.tintColor = .customAlertColor
                     configuration.modalPresentationStyle = .overFullScreen
@@ -58,13 +58,14 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
         }
     }
     
-    var alertView: some View {
-        CustomAlert(isPresented: $isPresented) {
+    
+    func alertView(for item: AlertItem) -> some View {
+        CustomAlert(isPresented: isPresented) {
             alertTitle()
         } content: {
-            alertContent()
+            alertContent(item)
         } actions: {
-            alertActions()
+            alertActions(item)
         }
         .transformEnvironment(\.self) { environment in
             environment.isEnabled = true
@@ -72,19 +73,30 @@ struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertC
     }
     
     /// The view identity of the alert
-    ///
+    /// 
     /// The `alertIdentity` represents the individual parts of the alert but combined into a single view.
     ///
     /// When attached to the content of the represeting view, any changes here will propagate to the content of the window which hosts the alert.
     @ViewBuilder var alertIdentity: some View {
-        ZStack {
-            alertTitle()
-            alertContent()
-            alertActions()
+        if let item {
+            ZStack {
+                alertTitle()
+                alertContent(item)
+                alertActions(item)
+            }
+            .accessibilityHidden(true)
+            .frame(width: 0, height: 0)
+            .hidden()
         }
-        .accessibilityHidden(true)
-        .frame(width: 0, height: 0)
-        .hidden()
+    }
+    
+    private var isPresented: Binding<Bool> {
+        Binding {
+            item != nil
+        } set: { newValue in
+            guard !newValue else { return }
+            item = nil
+        }
     }
 }
 

@@ -47,26 +47,27 @@ struct MultiButtonAlerts: View {
             } actions: {
                 MultiButton {
                     Button {
-                        
+                        print("A")
                     } label: {
                         Text("A")
                     }
 
                     Button {
-                        
+                        print("B")
                     } label: {
                         Text("B")
                     }
+                    .disabled(true)
                     
                     Button {
-                        
+                        print("C")
                     } label: {
                         Text("C")
                     }
                 }
                 
                 Button(role: .cancel) {
-                    
+                    print("Cancel")
                 } label: {
                     Text("Cancel")
                 }

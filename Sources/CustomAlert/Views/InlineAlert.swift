@@ -18,11 +18,24 @@ public struct InlineAlert<Content, Actions>: View where Content: View, Actions: 
         VStack(spacing: 0) {
             content
             
+            #if swift(>=6.0)
+            if #available(iOS 18.0, *) {
+                ForEach(subviewOf: actions) { child in
+                    Divider()
+                    child
+                }
+            } else {
+                _VariadicView.Tree(ContentLayout()) {
+                    actions
+                }
+            }
+            #else
             _VariadicView.Tree(ContentLayout()) {
                 actions
             }
-            .buttonStyle(.alert)
+            #endif
         }
+        .buttonStyle(.alert)
         .background(Color(.secondarySystemGroupedBackground))
         .listRowInsets(.zero)
         .cornerRadius(cornerRadius)
@@ -45,12 +58,36 @@ public struct InlineAlert<Content, Actions>: View where Content: View, Actions: 
         return view
     }
     
+    @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
     struct ContentLayout: _VariadicView_ViewRoot {
         func body(children: _VariadicView.Children) -> some View {
             VStack(spacing: 0) {
                 ForEach(children) { child in
                     Divider()
                     child
+                }
+            }
+        }
+    }
+}
+
+@available(iOS 15.0, *)
+#Preview {
+    List {
+        InlineAlert {
+            Text("Hello World")
+                .padding()
+        } actions: {
+            MultiButton {
+                Button(role: .cancel) {
+                    print("Cancel")
+                } label: {
+                    Text("Cancel")
+                }
+                Button {
+                    print("OK")
+                } label: {
+                    Text("OK")
                 }
             }
         }

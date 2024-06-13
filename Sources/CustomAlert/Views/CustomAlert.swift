@@ -131,8 +131,27 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
             }
             .frame(height: height)
             
-            _VariadicView.Tree(ActionLayout()) {
-                actions
+            Group {
+                #if swift(>=6.0)
+                if #available(iOS 18.0, *) {
+                    VStack(spacing: 0) {
+                        ForEach(subviewOf: actions) { child in
+                            if !configuration.button.hideDivider {
+                                Divider()
+                            }
+                            child
+                        }
+                    }
+                } else {
+                    _VariadicView.Tree(ActionLayout()) {
+                        actions
+                    }
+                }
+                #else
+                _VariadicView.Tree(ActionLayout()) {
+                    actions
+                }
+                #endif
             }
             .onAlertDismiss {
                 isPresented = false
@@ -149,6 +168,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     }
 }
 
+@available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
 struct ActionLayout: _VariadicView_ViewRoot {
     @Environment(\.customAlertConfiguration) private var configuration
     

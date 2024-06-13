@@ -11,13 +11,9 @@ import SwiftUI
 ///
 /// Used to create side by side buttons on a `.customAlert`
 public struct MultiButton<Content>: View where Content: View {
-    let content: Content
+    @Environment(\.customAlertConfiguration) private var configuration
     
-    public var body: some View {
-        _VariadicView.Tree(ContentLayout()) {
-            content
-        }
-    }
+    let content: Content
     
     /// Creates multiple buttons within the MultiButton Layout.
     ///
@@ -27,6 +23,35 @@ public struct MultiButton<Content>: View where Content: View {
         self.content = content()
     }
     
+    public var body: some View {
+        #if swift(>=6.0)
+        if #available(iOS 18.0, *) {
+            HStack(spacing: 0) {
+                Group(subviewsOf: content) { subviews in
+                    subviews.first
+                    ForEach(subviewOf: subviews.dropFirst()) { child in
+                        if !configuration.button.hideDivider {
+                            Divider()
+                        }
+                        child
+                    }
+                }
+                .buttonStyle(.alert)
+                .environment(\.alertButtonHeight, .infinity)
+            }
+        } else {
+            _VariadicView.Tree(ContentLayout()) {
+                content
+            }
+        }
+        #else
+        _VariadicView.Tree(ContentLayout()) {
+            content
+        }
+        #endif
+    }
+    
+    @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
     struct ContentLayout: _VariadicView_ViewRoot {
         @Environment(\.customAlertConfiguration) private var configuration
         
@@ -43,6 +68,29 @@ public struct MultiButton<Content>: View where Content: View {
             .fixedSize(horizontal: false, vertical: true)
             .buttonStyle(.alert)
             .environment(\.alertButtonHeight, .infinity)
+        }
+    }
+}
+
+@available(iOS 15.0, *)
+#Preview {
+    List {
+        InlineAlert {
+            Text("Hello World")
+                .padding()
+        } actions: {
+            MultiButton {
+                Button(role: .cancel) {
+                    print("Cancel")
+                } label: {
+                    Text("Cancel")
+                }
+                Button {
+                    print("OK")
+                } label: {
+                    Text("OK")
+                }
+            }
         }
     }
 }

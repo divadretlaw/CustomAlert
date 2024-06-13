@@ -12,12 +12,41 @@ extension View {
         count: Int = 1,
         perform action: @escaping () -> Void
     ) -> some View {
-        overlay(
-            SimultaneousTapGesture(
-                numberOfTapsRequired: count,
-                action: action
-            )
-        )
+        modifier(SimultaneousTapGestureViewModifier(count: count, perform: action))
+    }
+}
+
+private struct SimultaneousTapGestureViewModifier: ViewModifier {
+    let count: Int
+    let action: () -> Void
+            
+    init(
+        count: Int,
+        perform action: @escaping () -> Void
+    ) {
+        self.count = count
+        self.action = action
+    }
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content
+                .simultaneousGesture(simultaneousTapGesture)
+        } else {
+            content
+                .overlay(
+                    SimultaneousTapGesture(
+                        numberOfTapsRequired: count,
+                        action: action
+                    )
+                )
+        }
+    }
+    
+    var simultaneousTapGesture: some Gesture {
+        TapGesture().onEnded {
+            action()
+        }
     }
 }
 

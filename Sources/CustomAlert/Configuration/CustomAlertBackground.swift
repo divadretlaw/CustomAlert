@@ -17,4 +17,13 @@ public enum CustomAlertBackground {
     case color(Color)
     /// A `UIBlurEffect` as background with a `Color` as background
     case colorBlurEffect(Color, UIBlurEffect.Style)
+    case anyView(AnyView)
+    
+    public static func view<Content>(@ViewBuilder builder: () -> Content) -> CustomAlertBackground where Content: View {
+        CustomAlertBackground.anyView(AnyView(builder()))
+    }
+    
+    public static func view<Content>(_ view: Content) -> CustomAlertBackground where Content: View {
+        CustomAlertBackground.anyView(AnyView(view))
+    }
 }

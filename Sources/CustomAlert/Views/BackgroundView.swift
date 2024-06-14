@@ -21,6 +21,8 @@ struct BackgroundView: View {
                 color
                 BlurView(style: style)
             }
+        case let .anyView(view):
+            view
         }
     }
 }
@@ -30,5 +32,11 @@ struct BackgroundView_Previews: PreviewProvider {
         BackgroundView(background: .blurEffect(.regular))
         BackgroundView(background: .color(.blue))
         BackgroundView(background: .colorBlurEffect(.blue, .regular))
+        BackgroundView(background: .view {
+            ZStack {
+                Color.green
+                Text("Test")
+            }
+        })
     }
 }

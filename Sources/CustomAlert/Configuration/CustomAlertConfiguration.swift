@@ -20,6 +20,8 @@ public struct CustomAlertConfiguration {
     public var padding: EdgeInsets = EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30)
     /// The transition the alert appears with
     public var transition: AnyTransition = .opacity.combined(with: .scale(scale: 1.1))
+    /// Animate the alert appearance
+    public var animateTransition: Bool = true
     /// The vertical alginment of the alert
     public var alignment: VerticalAlignment = .center
     /// Allow dismissing the alert when tapping on the background

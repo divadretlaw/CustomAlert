@@ -65,7 +65,11 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
         }
         .captureSize($viewSize)
         .onAppear {
-            withAnimation {
+            if configuration.animateTransition {
+                withAnimation {
+                    isShowing = true
+                }
+            } else {
                 isShowing = true
             }
         }

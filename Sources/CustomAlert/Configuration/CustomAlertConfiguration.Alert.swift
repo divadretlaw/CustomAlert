@@ -29,7 +29,7 @@ extension CustomAlertConfiguration {
         public var alignment: CustomAlertAlignment = .center
         
         /// Create a custom configuration
-        /// 
+        ///
         /// - Parameter configure: Callback to change the default configuration
         ///
         /// - Returns: The customized ``CustomAlertConfiguration/Alert`` configuration

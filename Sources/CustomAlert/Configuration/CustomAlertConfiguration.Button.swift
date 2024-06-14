@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 extension CustomAlertConfiguration {
-    /// Configuration values of a custom alert button 
     public struct Button {
+        /// Configuration values of a custom alert button
         /// The tint color of the alert button
         public var tintColor: Color?
         /// The pressed tint color of the alert button
@@ -41,7 +41,7 @@ extension CustomAlertConfiguration {
         }
         
         /// Create a custom configuration
-        /// 
+        ///
         /// - Parameter configure: Callback to change the default configuration
         ///
         /// - Returns: The customized ``CustomAlertConfiguration/Button`` configuration

@@ -28,9 +28,9 @@ public struct CustomAlertConfiguration {
     public var dismissOnBackgroundTap: Bool = false
     
     /// Create a custom configuration
-    /// 
+    ///
     /// - Parameter configure: Callback to change the default configuration
-    /// 
+    ///
     /// - Returns: The customized ``CustomAlertConfiguration`` configuration
     public static func create(configure: (inout Self) -> Void) -> Self {
         var configuration = Self()

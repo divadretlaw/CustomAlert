@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 import WindowKit
 
+// MARK: - Default API
+
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for
     /// the title.
@@ -115,6 +117,8 @@ public extension View {
     }
 }
 
+// MARK: - WindowScene API
+
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for
     /// the title.
@@ -220,6 +224,8 @@ public extension View {
         customAlert(title(), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
 }
+
+// MARK: - Convenience API
 
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for

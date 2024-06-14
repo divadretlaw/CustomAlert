@@ -73,7 +73,7 @@ struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifi
     }
     
     /// The view identity of the alert
-    /// 
+    ///
     /// The `alertIdentity` represents the individual parts of the alert but combined into a single view.
     ///
     /// When attached to the content of the represeting view, any changes here will propagate to the content of the window which hosts the alert.

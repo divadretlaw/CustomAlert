@@ -1,5 +1,5 @@
 //
-//  EdgeInsets.swift
+//  EdgeInsetsExtensions.swift
 //  CustomAlert
 //
 //  Created by David Walter on 31.03.24.

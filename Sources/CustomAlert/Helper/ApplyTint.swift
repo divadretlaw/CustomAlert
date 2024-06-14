@@ -11,6 +11,7 @@ extension View {
     func applyTint(_ uiColor: UIColor?) -> some View {
         modifier(TintApplier(uiColor: uiColor))
     }
+
     func applyTint(_ color: Color?) -> some View {
         modifier(TintApplier(color: color))
     }

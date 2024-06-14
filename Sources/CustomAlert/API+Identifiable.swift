@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 import WindowKit
 
+// MARK: - Default API
+
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for
     /// the title.
@@ -33,7 +35,6 @@ public extension View {
         @ViewBuilder actions: @escaping (Item) -> Actions
     ) -> some View where Item: Identifiable, Content: View, Actions: View {
         modifier(
-
             CustomAlertItemHandler(
                 item: item,
                 windowScene: nil,
@@ -119,6 +120,8 @@ public extension View {
         customAlert(title(), item: item, content: content, actions: actions)
     }
 }
+
+// MARK: - WindowScene API
 
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -237,6 +240,8 @@ public extension View {
         customAlert(title(), item: item, on: windowScene, content: content, actions: actions)
     }
 }
+
+// MARK: - Convenience API
 
 public extension View {
     /// Presents an alert when a given condition is true, using an optional text view for

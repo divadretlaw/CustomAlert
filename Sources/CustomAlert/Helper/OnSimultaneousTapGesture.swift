@@ -19,7 +19,7 @@ extension View {
 private struct SimultaneousTapGestureViewModifier: ViewModifier {
     let count: Int
     let action: () -> Void
-            
+    
     init(
         count: Int,
         perform action: @escaping () -> Void
@@ -100,7 +100,7 @@ private struct SimultaneousTapGesture: UIViewRepresentable {
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             return false
         }
-
+        
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             return false
         }

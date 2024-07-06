@@ -20,7 +20,7 @@ struct OtherAlerts: View {
             Button {
                 showNoButton = true
             } label: {
-                Text("No Button")
+                DetailLabel("No Button", detail: "CustomAlert without a Button")
             }
             .customAlert("No Button Alert", isPresented: $showNoButton) {
                 ProgressView()
@@ -35,7 +35,7 @@ struct OtherAlerts: View {
             Button {
                 showStacked = true
             } label: {
-                Text("Stacked")
+                DetailLabel("Stacked", detail: "CustomAlert with custom content")
             }
             .customAlert("Stacked", isPresented: $showStacked) {
                 VStack {
@@ -70,7 +70,7 @@ struct OtherAlerts: View {
                 }
             } actions: {
                 Button(role: .cancel) {
-                    
+                    print("Other.Stacked - Cancel")
                 } label: {
                     Text("Cancel")
                 }
@@ -79,7 +79,7 @@ struct OtherAlerts: View {
             Button {
                 showFancy = true
             } label: {
-                Text("Fancy")
+                DetailLabel("Fancy", detail: "A fancier looking alert")
             }
             .customAlert(isPresented: $showFancy) {
                 VStack(spacing: 20) {
@@ -108,12 +108,14 @@ struct OtherAlerts: View {
                 MultiButton {
                     Button(role: .cancel) {
                         message = ""
+                        print("Other.Fancy - Cancel")
                     } label: {
                         Text("Cancel")
                     }
                     
                     Button {
                         message = ""
+                        print("Other.Fancy - Send")
                     } label: {
                         Text("Send")
                     }

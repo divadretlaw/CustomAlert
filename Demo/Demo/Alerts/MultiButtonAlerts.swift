@@ -17,20 +17,19 @@ struct MultiButtonAlerts: View {
             Button {
                 showSimple = true
             } label: {
-                Text("Simple MultiButton")
+                DetailLabel("Simple", detail: "CustomAlert using MultiButton with a simple layout")
             }
             .customAlert("Multibutton Alert", isPresented: $showSimple) {
-                Text("Simple Multibutton")
+                Text("Simple MultiButton")
             } actions: {
                 MultiButton {
                     Button {
-                        
+                        print("MultiButton.Simple - OK")
                     } label: {
                         Text("OK")
                     }
-
                     Button(role: .cancel) {
-                        
+                        print("MultiButton.Simple - Cancel")
                     } label: {
                         Text("Cancel")
                     }
@@ -40,34 +39,34 @@ struct MultiButtonAlerts: View {
             Button {
                 showComplex = true
             } label: {
-                Text("Complex MultiButton")
+                DetailLabel("Complex", detail: "CustomAlert using MultiButton with a slighly more complex layout")
             }
-            .customAlert("Multibutton Alert", isPresented: $showComplex) {
-                Text("Complex Multibutton")
+            .customAlert("MultiButton Alert", isPresented: $showComplex) {
+                Text("Complex MultiButton")
             } actions: {
                 MultiButton {
                     Button {
-                        print("A")
+                        print("MultiButton.Complex - A")
                     } label: {
                         Text("A")
                     }
 
                     Button {
-                        print("B")
+                        print("MultiButton.Complex - B")
                     } label: {
                         Text("B")
                     }
                     .disabled(true)
                     
                     Button {
-                        print("C")
+                        print("MultiButton.Complex - C")
                     } label: {
                         Text("C")
                     }
                 }
                 
                 Button(role: .cancel) {
-                    print("Cancel")
+                    print("MultiButton.Complex - Cancel")
                 } label: {
                     Text("Cancel")
                 }

@@ -16,23 +16,27 @@ struct CustomAlerts: View {
             Button {
                 showAlert = true
             } label: {
-                Text("Custom Button")
+                DetailLabel("Custom Config", detail: "CustomAlert with heavily modified styling")
             }
             .customAlert("Preview", isPresented: $showAlert) {
                 Text("Content")
             } actions: {
                 MultiButton {
                     Button {
+                        print("CustomStyling.MyConfig - Cancel")
                     } label: {
                         Text("Cancel")
                     }
                     Button(role: .destructive) {
+                        print("CustomStyling.MyConfig - Delete")
                     } label: {
                         Text("Delete")
                     }
                 }
             }
             .configureCustomAlert(.myConfig)
+        } header: {
+            Text("Custom Styling")
         }
     }
 }

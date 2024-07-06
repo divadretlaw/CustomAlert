@@ -17,7 +17,7 @@ struct InputAlerts: View {
             Button {
                 showTextField = true
             } label: {
-                Text("Show TextField")
+                DetailLabel("TextField", detail: "CustomAlert with a TextField")
             }
             .customAlert("TextField", isPresented: $showTextField) {
                 TextField("Enter some String", text: $text)
@@ -29,11 +29,13 @@ struct InputAlerts: View {
                     }
             } actions: {
                 Button(role: .cancel) {
-                    
+                    print("Input.TextField - Cancel")
                 } label: {
                     Text("Cancel")
                 }
             }
+        } header: {
+            Text("Input")
         }
     }
 }

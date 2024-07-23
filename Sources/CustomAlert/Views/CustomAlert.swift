@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Custom Alert
-struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
+public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
     @Binding var isPresented: Bool
@@ -26,7 +26,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     // Used to animate the appearance
     @State private var isShowing = false
     
-    init(
+    public init(
         isPresented: Binding<Bool>,
         title: @escaping () -> Text?,
         @ViewBuilder content: () -> Content,
@@ -38,7 +38,7 @@ struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
         self.actions = actions()
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             BackgroundView(background: configuration.background)
                 .edgesIgnoringSafeArea(.all)

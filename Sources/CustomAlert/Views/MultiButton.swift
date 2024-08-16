@@ -27,9 +27,9 @@ public struct MultiButton<Content>: View where Content: View {
         #if swift(>=6.0)
         if #available(iOS 18.0, *) {
             HStack(spacing: 0) {
-                Group(subviewsOf: content) { subviews in
+                Group(subviews: content) { subviews in
                     subviews.first
-                    ForEach(subviewOf: subviews.dropFirst()) { child in
+                    ForEach(subviews.dropFirst()) { child in
                         if !configuration.button.hideDivider {
                             Divider()
                         }

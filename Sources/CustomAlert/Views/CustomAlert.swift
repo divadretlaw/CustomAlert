@@ -139,7 +139,7 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
                 #if swift(>=6.0)
                 if #available(iOS 18.0, *) {
                     VStack(spacing: 0) {
-                        ForEach(subviewOf: actions) { child in
+                        ForEach(subviews: actions) { child in
                             if !configuration.button.hideDivider {
                                 Divider()
                             }

@@ -20,7 +20,7 @@ public struct InlineAlert<Content, Actions>: View where Content: View, Actions: 
             
             #if swift(>=6.0)
             if #available(iOS 18.0, *) {
-                ForEach(subviewOf: actions) { child in
+                ForEach(subviews: actions) { child in
                     Divider()
                     child
                 }

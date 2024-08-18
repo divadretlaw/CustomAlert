@@ -188,6 +188,26 @@ struct ActionLayout: _VariadicView_ViewRoot {
     }
 }
 
+private extension VerticalAlignment {
+    var hasTopSpacer: Bool {
+        switch self {
+        case .top, .firstTextBaseline:
+            return false
+        default:
+            return true
+        }
+    }
+    
+    var hasBottomSpacer: Bool {
+        switch self {
+        case .bottom, .lastTextBaseline:
+            return false
+        default:
+            return true
+        }
+    }
+}
+
 struct CustomAlert_Previews: PreviewProvider {
     static var previews: some View {
         CustomAlert(isPresented: .constant(true)) {
@@ -239,25 +259,5 @@ struct CustomAlert_Previews: PreviewProvider {
             }
         })
         .previewDisplayName("Custom")
-    }
-}
-
-private extension VerticalAlignment {
-    var hasTopSpacer: Bool {
-        switch self {
-        case .top, .firstTextBaseline:
-            return false
-        default:
-            return true
-        }
-    }
-    
-    var hasBottomSpacer: Bool {
-        switch self {
-        case .bottom, .lastTextBaseline:
-            return false
-        default:
-            return true
-        }
     }
 }

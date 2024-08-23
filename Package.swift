@@ -15,7 +15,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/divadretlaw/WindowKit", from: "2.3.2")
+        .package(url: "https://github.com/divadretlaw/WindowKit", from: "2.4.0")
     ],
     targets: [
         .target(name: "CustomAlert", dependencies: ["WindowKit"])

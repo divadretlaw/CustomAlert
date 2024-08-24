@@ -36,9 +36,10 @@ public struct MultiButton<Content>: View where Content: View {
                         child
                     }
                 }
-                .buttonStyle(.alert)
-                .environment(\.alertButtonHeight, .infinity)
             }
+            .fixedSize(horizontal: false, vertical: true)
+            .buttonStyle(.alert)
+            .environment(\.alertButtonHeight, .infinity)
         } else {
             _VariadicView.Tree(ContentLayout()) {
                 content

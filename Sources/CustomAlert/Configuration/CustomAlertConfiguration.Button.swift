@@ -9,26 +9,39 @@ import Foundation
 import SwiftUI
 
 extension CustomAlertConfiguration {
-    public struct Button {
+    public struct Button: Sendable {
         /// Configuration values of a custom alert button
         /// The tint color of the alert button
         public var tintColor: Color?
         /// The pressed tint color of the alert button
         public var pressedTintColor: Color?
-        internal var roleColor: [ButtonType: Color] = [.destructive: .red]
+        internal var roleColor: [ButtonType: Color]
         /// The padding of the alert button
-        public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+        public var padding: EdgeInsets
         /// The padding of the alert button when using accessibility scaling
-        public var accessibilityPadding: EdgeInsets = EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
+        public var accessibilityPadding: EdgeInsets
         /// The font of the alert button
-        public var font: Font = .body
-        internal var roleFont: [ButtonType: Font] = [.cancel: .headline]
+        public var font: Font
+        internal var roleFont: [ButtonType: Font]
         /// Whether to hide the dividers between the buttons
-        public var hideDivider: Bool = false
+        public var hideDivider: Bool
         /// The background of the alert button
-        public var background: CustomAlertBackground = .color(.almostClear)
+        public var background: CustomAlertBackground
         /// The pressed background of the alert button
-        public var pressedBackground: CustomAlertBackground = .color(Color(.customAlertBackgroundColor))
+        public var pressedBackground: CustomAlertBackground
+        
+        init() {
+            self.tintColor = nil
+            self.pressedTintColor = nil
+            self.roleColor = [.destructive: .red]
+            self.padding = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+            self.accessibilityPadding = EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
+            self.font = .body
+            self.roleFont = [.cancel: .headline]
+            self.hideDivider = false
+            self.background = .color(.almostClear)
+            self.pressedBackground = .color(Color(.customAlertBackgroundColor))
+        }
         
         @available(iOS 15.0, *)
         public mutating func font(_ font: Font, for role: ButtonRole) {

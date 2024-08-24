@@ -11,7 +11,7 @@ import WindowReader
 /// A button style that applies standard alert styling
 ///
 /// You can also use ``alert`` to construct this style.
-public struct AlertButtonStyle: ButtonStyle {
+@MainActor public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
     @Environment(\.alertDismiss) private var alertDismiss
     @Environment(\.alertButtonHeight) private var maxHeight

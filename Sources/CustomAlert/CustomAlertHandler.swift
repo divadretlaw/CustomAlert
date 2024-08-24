@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import WindowKit
 
-struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertContent: View, AlertActions: View {
+@MainActor struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertContent: View, AlertActions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
     @Binding var isPresented: Bool

@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Custom Alert
-public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
+@MainActor public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     @Environment(\.customDynamicTypeSize) private var dynamicTypeSize
     
@@ -208,9 +208,10 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
 }
 
 @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
-struct ActionLayout: _VariadicView_ViewRoot {
+@MainActor struct ActionLayout: _VariadicView_ViewRoot {
     @Environment(\.customAlertConfiguration) private var configuration
     
+    #if swift(>=6.0)
     func body(children: _VariadicView.Children) -> some View {
         VStack(spacing: 0) {
             ForEach(children) { child in
@@ -221,6 +222,24 @@ struct ActionLayout: _VariadicView_ViewRoot {
             }
         }
     }
+    #else
+    nonisolated func body(children: _VariadicView.Children) -> some View {
+        VStack(spacing: 0) {
+            ForEach(children) { child in
+                if !hideDivider {
+                    Divider()
+                }
+                child
+            }
+        }
+    }
+    
+    nonisolated var hideDivider: Bool {
+        MainActor.runSync {
+            configuration.button.hideDivider
+        }
+    }
+    #endif
 }
 
 private extension VerticalAlignment {

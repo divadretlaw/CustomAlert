@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import WindowKit
 
-struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
+@MainActor struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
     @Binding var item: AlertItem?

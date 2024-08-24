@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 
 /// Wrapped background of the alert
-public enum CustomAlertBackground {
+public enum CustomAlertBackground: Sendable {
     /// A `UIBlurEffect` as background
     case blurEffect(UIBlurEffect.Style)
     /// A `Color` as background
@@ -19,11 +19,27 @@ public enum CustomAlertBackground {
     case colorBlurEffect(Color, UIBlurEffect.Style)
     case anyView(AnyView)
     
-    public static func view<Content>(@ViewBuilder builder: () -> Content) -> CustomAlertBackground where Content: View {
-        CustomAlertBackground.anyView(AnyView(builder()))
+    @MainActor public static func view<Content>(@ViewBuilder builder: () -> Content) -> CustomAlertBackground where Content: View {
+        CustomAlertBackground.anyView(AnyView(builder: builder))
     }
     
-    public static func view<Content>(_ view: Content) -> CustomAlertBackground where Content: View {
+    @MainActor public static func view<Content>(_ view: Content) -> CustomAlertBackground where Content: View {
         CustomAlertBackground.anyView(AnyView(view))
+    }
+    
+    @MainActor public struct AnyView: View, Sendable {
+        let wrappedView: SwiftUI.AnyView
+        
+        init<Content>(@ViewBuilder builder: () -> Content) where Content: View {
+            self.wrappedView = SwiftUI.AnyView(builder())
+        }
+        
+        init<Content>(_ view: Content) where Content: View {
+            self.wrappedView = SwiftUI.AnyView(view)
+        }
+        
+        public var body: some View {
+            wrappedView
+        }
     }
 }

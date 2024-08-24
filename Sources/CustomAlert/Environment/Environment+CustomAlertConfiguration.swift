@@ -9,7 +9,7 @@ import SwiftUI
 
 private struct CustomAlertConfigurationKey: EnvironmentKey {
     static var defaultValue: CustomAlertConfiguration {
-        CustomAlertConfiguration()
+        CustomAlertConfiguration.default
     }
 }
 

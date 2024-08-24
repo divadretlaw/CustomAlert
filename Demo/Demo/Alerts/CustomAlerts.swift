@@ -114,7 +114,7 @@ struct CustomContent: View {
 }
 
 extension CustomAlertConfiguration {
-    static var myConfig: CustomAlertConfiguration = .create { configuration in
+    static let myConfig: CustomAlertConfiguration = .create { configuration in
         configuration.background = .blurEffect(.dark)
         configuration.padding = EdgeInsets()
         configuration.alert = .create { alert in

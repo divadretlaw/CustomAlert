@@ -53,9 +53,10 @@ public struct MultiButton<Content>: View where Content: View {
     }
     
     @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
-    struct ContentLayout: _VariadicView_ViewRoot {
+    @MainActor struct ContentLayout: _VariadicView_ViewRoot {
         @Environment(\.customAlertConfiguration) private var configuration
         
+        #if swift(>=6.0)
         func body(children: _VariadicView.Children) -> some View {
             HStack(spacing: 0) {
                 children.first
@@ -70,6 +71,34 @@ public struct MultiButton<Content>: View where Content: View {
             .buttonStyle(.alert)
             .environment(\.alertButtonHeight, .infinity)
         }
+        #else
+        nonisolated func body(children: _VariadicView.Children) -> some View {
+            HStack(spacing: 0) {
+                children.first
+                ForEach(children.dropFirst()) { child in
+                    if !hideDivider {
+                        Divider()
+                    }
+                    child
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .buttonStyle(buttonStyle)
+            .environment(\.alertButtonHeight, .infinity)
+        }
+        
+        nonisolated var buttonStyle: some ButtonStyle {
+            MainActor.runSync {
+                AlertButtonStyle(triggerDismiss: true)
+            }
+        }
+        
+        nonisolated var hideDivider: Bool {
+            MainActor.runSync {
+                configuration.button.hideDivider
+            }
+        }
+        #endif
     }
 }
 

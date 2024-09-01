@@ -81,7 +81,7 @@ You can also display an Alert inline, within a `List` for example
 ![Inline Alert](InlineAlert)
 
 ```swift
-InlineAlert {
+CustomAlertRow {
     // Content
 } actions: {
     // Actions

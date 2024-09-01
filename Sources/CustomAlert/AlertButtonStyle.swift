@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WindowReader
 
 /// A button style that applies standard alert styling
 ///
@@ -19,7 +20,20 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.window) private var window
     
+    var triggerDismiss: Bool
+    
     public func makeBody(configuration: Configuration) -> some View {
+        if triggerDismiss {
+            makeLabel(configuration: configuration)
+                .onSimultaneousTapGesture {
+                    alertDismiss()
+                }
+        } else {
+            makeLabel(configuration: configuration)
+        }
+    }
+    
+    func makeLabel(configuration: Configuration) -> some View {
         HStack {
             Spacer()
             label(configuration: configuration)
@@ -31,9 +45,6 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(buttonConfiguration.padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
-        .onSimultaneousTapGesture {
-            alertDismiss()
-        }
     }
     
     @ViewBuilder func label(configuration: Configuration) -> some View {
@@ -104,9 +115,15 @@ public struct AlertButtonStyle: ButtonStyle {
 public extension ButtonStyle where Self == AlertButtonStyle {
     /// A button style that applies standard alert styling
     ///
-    /// To apply this style to a button, or to a view that contains buttons, use
-    /// the `View/buttonStyle(_:)` modifier.
+    /// A tap on the button will trigger `EnvironmentValues.alertDismiss`
     static var alert: Self {
-        AlertButtonStyle()
+        AlertButtonStyle(triggerDismiss: true)
+    }
+    
+    /// A button style that applies standard alert styling
+    ///
+    /// - Parameter triggerDismiss: Whether the button should trigger `EnvironmentValues.alertDismiss` or not.
+    static func alert(triggerDismiss: Bool) -> Self {
+        AlertButtonStyle(triggerDismiss: triggerDismiss)
     }
 }

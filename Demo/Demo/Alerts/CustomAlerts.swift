@@ -11,6 +11,9 @@ import CustomAlert
 struct CustomAlerts: View {
     @State private var showAlert = false
     
+    @State private var showChangingAlert = false
+    @State private var next: Int = 0
+    
     var body: some View {
         Section {
             Button {
@@ -35,6 +38,56 @@ struct CustomAlerts: View {
                 }
             }
             .configureCustomAlert(.myConfig)
+            Button {
+                next = 0
+                showChangingAlert = true
+            } label: {
+                DetailLabel("Changing Alert", detail: "CustomAlert that changes")
+            }
+            .customAlert("Preview", isPresented: $showChangingAlert) {
+                ZStack {
+                    Group {
+                        switch next {
+                        case 0:
+                            Text("Initial Content. Press next to continue.")
+                        case 1:
+                            Text("Content changed, to display the next step. Press next to continue.")
+                        default:
+                            Text("Final Content. Press done to dismiss the alert.")
+                        }
+                    }
+                    .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                }
+                .animation(.default, value: next)
+            } actions: {
+                MultiButton {
+                    Button(role: .cancel) {
+                        print("CustomStyling.MyConfig - Cancel")
+                    } label: {
+                        Text("Cancel")
+                    }
+                    ZStack {
+                        switch next {
+                        case 0, 1:
+                            Button {
+                                next += 1
+                            } label: {
+                                Text("Next")
+                            }
+                            .transition(.opacity)
+                            .buttonStyle(.alert(triggerDismiss: false))
+                        default:
+                            Button(role: .destructive) {
+                                print("CustomStyling.MyConfig - Done")
+                            } label: {
+                                Text("Done")
+                            }
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.default, value: next)
+                }
+            }
         } header: {
             Text("Custom Styling")
         }

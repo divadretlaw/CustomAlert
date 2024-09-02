@@ -59,18 +59,18 @@ You can create Side by Side Buttons using `MultiButton`
 .customAlert("Alert with Side by Side Buttons", isPresented: $showAlert) {
     Text("Choose left or right")
 } actions: {
-	MultiButton {
-	    Button {
-	        // some Action
-	    } label: {
-	        Text("Left")
-	    }
-	    
-	    Button {
-	        // some Action
-	    } label: {
-	        Text("Right")
-	    }
+    MultiButton {
+        Button {
+            // some Action
+        } label: {
+            Text("Left")
+        }
+
+        Button {
+            // some Action
+        } label: {
+            Text("Right")
+        }
     }
 }
 ```
@@ -90,7 +90,7 @@ You can also display an Alert inline, within a `List` for example
 <img src="Sources/CustomAlert/Documentation.docc/Resources/InlineAlert.png" width="300">
 
 ```swift
-InlineAlert {
+CustomAlertRow {
     // Content
 } actions: {
     // Actions

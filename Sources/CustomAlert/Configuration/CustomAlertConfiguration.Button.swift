@@ -18,6 +18,8 @@ extension CustomAlertConfiguration {
         internal var roleColor: [ButtonType: Color] = [.destructive: .red]
         /// The padding of the alert button
         public var padding: EdgeInsets = EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+        /// The padding of the alert button when using accessibility scaling
+        public var accessibilityPadding: EdgeInsets = EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
         /// The font of the alert button
         public var font: Font = .body
         internal var roleFont: [ButtonType: Font] = [.cancel: .headline]
@@ -29,13 +31,13 @@ extension CustomAlertConfiguration {
         public var pressedBackground: CustomAlertBackground = .color(Color(.customAlertBackgroundColor))
         
         @available(iOS 15.0, *)
-        mutating func font(_ font: Font, for role: ButtonRole) {
+        public mutating func font(_ font: Font, for role: ButtonRole) {
             guard let type = ButtonType(from: role) else { return }
             self.roleFont[type] = font
         }
         
         @available(iOS 15.0, *)
-        mutating func color(_ color: Color, for role: ButtonRole) {
+        public mutating func color(_ color: Color, for role: ButtonRole) {
             guard let type = ButtonType(from: role) else { return }
             self.roleColor[type] = color
         }

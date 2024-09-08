@@ -17,8 +17,12 @@ extension CustomAlertConfiguration {
         public var cornerRadius: CGFloat = 13.3333
         /// The padding of the content of the alert view
         public var padding: EdgeInsets = EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8)
+        /// The padding of the content of the alert view when using accessibility scaling
+        public var accessibilityPadding: EdgeInsets = EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12)
         /// The minimum width of the alert view
         public var minWidth: CGFloat = 270
+        /// The minimum width of the alert view when using accessibility scaling
+        public var accessibilityMinWidth: CGFloat = 329
         /// The default font of the title of the alert view
         public var titleFont: Font = .headline
         /// The default font of the content of the alert view

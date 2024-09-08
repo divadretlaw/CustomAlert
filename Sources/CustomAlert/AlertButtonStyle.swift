@@ -15,6 +15,7 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
     @Environment(\.alertDismiss) private var alertDismiss
     @Environment(\.alertButtonHeight) private var maxHeight
+    @Environment(\.customDynamicTypeSize) private var dynamicTypeSize
     
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
@@ -42,9 +43,17 @@ public struct AlertButtonStyle: ButtonStyle {
                 .truncationMode(.middle)
             Spacer()
         }
-        .padding(buttonConfiguration.padding)
+        .padding(padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+    }
+    
+    var padding: EdgeInsets {
+        if dynamicTypeSize.isAccessibilitySize {
+            buttonConfiguration.accessibilityPadding
+        } else {
+            buttonConfiguration.padding
+        }
     }
     
     @ViewBuilder func label(configuration: Configuration) -> some View {

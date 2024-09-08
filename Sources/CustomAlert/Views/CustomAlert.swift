@@ -10,6 +10,7 @@ import SwiftUI
 /// Custom Alert
 public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     @Environment(\.customAlertConfiguration) private var configuration
+    @Environment(\.customDynamicTypeSize) private var dynamicTypeSize
     
     @Binding var isPresented: Bool
     var title: Text?
@@ -20,6 +21,7 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
     @State private var viewSize: CGSize = .zero
     @State private var contentSize: CGSize = .zero
     @State private var actionsSize: CGSize = .zero
+    @State private var alertId: Int = 0
     
     @State private var fitInScreen = false
     
@@ -55,7 +57,9 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
                 }
                 
                 if isShowing {
-                    alert.animation(nil, value: height)
+                    alert
+                        .animation(nil, value: height)
+                        .id(alertId)
                 }
                 
                 if configuration.alignment.hasBottomSpacer {
@@ -102,8 +106,22 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
             - configuration.padding.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
-        // Smallest AlertView should be 270
-        return max(min, configuration.alert.minWidth)
+        
+        if dynamicTypeSize.isAccessibilitySize {
+            // Smallest AlertView should be 329
+            return max(min, configuration.alert.accessibilityMinWidth)
+        } else {
+            // Smallest AlertView should be 270
+            return max(min, configuration.alert.minWidth)
+        }
+    }
+    
+    var alertPadding: EdgeInsets {
+        if dynamicTypeSize.isAccessibilitySize {
+            configuration.alert.accessibilityPadding
+        } else {
+            configuration.alert.padding
+        }
     }
     
     var alert: some View {
@@ -121,7 +139,7 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
                             .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
                     }
                     .foregroundColor(.primary)
-                    .padding(configuration.alert.padding)
+                    .padding(alertPadding)
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
                     // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
@@ -169,6 +187,23 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
         .padding(configuration.padding)
         .transition(configuration.transition)
         .animation(.default, value: isPresented)
+        .onChange(of: dynamicTypeSize) { _ in
+            redrawAlert()
+        }
+    }
+    
+    func calculateAlertId() {
+        var hasher = Hasher()
+        hasher.combine(dynamicTypeSize)
+        alertId = hasher.finalize()
+    }
+    
+    func redrawAlert() {
+        // Reset calculated sizes
+        contentSize = .zero
+        actionsSize = .zero
+        // Force redraw
+        calculateAlertId()
     }
 }
 

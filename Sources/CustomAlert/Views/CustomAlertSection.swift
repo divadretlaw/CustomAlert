@@ -151,7 +151,6 @@ extension CustomAlertSection where Header == EmptyView {
     }
 }
 
-@available(iOS 15.0, *)
 struct CustomAlertSection_Preview: PreviewProvider {
     static var previews: some View {
         Preview()

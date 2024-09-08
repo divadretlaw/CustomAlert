@@ -10,7 +10,7 @@ import SwiftUI
 /// Custom Alert
 @MainActor public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
     @Environment(\.customAlertConfiguration) private var configuration
-    @Environment(\.customDynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @Binding var isPresented: Bool
     var title: Text?

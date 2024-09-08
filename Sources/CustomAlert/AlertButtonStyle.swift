@@ -15,7 +15,7 @@ import WindowReader
     @Environment(\.customAlertConfiguration.button) private var buttonConfiguration
     @Environment(\.alertDismiss) private var alertDismiss
     @Environment(\.alertButtonHeight) private var maxHeight
-    @Environment(\.customDynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
@@ -57,22 +57,16 @@ import WindowReader
     }
     
     @ViewBuilder func label(configuration: Configuration) -> some View {
-        if #available(iOS 15, *) {
-            switch configuration.role {
-            case .some(.destructive):
-                configuration.label
-                    .font(resolvedFont(role: .destructive))
-                    .foregroundColor(resolvedColor(role: .destructive, isPressed: configuration.isPressed))
-            case .some(.cancel):
-                configuration.label
-                    .font(resolvedFont(role: .cancel))
-                    .foregroundColor(resolvedColor(role: .cancel, isPressed: configuration.isPressed))
-            default:
-                configuration.label
-                    .font(resolvedFont())
-                    .foregroundColor(resolvedColor(isPressed: configuration.isPressed))
-            }
-        } else {
+        switch configuration.role {
+        case .some(.destructive):
+            configuration.label
+                .font(resolvedFont(role: .destructive))
+                .foregroundColor(resolvedColor(role: .destructive, isPressed: configuration.isPressed))
+        case .some(.cancel):
+            configuration.label
+                .font(resolvedFont(role: .cancel))
+                .foregroundColor(resolvedColor(role: .cancel, isPressed: configuration.isPressed))
+        default:
             configuration.label
                 .font(resolvedFont())
                 .foregroundColor(resolvedColor(isPressed: configuration.isPressed))
@@ -102,11 +96,7 @@ import WindowReader
                 return .accentColor
             }
             
-            if #available(iOS 15.0, *) {
-                return Color(uiColor: color)
-            } else {
-                return Color(color)
-            }
+            return Color(uiColor: color)
         } else {
             return Color("Disabled", bundle: .module)
         }

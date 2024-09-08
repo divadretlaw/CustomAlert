@@ -43,13 +43,11 @@ extension CustomAlertConfiguration {
             self.pressedBackground = .color(Color(.customAlertBackgroundColor))
         }
         
-        @available(iOS 15.0, *)
         public mutating func font(_ font: Font, for role: ButtonRole) {
             guard let type = ButtonType(from: role) else { return }
             self.roleFont[type] = font
         }
         
-        @available(iOS 15.0, *)
         public mutating func color(_ color: Color, for role: ButtonRole) {
             guard let type = ButtonType(from: role) else { return }
             self.roleColor[type] = color
@@ -73,12 +71,11 @@ extension CustomAlertConfiguration {
     }
 }
 
-/// Internal button type because `ButtonRole` is iOS 15+
+/// Internal button type because `ButtonRole` is not `Hashable`
 enum ButtonType: Hashable {
     case destructive
     case cancel
     
-    @available(iOS 15.0, *)
     init?(from role: ButtonRole) {
         switch role {
         case .destructive:
@@ -94,15 +91,7 @@ enum ButtonType: Hashable {
 private extension UIColor {
     static var customAlertColor: UIColor {
         let traitCollection = UITraitCollection(activeAppearance: .active)
-        if #available(iOS 15.0, *) {
-            return .tintColor.resolvedColor(with: traitCollection)
-        } else {
-            return UIColor(
-                named: "AccentColor",
-                in: .main,
-                compatibleWith: traitCollection
-            ) ?? .systemBlue
-        }
+        return .tintColor.resolvedColor(with: traitCollection)
     }
     
     static var customAlertBackgroundColor: UIColor {

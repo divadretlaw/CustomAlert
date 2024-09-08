@@ -91,14 +91,6 @@ import WindowKit
 private extension UIColor {
     static var customAlertColor: UIColor {
         let traitCollection = UITraitCollection(activeAppearance: .active)
-        if #available(iOS 15.0, *) {
-            return .tintColor.resolvedColor(with: traitCollection)
-        } else {
-            return UIColor(
-                named: "AccentColor",
-                in: .main,
-                compatibleWith: traitCollection
-            ) ?? .systemBlue
-        }
+        return .tintColor.resolvedColor(with: traitCollection)
     }
 }

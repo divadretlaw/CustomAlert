@@ -102,7 +102,6 @@ public struct MultiButton<Content>: View where Content: View {
     }
 }
 
-@available(iOS 15.0, *)
 #Preview {
     List {
         CustomAlertRow {

@@ -22,7 +22,7 @@ struct CustomAlerts: View {
                 DetailLabel("Custom Config", detail: "CustomAlert with heavily modified styling")
             }
             .customAlert("Preview", isPresented: $showAlert) {
-                Text("Content")
+                CustomContent()
             } actions: {
                 MultiButton {
                     Button {
@@ -90,6 +90,25 @@ struct CustomAlerts: View {
             }
         } header: {
             Text("Custom Styling")
+        }
+    }
+}
+
+struct CustomContent: View {
+    @Environment(\.alertDismiss) private var alertDismiss
+    @Environment(\.customAlertConfiguration) private var configuration
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Content")
+            
+            Button {
+                alertDismiss()
+            } label: {
+                Text("Custom Dismiss Button")
+            }
+            .buttonStyle(.bordered)
+            .tint(configuration.button.tintColor)
         }
     }
 }

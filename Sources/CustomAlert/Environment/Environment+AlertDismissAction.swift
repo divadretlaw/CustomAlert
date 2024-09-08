@@ -8,10 +8,38 @@
 import SwiftUI
 
 /// An action that dismisses a custom alert presentation.
+///
+/// Use the `alertDismiss` environment value to get the instance
+/// of this structure for a given `Environment`. Then call the instance
+/// to perform the dismissal. You call the instance directly because
+/// it defines a ``AlertDismissAction/callAsFunction()``
+/// method that Swift calls when you call the instance.
 public struct AlertDismissAction {
     let action: () -> Void
     
-    func callAsFunction() {
+    /// Dismisses the alert if it is currently presented.
+    ///
+    /// Don't call this method directly. SwiftUI calls it for you when you
+    /// call the ``AlertDismissAction`` structure that you get from the
+    /// `Environment`:
+    ///
+    /// ```swift
+    /// private struct SheetContents: View {
+    ///     @Environment(\.alertDismiss) private var alertDismiss
+    ///
+    ///     var body: some View {
+    ///         Button("Done") {
+    ///             alertDismiss() // Implicitly calls dismiss.callAsFunction()
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// For information about how Swift uses the `callAsFunction()` method to
+    /// simplify call site syntax, see
+    /// [Methods with Special Names](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#ID622)
+    /// in *The Swift Programming Language*.
+    public func callAsFunction() {
         action()
     }
 }

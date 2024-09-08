@@ -157,11 +157,11 @@ public struct CustomAlert<Content, Actions>: View where Content: View, Actions: 
                 }
                 #endif
             }
-            .onAlertDismiss {
-                isPresented = false
-            }
             .buttonStyle(.alert)
             .captureSize($actionsSize)
+        }
+        .onAlertDismiss {
+            isPresented = false
         }
         .frame(minWidth: minWidth, maxWidth: maxWidth)
         .background(BackgroundView(background: configuration.alert.background))

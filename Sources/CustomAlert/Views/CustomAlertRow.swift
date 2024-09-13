@@ -73,7 +73,6 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
     }
 }
 
-@available(iOS 15.0, *)
 struct CustomAlertRow_Preview: PreviewProvider {
     static var previews: some View {
         Preview()

@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import WindowKit
 
-struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
+@MainActor struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
     @Binding var item: AlertItem?
@@ -103,14 +103,6 @@ struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifi
 private extension UIColor {
     static var customAlertColor: UIColor {
         let traitCollection = UITraitCollection(activeAppearance: .active)
-        if #available(iOS 15.0, *) {
-            return .tintColor.resolvedColor(with: traitCollection)
-        } else {
-            return UIColor(
-                named: "AccentColor",
-                in: .main,
-                compatibleWith: traitCollection
-            ) ?? .systemBlue
-        }
+        return .tintColor.resolvedColor(with: traitCollection)
     }
 }

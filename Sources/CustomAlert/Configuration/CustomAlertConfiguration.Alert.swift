@@ -10,27 +10,40 @@ import SwiftUI
 
 extension CustomAlertConfiguration {
     /// The custom alert configuration
-    public struct Alert {
+    public struct Alert: Sendable {
         /// The background of the alert view
-        public var background: CustomAlertBackground = .blurEffect(.systemMaterial)
+        public var background: CustomAlertBackground
         /// The corner radius of the alert view
-        public var cornerRadius: CGFloat = 13.3333
+        public var cornerRadius: CGFloat
         /// The padding of the content of the alert view
-        public var padding: EdgeInsets = EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8)
+        public var padding: EdgeInsets
         /// The padding of the content of the alert view when using accessibility scaling
-        public var accessibilityPadding: EdgeInsets = EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12)
+        public var accessibilityPadding: EdgeInsets
         /// The minimum width of the alert view
-        public var minWidth: CGFloat = 270
+        public var minWidth: CGFloat
         /// The minimum width of the alert view when using accessibility scaling
-        public var accessibilityMinWidth: CGFloat = 329
+        public var accessibilityMinWidth: CGFloat
         /// The default font of the title of the alert view
-        public var titleFont: Font = .headline
+        public var titleFont: Font
         /// The default font of the content of the alert view
-        public var contentFont: Font = .footnote
+        public var contentFont: Font
         /// The spacing of the content of the alert view
-        public var spacing: CGFloat = 4
+        public var spacing: CGFloat
         /// The alignment of the content of the alert view
-        public var alignment: CustomAlertAlignment = .center
+        public var alignment: CustomAlertAlignment
+        
+        init() {
+            self.background = .blurEffect(.systemMaterial)
+            self.cornerRadius = 13.3333
+            self.padding = EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8)
+            self.accessibilityPadding = EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12)
+            self.minWidth = 270
+            self.accessibilityMinWidth = 329
+            self.titleFont = .headline
+            self.contentFont = .footnote
+            self.spacing = 4
+            self.alignment = .center
+        }
         
         /// Create a custom configuration
         ///
@@ -44,7 +57,7 @@ extension CustomAlertConfiguration {
         }
         
         /// The default configuration
-        public static var `default`: CustomAlertConfiguration {
+        @MainActor public static var `default`: CustomAlertConfiguration {
             CustomAlertConfiguration()
         }
         
@@ -84,7 +97,7 @@ extension CustomAlertConfiguration {
 }
 
 /// The alignment of the content of the custom alert
-public enum CustomAlertAlignment {
+public enum CustomAlertAlignment: Sendable {
     /// The content is aligned in the center
     case center
     /// The content is aligned on the leading edge

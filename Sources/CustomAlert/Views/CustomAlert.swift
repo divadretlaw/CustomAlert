@@ -40,6 +40,17 @@ import SwiftUI
         self.actions = actions()
     }
     
+    public init(
+        title: @autoclosure @escaping () -> Text?,
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder actions: () -> Actions
+    ) {
+        self._isPresented = .constant(true)
+        self.title = title()
+        self.content = content()
+        self.actions = actions()
+    }
+    
     public var body: some View {
         ZStack {
             BackgroundView(background: configuration.background)

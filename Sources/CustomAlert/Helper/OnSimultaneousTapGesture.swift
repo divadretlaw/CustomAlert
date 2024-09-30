@@ -29,6 +29,15 @@ private struct SimultaneousTapGestureViewModifier: ViewModifier {
     }
     
     func body(content: Content) -> some View {
+        #if compiler(<6.0)
+        content
+            .overlay(
+                SimultaneousTapGesture(
+                    numberOfTapsRequired: count,
+                    action: action
+                )
+            )
+        #else
         if #available(iOS 18.0, *) {
             content
                 .simultaneousGesture(simultaneousTapGesture)
@@ -41,6 +50,7 @@ private struct SimultaneousTapGestureViewModifier: ViewModifier {
                     )
                 )
         }
+        #endif
     }
     
     var simultaneousTapGesture: some Gesture {

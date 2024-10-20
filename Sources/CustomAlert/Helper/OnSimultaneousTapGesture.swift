@@ -39,8 +39,18 @@ private struct SimultaneousTapGestureViewModifier: ViewModifier {
             )
         #else
         if #available(iOS 18.0, *) {
-            content
-                .simultaneousGesture(simultaneousTapGesture)
+            if ProcessInfo.processInfo.isiOSAppOnOtherPlatform {
+                content
+                    .overlay(
+                        SimultaneousTapGesture(
+                            numberOfTapsRequired: count,
+                            action: action
+                        )
+                    )
+            } else {
+                content
+                    .simultaneousGesture(simultaneousTapGesture)
+            }
         } else {
             content
                 .overlay(

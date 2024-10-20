@@ -23,6 +23,7 @@ struct ContentView: View {
             }
             .navigationTitle("Custom Alert")
         }
+        .navigationViewStyle(.stack)
     }
 }
 

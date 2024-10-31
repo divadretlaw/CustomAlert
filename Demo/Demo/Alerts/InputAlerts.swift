@@ -11,7 +11,9 @@ import CustomAlert
 struct InputAlerts: View {
     @State private var showTextField = false
     @State private var text = ""
-    
+    @State private var showTextEditor = false
+    @State private var editorText = ""
+
     var body: some View {
         Section {
             Button {
@@ -30,6 +32,28 @@ struct InputAlerts: View {
             } actions: {
                 Button(role: .cancel) {
                     print("Input.TextField - Cancel")
+                } label: {
+                    Text("Cancel")
+                }
+            }
+            
+            Button {
+                showTextEditor = true
+            } label: {
+                DetailLabel("TextEditor", detail: "CustomAlert with a TextEditor")
+            }
+            .customAlert("TextEditor", isPresented: $showTextEditor) {
+                TextEditor(text: $text)
+                    .font(.body)
+                    .padding(4)
+                    .frame(height: 100)
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(uiColor: .systemBackground))
+                    }
+            } actions: {
+                Button(role: .cancel) {
+                    print("Input.TextEditor - Cancel")
                 } label: {
                     Text("Cancel")
                 }

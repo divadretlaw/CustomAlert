@@ -31,6 +31,8 @@ extension CustomAlertConfiguration {
         public var spacing: CGFloat
         /// The alignment of the content of the alert view
         public var alignment: CustomAlertAlignment
+        /// Optional shadow applied to the alert
+        public var shadow: CustomAlertShadow?
         
         init() {
             self.background = .blurEffect(.systemMaterial)
@@ -43,6 +45,7 @@ extension CustomAlertConfiguration {
             self.contentFont = .footnote
             self.spacing = 4
             self.alignment = .center
+            self.shadow = nil
         }
         
         /// Create a custom configuration

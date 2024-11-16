@@ -195,6 +195,7 @@ import SwiftUI
         .frame(minWidth: minWidth, maxWidth: maxWidth)
         .background(BackgroundView(background: configuration.alert.background))
         .cornerRadius(configuration.alert.cornerRadius)
+        .shadow(configuration.alert.shadow)
         .padding(configuration.padding)
         .transition(configuration.transition)
         .animation(.default, value: isPresented)

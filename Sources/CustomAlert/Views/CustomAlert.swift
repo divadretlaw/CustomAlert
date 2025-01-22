@@ -19,6 +19,7 @@ import SwiftUI
     
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
+    @State private var safeAreaInsets: EdgeInsets = .zero
     @State private var contentSize: CGSize = .zero
     @State private var actionsSize: CGSize = .zero
     @State private var alertId: Int = 0
@@ -52,33 +53,37 @@ import SwiftUI
     }
     
     public var body: some View {
-        ZStack {
-            BackgroundView(background: configuration.background)
-                .edgesIgnoringSafeArea(.all)
-                .accessibilityAddTraits(configuration.dismissOnBackgroundTap ? [.isButton] : [])
-                .onTapGesture {
-                    if configuration.dismissOnBackgroundTap {
-                        isPresented = false
+        GeometryReader { proxy in
+            ZStack {
+                BackgroundView(background: configuration.background)
+                    .edgesIgnoringSafeArea(.all)
+                    .accessibilityAddTraits(configuration.dismissOnBackgroundTap ? [.isButton] : [])
+                    .onTapGesture {
+                        if configuration.dismissOnBackgroundTap {
+                            isPresented = false
+                        }
+                    }
+                
+                VStack(spacing: 0) {
+                    if configuration.alignment.hasTopSpacer {
+                        Spacer()
+                    }
+                    
+                    if isShowing {
+                        alert
+                            .animation(nil, value: height)
+                            .id(alertId)
+                    }
+                    
+                    if configuration.alignment.hasBottomSpacer {
+                        Spacer()
                     }
                 }
-            
-            VStack(spacing: 0) {
-                if configuration.alignment.hasTopSpacer {
-                    Spacer()
-                }
-                
-                if isShowing {
-                    alert
-                        .animation(nil, value: height)
-                        .id(alertId)
-                }
-                
-                if configuration.alignment.hasBottomSpacer {
-                    Spacer()
-                }
             }
+            .frame(maxWidth: proxy.totalWidth, maxHeight: proxy.totalHeight)
+            .captureTotalSize($viewSize)
         }
-        .captureSize($viewSize)
+        .captureSafeAreaInsets($safeAreaInsets)
         .onAppear {
             if configuration.animateTransition {
                 withAnimation {
@@ -93,8 +98,10 @@ import SwiftUI
     var height: CGFloat {
         // View height - padding top and bottom - actions height
         let maxHeight = viewSize.height
-            - configuration.padding.leading
-            - configuration.padding.trailing
+            - configuration.padding.top
+            - configuration.padding.bottom
+            - safeAreaInsets.top
+            - safeAreaInsets.bottom
             - actionsSize.height
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
@@ -115,6 +122,8 @@ import SwiftUI
         let maxWidth = viewSize.width
             - configuration.padding.leading
             - configuration.padding.trailing
+            - safeAreaInsets.leading
+            - safeAreaInsets.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
         
@@ -271,6 +280,16 @@ private extension VerticalAlignment {
         default:
             return true
         }
+    }
+}
+
+private extension GeometryProxy {
+    var totalWidth: CGFloat {
+        size.width + safeAreaInsets.leading + safeAreaInsets.trailing
+    }
+    
+    var totalHeight: CGFloat {
+        size.height + safeAreaInsets.top + safeAreaInsets.bottom
     }
 }
 

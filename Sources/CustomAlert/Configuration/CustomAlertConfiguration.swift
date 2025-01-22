@@ -31,7 +31,7 @@ import SwiftUI
         self.alert = .init()
         self.button = .init()
         self.background = .color(Color.black.opacity(0.2))
-        self.padding = EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30)
+        self.padding = EdgeInsets(top: 0, leading: 30, bottom: 16, trailing: 30)
         self.transition = .opacity.combined(with: .scale(scale: 1.1))
         self.animateTransition = true
         self.alignment = .center

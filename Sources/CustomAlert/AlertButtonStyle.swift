@@ -46,6 +46,7 @@ public struct AlertButtonStyle: ButtonStyle {
         .padding(padding)
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+        .fixedSize(horizontal: false, vertical: true)
     }
     
     var padding: EdgeInsets {

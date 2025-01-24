@@ -58,7 +58,6 @@ import WindowKit
         }
     }
     
-    
     func alertView(for item: AlertItem) -> some View {
         CustomAlert(isPresented: isPresented) {
             alertTitle()

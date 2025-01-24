@@ -1,5 +1,6 @@
 # By default, SwiftLint uses a set of sensible default rules you can adjust:
 disabled_rules: # rule identifiers turned on by default to exclude from running
+  # - attribute_name_spacing
   # - blanket_disable_command
   # - block_based_kvo
   # - class_delegate_protocol
@@ -11,7 +12,6 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   # - compiler_protocol_init
   # - computed_accessors_order
   # - control_statement
-  # - custom_rules
   # - cyclomatic_complexity
   # - deployment_target
   # - discouraged_direct_init
@@ -49,12 +49,15 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   # - nesting
   # - no_fallthrough_only
   # - no_space_in_method_call
+  # - non_optional_string_data_conversion
   # - notification_center_detachment
   # - ns_number_init_as_function_reference
   # - nsobject_prefer_isequal
   # - opening_brace
   # - operator_whitespace
+  # - optional_data_string_conversion
   # - orphaned_doc_comment
+  # - prefer_type_checking
   # - private_over_fileprivate
   # - private_unit_test
   # - protocol_property_accessors_order
@@ -62,6 +65,7 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   # - redundant_discardable_let
   # - redundant_objc_attribute
   # - redundant_optional_initialization
+  - redundant_sendable
   # - redundant_set_access_control
   # - redundant_string_enum_value
   # - redundant_void_return
@@ -69,6 +73,7 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   # - self_in_property_initialization
   # - shorthand_operator
   # - statement_position
+  # - static_over_final_class
   # - superfluous_disable_command
   # - switch_case_alignment
   # - syntactic_sugar
@@ -81,6 +86,8 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   # - type_name
   # - unavailable_condition
   # - unneeded_break_in_switch
+  # - unneeded_override
+  # - unneeded_synthesized_initializer
   # - unused_closure_parameter
   # - unused_control_flow_label
   # - unused_enumerated
@@ -97,6 +104,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - accessibility_trait_for_button
   # - anonymous_argument_in_multiline_closure
   - array_init
+  # - async_without_await
   # - attributes
   - balanced_xctest_lifecycle
   # - capture_variable
@@ -110,6 +118,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - contains_over_filter_is_empty
   - contains_over_first_not_nil
   - contains_over_range_nil_comparison
+  # - contrasted_opening_brace
   - convenience_type
   - direct_return
   - discarded_notification_center_observer
@@ -137,6 +146,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   # - file_name
   - file_name_no_space
   # - file_types_order
+  # - final_test_case
   - first_where
   - flatmap_over_map_reduce
   - force_unwrapping
@@ -145,7 +155,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - identical_operands
   # - implicit_return
   - implicitly_unwrapped_optional
-  # - indentation_width
+  - indentation_width
   - joined_default_parameter
   - last_where
   - legacy_multiple
@@ -163,19 +173,23 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - multiline_parameters
   - multiline_parameters_brackets
   - nimble_operator
+  # - no_empty_block
   # - no_extension_access_modifier
   - no_grouping_extension
   # - no_magic_numbers
+  # - non_overridable_class_declaration
   - nslocalizedstring_key
   # - nslocalizedstring_require_bundle
   - number_separator
   - object_literal
+  # - one_declaration_per_file
   - operator_usage_whitespace
   - optional_enum_case_matching
   - overridden_super_call
   - override_in_extension
   - pattern_matching_keywords
   - period_spacing
+  # - prefer_key_path
   - prefer_nimble
   # - prefer_self_in_static_references
   # - prefer_self_type_over_type_of_self
@@ -183,7 +197,8 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - prefixed_toplevel_constant
   - private_action
   - private_outlet
-  # - private_subject
+  - private_subject
+  - private_swiftui_state
   - prohibited_interface_builder
   - prohibited_super_call
   - quick_discouraged_call
@@ -198,6 +213,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - required_enum_case
   - return_value_from_void_function
   - self_binding
+  # - shorthand_argument
   - shorthand_optional_binding
   - single_test_class
   # - sorted_enum_cases
@@ -220,6 +236,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - untyped_error_in_catch
   # - unused_declaration
   # - unused_import
+  # - unused_parameter
   - vertical_parameter_alignment_on_call
   # - vertical_whitespace_between_cases
   - vertical_whitespace_closing_braces

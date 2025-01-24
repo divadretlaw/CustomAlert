@@ -13,6 +13,8 @@ struct ContentView: View {
             List {
                 SimpleAlerts()
                 
+                ScrollContentAlerts()
+                
                 InputAlerts()
                 
                 MultiButtonAlerts()

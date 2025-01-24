@@ -24,7 +24,7 @@ private struct IntrinsicSafeAreaPreferenceKey: PreferenceKey {
 }
 
 extension View {
-    func captureSize(_ size: Binding<CGSize>, withSafeArea: Bool = false) -> some View {
+    func captureSize(_ size: Binding<CGSize>) -> some View {
         background(
             GeometryReader { proxy in
                 Color.clear

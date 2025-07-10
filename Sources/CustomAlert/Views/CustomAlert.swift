@@ -181,7 +181,11 @@ import SwiftUI
                             if !configuration.button.hideDivider {
                                 Divider()
                             }
-                            child
+                            // iOS 26 beta compatibility wrapper
+                            // Fixes documented SwiftUI button action bug in modal presentations
+                            iOS26CompatibleButtonWrapper(isPresented: $isPresented) {
+                                child
+                            }
                         }
                     }
                 } else {

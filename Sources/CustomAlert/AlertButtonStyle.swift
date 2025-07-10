@@ -24,14 +24,7 @@ public struct AlertButtonStyle: ButtonStyle {
     var triggerDismiss: Bool
     
     public func makeBody(configuration: Configuration) -> some View {
-        if triggerDismiss {
-            makeLabel(configuration: configuration)
-                .onSimultaneousTapGesture {
-                    alertDismiss()
-                }
-        } else {
-            makeLabel(configuration: configuration)
-        }
+        makeLabel(configuration: configuration)
     }
     
     func makeLabel(configuration: Configuration) -> some View {

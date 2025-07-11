@@ -22,13 +22,7 @@ struct InputAlerts: View {
                 DetailLabel("TextField", detail: "CustomAlert with a TextField")
             }
             .customAlert("TextField", isPresented: $showTextField) {
-                TextField("Enter some String", text: $text)
-                    .font(.body)
-                    .padding(4)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(uiColor: .systemBackground))
-                    }
+                MyInputAlert(text: $text)
             } actions: {
                 Button(role: .cancel) {
                     print("Input.TextField - Cancel")
@@ -43,7 +37,7 @@ struct InputAlerts: View {
                 DetailLabel("TextEditor", detail: "CustomAlert with a TextEditor")
             }
             .customAlert("TextEditor", isPresented: $showTextEditor) {
-                TextEditor(text: $text)
+                TextEditor(text: $editorText)
                     .font(.body)
                     .padding(4)
                     .frame(height: 100)
@@ -61,6 +55,26 @@ struct InputAlerts: View {
         } header: {
             Text("Input")
         }
+    }
+}
+
+private struct MyInputAlert: View {
+    @Binding var text: String
+
+    @FocusState private var isFocused
+
+    var body: some View {
+        TextField("Enter some String", text: $text)
+            .focused($isFocused)
+            .font(.body)
+            .padding(4)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color(uiColor: .systemBackground))
+            }
+            .onAppear {
+                isFocused = true
+            }
     }
 }
 

@@ -19,7 +19,6 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
             VStack(spacing: 0) {
                 content
                 
-                #if swift(>=6.0)
                 if #available(iOS 18.0, *) {
                     ForEach(subviews: actions) { child in
                         Divider()
@@ -30,11 +29,6 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
                         actions
                     }
                 }
-                #else
-                _VariadicView.Tree(ContentLayout()) {
-                    actions
-                }
-                #endif
             }
             .buttonStyle(.alert(triggerDismiss: false))
             .listRowInsets(.zero)

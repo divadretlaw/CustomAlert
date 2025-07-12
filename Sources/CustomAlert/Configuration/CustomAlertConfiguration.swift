@@ -100,10 +100,27 @@ import SwiftUI
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
-    CustomAlert(isPresented: .constant(true)) {
-        Text("Custom Alert")
-    } content: {
+    @Previewable @State var showAlert = true
+    VStack {
+        Button("Show Alert") {
+            showAlert = true
+        }
+    }
+    .alert("Native Alert", isPresented: $showAlert) {
+        Button(role: .cancel) {
+        } label: {
+            Text("Cancel")
+        }
+        Button {
+        } label: {
+            Text("OK")
+        }
+    } message: {
+        Text("Some Message")
+    }
+    .customAlert("Custom Alert", isPresented: $showAlert) {
         Text("Some Message")
     } actions: {
         MultiButton {

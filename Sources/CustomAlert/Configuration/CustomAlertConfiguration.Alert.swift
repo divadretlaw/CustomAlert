@@ -16,9 +16,11 @@ extension CustomAlertConfiguration {
         /// The corner radius of the alert view
         public var cornerRadius: CGFloat
         /// The padding of the content of the alert view
-        public var padding: EdgeInsets
+        public var contentPadding: EdgeInsets
         /// The padding of the content of the alert view when using accessibility scaling
-        public var accessibilityPadding: EdgeInsets
+        public var accessibilityContentPadding: EdgeInsets
+        /// The padding of the buttons of the alert view
+        public var buttonPadding: EdgeInsets
         /// The minimum width of the alert view
         public var minWidth: CGFloat
         /// The minimum width of the alert view when using accessibility scaling
@@ -37,8 +39,9 @@ extension CustomAlertConfiguration {
         init(
             background: CustomAlertBackground,
             cornerRadius: CGFloat,
-            padding: EdgeInsets,
-            accessibilityPadding: EdgeInsets,
+            contentPadding: EdgeInsets,
+            accessibilityContentPadding: EdgeInsets,
+            buttonPadding: EdgeInsets,
             minWidth: CGFloat,
             accessibilityMinWidth: CGFloat,
             titleFont: Font,
@@ -49,8 +52,9 @@ extension CustomAlertConfiguration {
         ) {
             self.background = background
             self.cornerRadius = cornerRadius
-            self.padding = padding
-            self.accessibilityPadding = accessibilityPadding
+            self.contentPadding = contentPadding
+            self.buttonPadding = buttonPadding
+            self.accessibilityContentPadding = accessibilityContentPadding
             self.minWidth = minWidth
             self.accessibilityMinWidth = accessibilityMinWidth
             self.titleFont = titleFont
@@ -58,6 +62,16 @@ extension CustomAlertConfiguration {
             self.spacing = spacing
             self.alignment = alignment
             self.shadow = shadow
+        }
+
+        @available(*, deprecated, renamed: "contentPadding")
+        public var padding: EdgeInsets {
+            get {
+                contentPadding
+            }
+            set {
+                contentPadding = newValue
+            }
         }
 
         /// Create a custom configuration
@@ -84,9 +98,10 @@ extension CustomAlertConfiguration {
         public nonisolated static var liquidGlass: CustomAlertConfiguration.Alert {
             CustomAlertConfiguration.Alert(
                 background: .glass(),
-                cornerRadius: 30,
-                padding: EdgeInsets(top: 20, leading: 30, bottom: 20, trailing: 30),
-                accessibilityPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
+                cornerRadius: 35,
+                contentPadding: EdgeInsets(top: 25, leading: 28, bottom: 25, trailing: 28),
+                accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
+                buttonPadding: EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15),
                 minWidth: 300,
                 accessibilityMinWidth: 379,
                 titleFont: .headline,
@@ -102,8 +117,9 @@ extension CustomAlertConfiguration {
             CustomAlertConfiguration.Alert(
                 background: .blurEffect(.systemMaterial),
                 cornerRadius: 13.3333,
-                padding: EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8),
-                accessibilityPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
+                contentPadding: EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8),
+                accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
+                buttonPadding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
                 minWidth: 270,
                 accessibilityMinWidth: 379,
                 titleFont: .headline,
@@ -159,10 +175,27 @@ public enum CustomAlertAlignment: Sendable {
     case trailing
 }
 
+@available(iOS 17.0, *)
 #Preview {
-    CustomAlert(isPresented: .constant(true)) {
-        Text("Custom Alert")
-    } content: {
+    @Previewable @State var showAlert = true
+    VStack {
+        Button("Show Alert") {
+            showAlert = true
+        }
+    }
+    .alert("Native Alert", isPresented: $showAlert) {
+        Button(role: .cancel) {
+        } label: {
+            Text("Cancel")
+        }
+        Button {
+        } label: {
+            Text("OK")
+        }
+    } message: {
+        Text("Some Message")
+    }
+    .customAlert("Custom Alert", isPresented: .constant(true)) {
         Text("Some Message")
     } actions: {
         MultiButton {

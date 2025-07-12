@@ -29,6 +29,11 @@ extension CustomAlertConfiguration {
         public var background: CustomAlertBackground
         /// The pressed background of the alert button
         public var pressedBackground: CustomAlertBackground
+        internal var roleBackground: [ButtonType: CustomAlertBackground]
+        /// The spacing between buttons
+        public var spacing: CGFloat
+        /// The shape of the buttons
+        public var shape: ButtonBorderShape
 
         init(
             tintColor: Color?,
@@ -40,7 +45,10 @@ extension CustomAlertConfiguration {
             roleFont: [ButtonType: Font],
             hideDivider: Bool,
             background: CustomAlertBackground,
-            pressedBackground: CustomAlertBackground
+            pressedBackground: CustomAlertBackground,
+            roleBackground: [ButtonType: CustomAlertBackground],
+            spacing: CGFloat,
+            shape: ButtonBorderShape
         ) {
             self.tintColor = tintColor
             self.pressedTintColor = pressedTintColor
@@ -52,6 +60,9 @@ extension CustomAlertConfiguration {
             self.hideDivider = hideDivider
             self.background = background
             self.pressedBackground = pressedBackground
+            self.roleBackground = roleBackground
+            self.spacing = spacing
+            self.shape = shape
         }
 
         /// Create a custom configuration
@@ -76,34 +87,44 @@ extension CustomAlertConfiguration {
 
         /// The default configuration for a liquid glass alert
         public nonisolated static var liquidGlass: CustomAlertConfiguration.Button {
-            CustomAlertConfiguration.Button(
-                tintColor: nil,
-                pressedTintColor: nil,
-                roleColor: [.destructive: .red],
-                padding: EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12),
-                accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
-                font: .body,
-                roleFont: [.cancel: .headline],
-                hideDivider: true,
-                background: .color(.almostClear),
-                pressedBackground: .color(Color(.customAlertBackgroundColor))
-            )
+            MainActor.runSync {
+                CustomAlertConfiguration.Button(
+                    tintColor: .primary,
+                    pressedTintColor: nil,
+                    roleColor: [.destructive: .red, .cancel: .white],
+                    padding: EdgeInsets(top: 14, leading: 12, bottom: 14, trailing: 12),
+                    accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
+                    font: .body,
+                    roleFont: [.cancel: .headline],
+                    hideDivider: true,
+                    background: .color(Color(.customAlertBackgroundColor)),
+                    pressedBackground: .color(Color(.customAlertBackgroundColor)),
+                    roleBackground: [.cancel: .color(.accentColor)],
+                    spacing: 8,
+                    shape: .capsule
+                )
+            }
         }
 
         /// The default configuration for a classic alert
         public nonisolated static var classic: CustomAlertConfiguration.Button {
-            CustomAlertConfiguration.Button(
-                tintColor: nil,
-                pressedTintColor: nil,
-                roleColor: [.destructive: .red, .cancel: .accentColor],
-                padding: EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12),
-                accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
-                font: .body,
-                roleFont: [.cancel: .headline],
-                hideDivider: false,
-                background: .color(.almostClear),
-                pressedBackground: .color(Color(.customAlertBackgroundColor))
-            )
+            MainActor.runSync {
+                CustomAlertConfiguration.Button(
+                    tintColor: nil,
+                    pressedTintColor: nil,
+                    roleColor: [.destructive: .red],
+                    padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
+                    accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
+                    font: .body,
+                    roleFont: [.cancel: .headline],
+                    hideDivider: false,
+                    background: .color(.almostClear),
+                    pressedBackground: .color(Color(.customAlertBackgroundColor)),
+                    roleBackground: [:],
+                    spacing: 0,
+                    shape: .automatic
+                )
+            }
         }
 
         public mutating func font(_ font: Font, for role: ButtonRole) {
@@ -114,6 +135,11 @@ extension CustomAlertConfiguration {
         public mutating func color(_ color: Color, for role: ButtonRole) {
             guard let type = ButtonType(from: role) else { return }
             self.roleColor[type] = color
+        }
+
+        public mutating func background(_ backkground: CustomAlertBackground, for role: ButtonRole) {
+            guard let type = ButtonType(from: role) else { return }
+            self.roleBackground[type] = backkground
         }
     }
 }

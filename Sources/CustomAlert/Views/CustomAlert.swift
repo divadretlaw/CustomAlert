@@ -138,9 +138,9 @@ import SwiftUI
     
     var alertPadding: EdgeInsets {
         if dynamicTypeSize.isAccessibilitySize {
-            configuration.alert.accessibilityPadding
+            configuration.alert.accessibilityContentPadding
         } else {
-            configuration.alert.padding
+            configuration.alert.contentPadding
         }
     }
     
@@ -174,7 +174,6 @@ import SwiftUI
             .frame(height: height)
             
             Group {
-                #if swift(>=6.0)
                 if #available(iOS 18.0, *) {
                     VStack(spacing: 0) {
                         ForEach(subviews: actions) { child in
@@ -184,16 +183,13 @@ import SwiftUI
                             child
                         }
                     }
+                    .padding(configuration.alert.buttonPadding)
                 } else {
                     _VariadicView.Tree(ActionLayout()) {
                         actions
                     }
+                    .padding(configuration.alert.buttonPadding)
                 }
-                #else
-                _VariadicView.Tree(ActionLayout()) {
-                    actions
-                }
-                #endif
             }
             .buttonStyle(.alert)
             .captureSize($actionsSize)
@@ -212,7 +208,7 @@ import SwiftUI
             redrawAlert()
         }
     }
-    
+
     func calculateAlertId() {
         var hasher = Hasher()
         hasher.combine(dynamicTypeSize)
@@ -232,7 +228,6 @@ import SwiftUI
 @MainActor struct ActionLayout: _VariadicView_ViewRoot {
     @Environment(\.customAlertConfiguration) private var configuration
     
-    #if swift(>=6.0)
     func body(children: _VariadicView.Children) -> some View {
         VStack(spacing: 0) {
             ForEach(children) { child in
@@ -243,24 +238,6 @@ import SwiftUI
             }
         }
     }
-    #else
-    nonisolated func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: 0) {
-            ForEach(children) { child in
-                if !hideDivider {
-                    Divider()
-                }
-                child
-            }
-        }
-    }
-    
-    nonisolated var hideDivider: Bool {
-        MainActor.runSync {
-            configuration.button.hideDivider
-        }
-    }
-    #endif
 }
 
 private extension VerticalAlignment {
@@ -329,7 +306,7 @@ struct CustomAlert_Previews: PreviewProvider {
             configuration.alert = .create { alert in
                 alert.background = .color(.white)
                 alert.cornerRadius = 4
-                alert.padding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
+                alert.contentPadding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
                 alert.minWidth = 300
                 alert.titleFont = .headline
                 alert.contentFont = .subheadline

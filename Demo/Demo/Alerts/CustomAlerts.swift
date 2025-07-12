@@ -120,7 +120,7 @@ extension CustomAlertConfiguration {
         configuration.alert = .create { alert in
             alert.background = .color(.white)
             alert.cornerRadius = 4
-            alert.padding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
+            alert.contentPadding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
             alert.minWidth = 300
             alert.titleFont = .headline
             alert.contentFont = .subheadline

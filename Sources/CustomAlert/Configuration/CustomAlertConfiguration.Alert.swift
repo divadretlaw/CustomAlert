@@ -99,9 +99,9 @@ extension CustomAlertConfiguration {
             CustomAlertConfiguration.Alert(
                 background: .glass(),
                 cornerRadius: 35,
-                contentPadding: EdgeInsets(top: 25, leading: 28, bottom: 25, trailing: 28),
+                contentPadding: EdgeInsets(top: 25, leading: 28, bottom: 10, trailing: 28),
                 accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
-                buttonPadding: EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15),
+                buttonPadding: EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15),
                 minWidth: 300,
                 accessibilityMinWidth: 379,
                 titleFont: .headline,
@@ -115,7 +115,7 @@ extension CustomAlertConfiguration {
         /// The default configuration for a classic alert
         public nonisolated static var classic: CustomAlertConfiguration.Alert {
             CustomAlertConfiguration.Alert(
-                background: .blurEffect(.systemMaterial),
+                background: .blurEffect(.systemThinMaterial),
                 cornerRadius: 13.3333,
                 contentPadding: EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8),
                 accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BackgroundView: View {
+    @Environment(\.customAlertConfiguration) private var configuration
+
     var background: CustomAlertBackground
     
     var body: some View {
@@ -25,13 +27,11 @@ struct BackgroundView: View {
             view
         case let .glass(color):
             if #available(iOS 26.0, *) {
-                /// UIGlassEffect doesn't support custom radius yet: https://developer.apple.com/forums/thread/787996?answerId=843646022#843646022
-                // GlassView(color: color)
-                BlurView(style: .systemMaterial)
+                Color.clear.glassEffect(.regular.tint(color), in: RoundedRectangle(cornerRadius: configuration.alert.cornerRadius))
             } else {
                 if let color {
                     ZStack {
-                        Color(uiColor: color)
+                        color
                         BlurView(style: .systemMaterial)
                     }
                 } else {

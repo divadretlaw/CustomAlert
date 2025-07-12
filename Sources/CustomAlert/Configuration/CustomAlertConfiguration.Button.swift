@@ -97,8 +97,8 @@ extension CustomAlertConfiguration {
                     font: .body,
                     roleFont: [.cancel: .headline],
                     hideDivider: true,
-                    background: .color(Color(.customAlertBackgroundColor)),
-                    pressedBackground: .color(Color(.customAlertBackgroundColor)),
+                    background: .color(Color("Background", bundle: .module)),
+                    pressedBackground: .color(.liquidGlassBackgroundColor),
                     roleBackground: [.cancel: .color(.accentColor)],
                     spacing: 8,
                     shape: .capsule
@@ -118,8 +118,8 @@ extension CustomAlertConfiguration {
                     font: .body,
                     roleFont: [.cancel: .headline],
                     hideDivider: false,
-                    background: .color(.almostClear),
-                    pressedBackground: .color(Color(.customAlertBackgroundColor)),
+                    background: .color(.classicBackgroundColor),
+                    pressedBackground: .color(.classicBackgroundColor),
                     roleBackground: [:],
                     spacing: 0,
                     shape: .automatic
@@ -157,24 +157,6 @@ enum ButtonType: Hashable {
             self = .cancel
         default:
             return nil
-        }
-    }
-}
-
-private extension UIColor {
-    static var customAlertColor: UIColor {
-        let traitCollection = UITraitCollection(activeAppearance: .active)
-        return .tintColor.resolvedColor(with: traitCollection)
-    }
-    
-    static var customAlertBackgroundColor: UIColor {
-        UIColor { traitCollection in
-            switch traitCollection.userInterfaceStyle {
-            case .dark:
-                UIColor.white.withAlphaComponent(0.135)
-            default:
-                UIColor.black.withAlphaComponent(0.085)
-            }
         }
     }
 }

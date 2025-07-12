@@ -175,7 +175,7 @@ import SwiftUI
             
             Group {
                 if #available(iOS 18.0, *) {
-                    VStack(spacing: 0) {
+                    VStack(spacing: configuration.button.spacing) {
                         ForEach(subviews: actions) { child in
                             if !configuration.button.hideDivider {
                                 Divider()
@@ -229,7 +229,7 @@ import SwiftUI
     @Environment(\.customAlertConfiguration) private var configuration
     
     func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: 0) {
+        VStack(spacing: configuration.button.spacing) {
             ForEach(children) { child in
                 if !configuration.button.hideDivider {
                     Divider()

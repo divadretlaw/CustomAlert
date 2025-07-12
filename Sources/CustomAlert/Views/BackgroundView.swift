@@ -23,6 +23,21 @@ struct BackgroundView: View {
             }
         case let .anyView(view):
             view
+        case let .glass(color):
+            if #available(iOS 26.0, *) {
+                /// UIGlassEffect doesn't support custom radius yet: https://developer.apple.com/forums/thread/787996?answerId=843646022#843646022
+                // GlassView(color: color)
+                BlurView(style: .systemMaterial)
+            } else {
+                if let color {
+                    ZStack {
+                        Color(uiColor: color)
+                        BlurView(style: .systemMaterial)
+                    }
+                } else {
+                    BlurView(style: .systemMaterial)
+                }
+            }
         }
     }
 }

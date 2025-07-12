@@ -26,33 +26,95 @@ import SwiftUI
     public var alignment: VerticalAlignment
     /// Allow dismissing the alert when tapping on the background
     public var dismissOnBackgroundTap: Bool
-    
-    public init() {
-        self.alert = .init()
-        self.button = .init()
-        self.background = .color(Color("DimmingBackround", bundle: .module))
-        self.padding = EdgeInsets(top: 0, leading: 30, bottom: 16, trailing: 30)
-        self.transition = .opacity.combined(with: .scale(scale: 1.1))
-        self.animateTransition = true
-        self.alignment = .center
-        self.dismissOnBackgroundTap = false
+
+    init(
+        alert: CustomAlertConfiguration.Alert,
+        button: CustomAlertConfiguration.Button,
+        background: CustomAlertBackground,
+        padding: EdgeInsets,
+        transition: AnyTransition,
+        animateTransition: Bool,
+        alignment: VerticalAlignment,
+        dismissOnBackgroundTap: Bool
+    ) {
+        self.alert = alert
+        self.button = button
+        self.background = background
+        self.padding = padding
+        self.transition = transition
+        self.animateTransition = animateTransition
+        self.alignment = alignment
+        self.dismissOnBackgroundTap = dismissOnBackgroundTap
     }
-    
     /// Create a custom configuration
     ///
     /// - Parameter configure: Callback to change the default configuration
     ///
     /// - Returns: The customized ``CustomAlertConfiguration`` configuration
     public static func create(configure: (inout Self) -> Void) -> Self {
-        var configuration = Self()
+        var configuration = CustomAlertConfiguration.default
         configure(&configuration)
         return configuration
     }
     
     /// The default configuration
     public static nonisolated var `default`: CustomAlertConfiguration {
+        if #available(iOS 26.0, *) {
+            .liquidGlass
+        } else {
+            .classic
+        }
+    }
+
+    /// The default configuration for a liquid glass alert
+    @available(iOS 26.0, *)
+    public static nonisolated var liquidGlass: CustomAlertConfiguration {
         MainActor.runSync {
-            CustomAlertConfiguration()
+            CustomAlertConfiguration(
+                alert: .liquidGlass,
+                button: .liquidGlass,
+                background: .color(Color("DimmingBackround", bundle: .module)),
+                padding: EdgeInsets(top: 30, leading: 20, bottom: 30, trailing: 20),
+                transition: .opacity.combined(with: .scale(scale: 1.1)),
+                animateTransition: true,
+                alignment: .center,
+                dismissOnBackgroundTap: false
+            )
+        }
+    }
+
+    /// The default configuration for a classic alert
+    public static nonisolated var classic: CustomAlertConfiguration {
+        MainActor.runSync {
+            CustomAlertConfiguration(
+                alert: .classic,
+                button: .classic,
+                background: .color(Color("DimmingBackround", bundle: .module)),
+                padding: EdgeInsets(top: 0, leading: 30, bottom: 16, trailing: 30),
+                transition: .opacity.combined(with: .scale(scale: 1.1)),
+                animateTransition: true,
+                alignment: .center,
+                dismissOnBackgroundTap: false
+            )
+        }
+    }
+}
+
+#Preview {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Custom Alert")
+    } content: {
+        Text("Some Message")
+    } actions: {
+        MultiButton {
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+            Button {
+            } label: {
+                Text("OK")
+            }
         }
     }
 }

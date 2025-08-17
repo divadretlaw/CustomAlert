@@ -19,6 +19,8 @@ extension CustomAlertConfiguration {
         public var cornerRadius: CGFloat
         /// The padding of the content of the alert view
         public var contentPadding: EdgeInsets
+        /// The padding of the content of the alert view when the alert is compacted
+        public var compactContentPadding: EdgeInsets
         /// The padding of the content of the alert view when using accessibility scaling
         public var accessibilityContentPadding: EdgeInsets
         /// The padding of the buttons of the alert view
@@ -37,6 +39,8 @@ extension CustomAlertConfiguration {
         public var contentColor: Color
         /// The spacing of the content of the alert view
         public var spacing: CGFloat
+        /// The spacing of the content of the alert view when the alert is compacted
+        public var compactSpacing: CGFloat
         /// The alignment of the content of the alert view
         public var alignment: CustomAlertAlignment
         /// Optional shadow applied to the alert
@@ -78,7 +82,8 @@ extension CustomAlertConfiguration {
                 background: .glass(),
                 dividerVisibility: .automatic, // TODO: Allow more divider customization
                 cornerRadius: 35,
-                contentPadding: EdgeInsets(top: 25, leading: 28, bottom: 10, trailing: 28),
+                contentPadding: EdgeInsets(top: 22, leading: 30, bottom: 5, trailing: 30),
+                compactContentPadding: EdgeInsets(top: 4, leading: 30, bottom: 5, trailing: 30),
                 accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
                 buttonPadding: EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15),
                 minWidth: 320,
@@ -88,6 +93,7 @@ extension CustomAlertConfiguration {
                 contentFont: .subheadline,
                 contentColor: .secondary,
                 spacing: 8,
+                compactSpacing: 0,
                 alignment: .leading,
                 shadow: nil
             )
@@ -100,6 +106,7 @@ extension CustomAlertConfiguration {
                 dividerVisibility: .visible,
                 cornerRadius: 13.3333,
                 contentPadding: EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8),
+                compactContentPadding: EdgeInsets(top: 4, leading: 8, bottom: 5, trailing: 8),
                 accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
                 buttonPadding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
                 minWidth: 270,
@@ -109,6 +116,7 @@ extension CustomAlertConfiguration {
                 contentFont: .footnote,
                 contentColor: .primary,
                 spacing: 4,
+                compactSpacing: 0,
                 alignment: .center,
                 shadow: nil
             )

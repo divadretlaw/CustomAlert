@@ -104,7 +104,7 @@ import SwiftUI
             - configuration.padding.top
             - configuration.padding.bottom
             - safeAreaInsets.top
-            - safeAreaInsets.bottom
+            - safeAreaInsets.bottom * 2
             - actionsSize.height
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
@@ -142,6 +142,8 @@ import SwiftUI
     var alertPadding: EdgeInsets {
         if dynamicTypeSize.isAccessibilitySize {
             configuration.alert.accessibilityContentPadding
+        } else if !fitInScreen {
+            configuration.alert.compactContentPadding
         } else {
             configuration.alert.contentPadding
         }
@@ -151,7 +153,7 @@ import SwiftUI
         VStack(spacing: 0) {
             GeometryReader { proxy in
                 ScrollView(.vertical) {
-                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing) {
+                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: spacing) {
                         title?
                             .font(configuration.alert.titleFont)
                             .foregroundStyle(configuration.alert.titleColor)
@@ -225,6 +227,14 @@ import SwiftUI
         // Force redraw
         calculateAlertId()
     }
+
+    var spacing: CGFloat {
+        if fitInScreen {
+            configuration.alert.spacing
+        } else {
+            configuration.alert.compactSpacing
+        }
+    }
 }
 
 @MainActor struct ActionLayout: _VariadicView_ViewRoot {
@@ -272,6 +282,7 @@ private extension GeometryProxy {
     }
 }
 
+#if DEBUG
 #Preview("Default") {
     CustomAlert(isPresented: .constant(true)) {
         Text("Preview")
@@ -284,3 +295,17 @@ private extension GeometryProxy {
         }
     }
 }
+
+#Preview("Lorem Ipsum") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Preview")
+    } content: {
+        Text(String.loremIpsum)
+    } actions: {
+        Button {
+        } label: {
+            Text("OK")
+        }
+    }
+}
+#endif

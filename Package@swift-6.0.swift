@@ -18,6 +18,12 @@ let package = Package(
         .package(url: "https://github.com/divadretlaw/WindowKit", from: "2.5.2")
     ],
     targets: [
-        .target(name: "CustomAlert", dependencies: ["WindowKit"])
+        .target(
+            name: "CustomAlert",
+            dependencies: ["WindowKit"],
+            swiftSettings: [
+                // .define("CUSTOM_ALERT_DESIGN")
+            ]
+        )
     ]
 )

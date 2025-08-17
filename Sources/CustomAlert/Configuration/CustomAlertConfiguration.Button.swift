@@ -131,21 +131,14 @@ enum ButtonType: Hashable {
     }
 }
 
-#Preview {
-    CustomAlert(isPresented: .constant(true)) {
-        Text("Custom Alert")
-    } content: {
-        Text("Some Message")
-    } actions: {
-        MultiButton {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
-            Button {
-            } label: {
-                Text("OK")
-            }
-        }
-    }
+#if DEBUG
+@available(iOS 17.0, *)
+#Preview("Default") {
+    AlertPreview(title: "Title", content: "Content")
 }
+
+@available(iOS 17.0, *)
+#Preview("Lorem Ipsum") {
+    AlertPreview(title: "Title", content: .loremIpsum)
+}
+#endif

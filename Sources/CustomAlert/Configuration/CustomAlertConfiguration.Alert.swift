@@ -159,38 +159,14 @@ public enum CustomAlertAlignment: Sendable {
     case trailing
 }
 
+#if DEBUG
 @available(iOS 17.0, *)
-#Preview {
-    @Previewable @State var showAlert = true
-    VStack {
-        Button("Show Alert") {
-            showAlert = true
-        }
-    }
-    .alert("Native Alert", isPresented: $showAlert) {
-        Button(role: .cancel) {
-        } label: {
-            Text("Cancel")
-        }
-        Button {
-        } label: {
-            Text("OK")
-        }
-    } message: {
-        Text("Some Message")
-    }
-    .customAlert("Custom Alert", isPresented: .constant(true)) {
-        Text("Some Message")
-    } actions: {
-        MultiButton {
-            Button(role: .cancel) {
-            } label: {
-                Text("Cancel")
-            }
-            Button {
-            } label: {
-                Text("OK")
-            }
-        }
-    }
+#Preview("Default") {
+    AlertPreview(title: "Title", content: "Content")
 }
+
+@available(iOS 17.0, *)
+#Preview("Lorem Ipsum") {
+    AlertPreview(title: "Title", content: .loremIpsum)
+}
+#endif

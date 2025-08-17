@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 extension CustomAlertConfiguration {
+    /// Configuration values of a custom alert button
     public struct Button: Sendable {
-        /// Configuration values of a custom alert button
         /// The tint color of the alert button
         public var tintColor: Color?
         /// The pressed tint color of the alert button
@@ -34,36 +34,6 @@ extension CustomAlertConfiguration {
         public var spacing: CGFloat
         /// The shape of the buttons
         public var shape: ButtonBorderShape
-
-        init(
-            tintColor: Color?,
-            pressedTintColor: Color?,
-            roleColor: [ButtonType: Color],
-            padding: EdgeInsets,
-            accessibilityPadding: EdgeInsets,
-            font: Font,
-            roleFont: [ButtonType: Font],
-            hideDivider: Bool,
-            background: CustomAlertBackground,
-            pressedBackground: CustomAlertBackground,
-            roleBackground: [ButtonType: CustomAlertBackground],
-            spacing: CGFloat,
-            shape: ButtonBorderShape
-        ) {
-            self.tintColor = tintColor
-            self.pressedTintColor = pressedTintColor
-            self.roleColor = roleColor
-            self.padding = padding
-            self.accessibilityPadding = accessibilityPadding
-            self.font = font
-            self.roleFont = roleFont
-            self.hideDivider = hideDivider
-            self.background = background
-            self.pressedBackground = pressedBackground
-            self.roleBackground = roleBackground
-            self.spacing = spacing
-            self.shape = shape
-        }
 
         /// Create a custom configuration
         ///
@@ -91,15 +61,15 @@ extension CustomAlertConfiguration {
                 CustomAlertConfiguration.Button(
                     tintColor: .primary,
                     pressedTintColor: nil,
-                    roleColor: [.destructive: .red, .cancel: .white],
+                    roleColor: [.destructive: .red],
                     padding: EdgeInsets(top: 14, leading: 12, bottom: 14, trailing: 12),
                     accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
-                    font: .body,
-                    roleFont: [.cancel: .headline],
+                    font: .body.weight(.medium),
+                    roleFont: [:],
                     hideDivider: true,
                     background: .color(Color("Background", bundle: .module)),
                     pressedBackground: .color(.liquidGlassBackgroundColor),
-                    roleBackground: [.cancel: .color(.accentColor)],
+                    roleBackground: [:],
                     spacing: 8,
                     shape: .capsule
                 )
@@ -113,12 +83,12 @@ extension CustomAlertConfiguration {
                     tintColor: nil,
                     pressedTintColor: nil,
                     roleColor: [.destructive: .red],
-                    padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
+                    padding: EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12),
                     accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
                     font: .body,
                     roleFont: [.cancel: .headline],
                     hideDivider: false,
-                    background: .color(.classicBackgroundColor),
+                    background: .color(.almostClear),
                     pressedBackground: .color(.classicBackgroundColor),
                     roleBackground: [:],
                     spacing: 0,

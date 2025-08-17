@@ -96,7 +96,6 @@ private struct SendableGeometryProxy: Sendable {
     }
 }
 
-
 private extension CGSize {
     static func + (lhs: CGSize, rhs: EdgeInsets) -> CGSize {
         let width = lhs.width + rhs.leading + rhs.trailing

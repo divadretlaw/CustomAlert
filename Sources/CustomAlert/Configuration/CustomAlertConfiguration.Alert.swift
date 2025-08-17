@@ -13,6 +13,8 @@ extension CustomAlertConfiguration {
     public struct Alert: Sendable {
         /// The background of the alert view
         public var background: CustomAlertBackground
+        /// The visibility of the divider between content and actions
+        public var dividerVisibility: Visibility
         /// The corner radius of the alert view
         public var cornerRadius: CGFloat
         /// The padding of the content of the alert view
@@ -27,42 +29,18 @@ extension CustomAlertConfiguration {
         public var accessibilityMinWidth: CGFloat
         /// The default font of the title of the alert view
         public var titleFont: Font
+        /// The default color of the title of the alert view
+        public var titleColor: Color
         /// The default font of the content of the alert view
         public var contentFont: Font
+        /// The default font of the content of the alert view
+        public var contentColor: Color
         /// The spacing of the content of the alert view
         public var spacing: CGFloat
         /// The alignment of the content of the alert view
         public var alignment: CustomAlertAlignment
         /// Optional shadow applied to the alert
         public var shadow: CustomAlertShadow?
-
-        init(
-            background: CustomAlertBackground,
-            cornerRadius: CGFloat,
-            contentPadding: EdgeInsets,
-            accessibilityContentPadding: EdgeInsets,
-            buttonPadding: EdgeInsets,
-            minWidth: CGFloat,
-            accessibilityMinWidth: CGFloat,
-            titleFont: Font,
-            contentFont: Font,
-            spacing: CGFloat,
-            alignment: CustomAlertAlignment,
-            shadow: CustomAlertShadow?
-        ) {
-            self.background = background
-            self.cornerRadius = cornerRadius
-            self.contentPadding = contentPadding
-            self.buttonPadding = buttonPadding
-            self.accessibilityContentPadding = accessibilityContentPadding
-            self.minWidth = minWidth
-            self.accessibilityMinWidth = accessibilityMinWidth
-            self.titleFont = titleFont
-            self.contentFont = contentFont
-            self.spacing = spacing
-            self.alignment = alignment
-            self.shadow = shadow
-        }
 
         @available(*, deprecated, renamed: "contentPadding")
         public var padding: EdgeInsets {
@@ -98,14 +76,17 @@ extension CustomAlertConfiguration {
         public nonisolated static var liquidGlass: CustomAlertConfiguration.Alert {
             CustomAlertConfiguration.Alert(
                 background: .glass(),
+                dividerVisibility: .automatic, // TODO: Allow more divider customization
                 cornerRadius: 35,
                 contentPadding: EdgeInsets(top: 25, leading: 28, bottom: 10, trailing: 28),
                 accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
                 buttonPadding: EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15),
-                minWidth: 300,
+                minWidth: 320,
                 accessibilityMinWidth: 379,
                 titleFont: .headline,
-                contentFont: .callout,
+                titleColor: .primary,
+                contentFont: .subheadline,
+                contentColor: .secondary,
                 spacing: 8,
                 alignment: .leading,
                 shadow: nil
@@ -116,6 +97,7 @@ extension CustomAlertConfiguration {
         public nonisolated static var classic: CustomAlertConfiguration.Alert {
             CustomAlertConfiguration.Alert(
                 background: .blurEffect(.systemThinMaterial),
+                dividerVisibility: .visible,
                 cornerRadius: 13.3333,
                 contentPadding: EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8),
                 accessibilityContentPadding: EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12),
@@ -123,7 +105,9 @@ extension CustomAlertConfiguration {
                 minWidth: 270,
                 accessibilityMinWidth: 379,
                 titleFont: .headline,
+                titleColor: .primary,
                 contentFont: .footnote,
+                contentColor: .primary,
                 spacing: 4,
                 alignment: .center,
                 shadow: nil

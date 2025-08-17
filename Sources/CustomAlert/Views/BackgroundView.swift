@@ -26,6 +26,7 @@ struct BackgroundView: View {
         case let .anyView(view):
             view
         case let .glass(color):
+            #if swift(>=6.2)
             if #available(iOS 26.0, *) {
                 Color.clear.glassEffect(.regular.tint(color), in: RoundedRectangle(cornerRadius: configuration.alert.cornerRadius))
             } else {
@@ -38,12 +39,22 @@ struct BackgroundView: View {
                     BlurView(style: .systemMaterial)
                 }
             }
+            #else
+            if let color {
+                ZStack {
+                    color
+                    BlurView(style: .systemMaterial)
+                }
+            } else {
+                BlurView(style: .systemMaterial)
+            }
+            #endif
         }
     }
 }
 
-struct BackgroundView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    VStack {
         BackgroundView(background: .blurEffect(.regular))
         BackgroundView(background: .color(.blue))
         BackgroundView(background: .colorBlurEffect(.blue, .regular))

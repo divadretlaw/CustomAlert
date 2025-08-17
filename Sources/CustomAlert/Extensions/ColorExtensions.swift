@@ -31,9 +31,9 @@ private extension UIColor {
         UIColor { traitCollection in
             switch traitCollection.userInterfaceStyle {
             case .dark:
-                UIColor.black.withAlphaComponent(0.135)
+                UIColor.black.withAlphaComponent(0.3)
             default:
-                UIColor.white.withAlphaComponent(0.08)
+                UIColor.white.withAlphaComponent(0.3)
             }
         }
     }

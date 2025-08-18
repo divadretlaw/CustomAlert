@@ -4,9 +4,10 @@ The API is very similar to the SwiftUI Alerts
 
 ## Overview
 
-| SwiftUI Alert | Custom Alert |
-|:-:|:-:|
-| ![Native Alert](SwiftUI) | ![Custom Alert](Custom) |
+| iOS | SwiftUI Alert | Custom Alert |
+|:---:|:-------------:|:------------:|
+| iOS 26+ | ![Native Alert](SwiftUI_liquidGlass) | ![Custom Alert](Custom_liquidGlass) |
+| iOS 15 - iOS 18 | ![Native Alert](SwiftUI_classic) | ![Custom Alert](Custom_classic) |
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 

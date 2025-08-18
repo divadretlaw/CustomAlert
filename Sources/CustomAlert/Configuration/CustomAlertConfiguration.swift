@@ -11,23 +11,29 @@ import SwiftUI
 /// Configuration values for custom alerts
 @MainActor public struct CustomAlertConfiguration: Sendable {
     /// The configuration of the alert view
-    public var alert: Alert
+    var alert: Alert
     /// The configuration of the alert buttons
-    public var button: Button
+    var button: Button
     /// The window background behind the alert
-    public var background: CustomAlertBackground
+    var background: CustomAlertBackground
     /// The padding around the alert
-    public var padding: EdgeInsets
+    var padding: EdgeInsets
     /// The transition the alert appears with
-    public var transition: AnyTransition
+    var transition: AnyTransition
     /// Animate the alert appearance
-    public var animateTransition: Bool
-    /// The vertical alginment of the alert
-    public var alignment: VerticalAlignment
+    var animateTransition: Bool
+    /// The vertical alignment of the alert
+    var alignment: VerticalAlignment
     /// Allow dismissing the alert when tapping on the background
-    public var dismissOnBackgroundTap: Bool
+    var dismissOnBackgroundTap: Bool
 
-    init(
+    // MARK: - Init
+
+    public init() {
+        self = .default
+    }
+
+    private init(
         alert: CustomAlertConfiguration.Alert,
         button: CustomAlertConfiguration.Button,
         background: CustomAlertBackground,
@@ -46,17 +52,7 @@ import SwiftUI
         self.alignment = alignment
         self.dismissOnBackgroundTap = dismissOnBackgroundTap
     }
-    /// Create a custom configuration
-    ///
-    /// - Parameter configure: Callback to change the default configuration
-    ///
-    /// - Returns: The customized ``CustomAlertConfiguration`` configuration
-    public static func create(configure: (inout Self) -> Void) -> Self {
-        var configuration = CustomAlertConfiguration.default
-        configure(&configuration)
-        return configuration
-    }
-    
+
     /// The default configuration
     public static nonisolated var `default`: CustomAlertConfiguration {
         if #available(iOS 26.0, *) {
@@ -97,6 +93,92 @@ import SwiftUI
                 dismissOnBackgroundTap: false
             )
         }
+    }
+
+    // MARK: - Modifier
+
+    /// Set the configuration of the alert view
+    public func alert(_ value: Alert) -> Self {
+        var configuration = self
+        configuration.alert = value
+        return configuration
+    }
+
+    /// Create the configuration of the alert view
+    public func alert(_ build: () -> Alert) -> Self {
+        var configuration = self
+        configuration.alert = build()
+        return configuration
+    }
+
+    /// Adapt the configuration of the alert view
+    public func alert(_ build: (Alert) -> Alert) -> Self {
+        var configuration = self
+        configuration.alert = build(alert)
+        return configuration
+    }
+
+    /// Set the configuration of the alert buttons
+    public func button(_ value: Button) -> Self {
+        var configuration = self
+        configuration.button = value
+        return configuration
+    }
+
+    /// Create the configuration of the alert buttons
+    public func button(_ build: () -> Button) -> Self {
+        var configuration = self
+        configuration.button = build()
+        return configuration
+    }
+
+    /// Adapt the configuration of the alert buttons
+    public func button(_ build: (Button) -> Button) -> Self {
+        var configuration = self
+        configuration.button = build(button)
+        return configuration
+    }
+
+    /// The window background behind the alert
+    public func background(_ value: CustomAlertBackground) -> Self {
+        var configuration = self
+        configuration.background = value
+        return configuration
+    }
+
+    /// The padding around the alert
+    public func padding(_ value: EdgeInsets) -> Self {
+        var configuration = self
+        configuration.padding = value
+        return configuration
+    }
+
+    /// The transition the alert appears with
+    public func transition(_ value: AnyTransition) -> Self {
+        var configuration = self
+        configuration.transition = value
+        return configuration
+    }
+
+    /// Animate the alert appearance
+    public func animateTransition(_ value: Bool) -> Self {
+        var configuration = self
+        configuration.animateTransition = value
+        return configuration
+    }
+
+    /// The vertical alignment of the alert
+    public func alignment(_ value: VerticalAlignment) -> Self {
+        var configuration = self
+        configuration.alignment = value
+        return configuration
+    }
+
+    /// Allow dismissing the alert when tapping on the background
+    public func dismissOnBackgroundTap(_ value: Bool) -> Self {
+        var configuration = self
+        configuration.dismissOnBackgroundTap = value
+        return configuration
     }
 }
 

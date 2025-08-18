@@ -12,38 +12,62 @@ extension CustomAlertConfiguration {
     /// Configuration values of a custom alert button
     public struct Button: Sendable {
         /// The tint color of the alert button
-        public var tintColor: Color?
+        var tintColor: Color?
         /// The pressed tint color of the alert button
-        public var pressedTintColor: Color?
-        internal var roleColor: [ButtonType: Color]
-        /// The padding of the alert button
-        public var padding: EdgeInsets
-        /// The padding of the alert button when using accessibility scaling
-        public var accessibilityPadding: EdgeInsets
+        var pressedTintColor: Color?
+        /// The tint color of the alert button for a given role
+        var roleColor: [ButtonType: Color]
+        /// The padding of the button
+        var padding: Value<EdgeInsets>
         /// The font of the alert button
-        public var font: Font
-        internal var roleFont: [ButtonType: Font]
+        var font: Font
+        /// The font of the alert button for a given role
+        var roleFont: [ButtonType: Font]
         /// Whether to hide the dividers between the buttons
-        public var hideDivider: Bool
+        var hideDivider: Bool
         /// The background of the alert button
-        public var background: CustomAlertBackground
+        var background: CustomAlertBackground
         /// The pressed background of the alert button
-        public var pressedBackground: CustomAlertBackground
-        internal var roleBackground: [ButtonType: CustomAlertBackground]
+        var pressedBackground: CustomAlertBackground
+        /// The background of the alert button for a given role
+        var roleBackground: [ButtonType: CustomAlertBackground]
         /// The spacing between buttons
-        public var spacing: CGFloat
+        var spacing: CGFloat
         /// The shape of the buttons
-        public var shape: ButtonBorderShape
+        var shape: ButtonBorderShape
 
-        /// Create a custom configuration
-        ///
-        /// - Parameter configure: Callback to change the default configuration
-        ///
-        /// - Returns: The customized ``CustomAlertConfiguration/Button`` configuration
-        public static func create(configure: (inout Self) -> Void) -> Self {
-            var configuration = CustomAlertConfiguration.Button.default
-            configure(&configuration)
-            return configuration
+        // MARK: - Init
+
+        public init() {
+            self = .default
+        }
+
+        private init(
+            tintColor: Color?,
+            pressedTintColor: Color?,
+            roleColor: [ButtonType: Color],
+            padding: CustomAlertConfiguration.Value<EdgeInsets>,
+            font: Font,
+            roleFont: [ButtonType: Font],
+            hideDivider: Bool,
+            background: CustomAlertBackground,
+            pressedBackground: CustomAlertBackground,
+            roleBackground: [ButtonType: CustomAlertBackground],
+            spacing: CGFloat,
+            shape: ButtonBorderShape
+        ) {
+            self.tintColor = tintColor
+            self.pressedTintColor = pressedTintColor
+            self.roleColor = roleColor
+            self.padding = padding
+            self.font = font
+            self.roleFont = roleFont
+            self.hideDivider = hideDivider
+            self.background = background
+            self.pressedBackground = pressedBackground
+            self.roleBackground = roleBackground
+            self.spacing = spacing
+            self.shape = shape
         }
 
         /// The default configuration
@@ -62,8 +86,13 @@ extension CustomAlertConfiguration {
                     tintColor: .primary,
                     pressedTintColor: nil,
                     roleColor: [.destructive: .red],
-                    padding: EdgeInsets(top: 14, leading: 12, bottom: 14, trailing: 12),
-                    accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
+                    padding: .dynamic { state in
+                        if state.isAccessibilitySize {
+                            EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
+                        } else {
+                            EdgeInsets(top: 14, leading: 12, bottom: 14, trailing: 12)
+                        }
+                    },
                     font: .body.weight(.medium),
                     roleFont: [:],
                     hideDivider: true,
@@ -83,8 +112,13 @@ extension CustomAlertConfiguration {
                     tintColor: nil,
                     pressedTintColor: nil,
                     roleColor: [.destructive: .red],
-                    padding: EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12),
-                    accessibilityPadding: EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12),
+                    padding: .dynamic { state in
+                        if state.isAccessibilitySize {
+                            EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
+                        } else {
+                            EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+                        }
+                    },
                     font: .body,
                     roleFont: [.cancel: .headline],
                     hideDivider: false,
@@ -97,19 +131,97 @@ extension CustomAlertConfiguration {
             }
         }
 
-        public mutating func font(_ font: Font, for role: ButtonRole) {
-            guard let type = ButtonType(from: role) else { return }
-            self.roleFont[type] = font
-        }
-        
-        public mutating func color(_ color: Color, for role: ButtonRole) {
-            guard let type = ButtonType(from: role) else { return }
-            self.roleColor[type] = color
+        // MARK: - Modifier
+
+        /// The tint color of the alert button
+        public func tintColor(_ value: Color?) -> Self {
+            var configuration = self
+            configuration.tintColor = value
+            return configuration
         }
 
-        public mutating func background(_ backkground: CustomAlertBackground, for role: ButtonRole) {
-            guard let type = ButtonType(from: role) else { return }
-            self.roleBackground[type] = backkground
+        /// The pressed tint color of the alert button
+        public func pressedTintColor(_ value: Color?) -> Self {
+            var configuration = self
+            configuration.pressedTintColor = value
+            return configuration
+        }
+
+        public func color(_ color: Color, for role: ButtonRole) -> Self {
+            guard let type = ButtonType(from: role) else { return self }
+            var configuration = self
+            configuration.roleColor[type] = color
+            return configuration
+        }
+
+        public func padding(_ value: EdgeInsets) -> Self {
+            var configuration = self
+            configuration.padding = .static(value)
+            return configuration
+        }
+
+        public func padding(_ value: @Sendable @escaping (CustomAlertState) -> EdgeInsets) -> Self {
+            var configuration = self
+            configuration.padding = .dynamic(value)
+            return configuration
+        }
+
+        /// The font of the alert button
+        public func font(_ value: Font) -> Self {
+            var configuration = self
+            configuration.font = value
+            return configuration
+        }
+
+        public func font(_ value: Font, for role: ButtonRole) -> Self {
+            guard let type = ButtonType(from: role) else { return self }
+
+            var configuration = self
+            configuration.roleFont[type] = value
+            return configuration
+        }
+
+        /// Whether to hide the dividers between the buttons
+        public func hideDivider(_ value: Bool) -> Self {
+            var configuration = self
+            configuration.hideDivider = value
+            return configuration
+        }
+
+        /// The background of the alert button
+        public func background(_ value: CustomAlertBackground) -> Self {
+            var configuration = self
+            configuration.background = value
+            return configuration
+        }
+
+        /// The pressed background of the alert button
+        public func pressedBackground(_ value: CustomAlertBackground) -> Self {
+            var configuration = self
+            configuration.pressedBackground = value
+            return configuration
+        }
+
+        public mutating func background(_ value: CustomAlertBackground, for role: ButtonRole) -> Self {
+            guard let type = ButtonType(from: role) else { return self }
+
+            var configuration = self
+            configuration.roleBackground[type] = value
+            return configuration
+        }
+
+        /// The spacing between buttons
+        public func spacing(_ value: CGFloat) -> Self {
+            var configuration = self
+            configuration.spacing = value
+            return configuration
+        }
+
+        /// The shape of the buttons
+        public func shape(_ value: ButtonBorderShape) -> Self {
+            var configuration = self
+            configuration.shape = value
+            return configuration
         }
     }
 }

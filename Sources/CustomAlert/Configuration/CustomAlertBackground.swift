@@ -17,6 +17,7 @@ public enum CustomAlertBackground: Sendable {
     case color(Color)
     /// A `UIBlurEffect` as background with a `Color` as background
     case colorBlurEffect(Color, UIBlurEffect.Style)
+    /// Any view a background
     case anyView(AnyView)
     /// Liquid glass as background
     case glass(Color? = nil)

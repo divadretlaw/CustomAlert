@@ -96,7 +96,6 @@ struct CustomAlerts: View {
 
 struct CustomContent: View {
     @Environment(\.alertDismiss) private var alertDismiss
-    @Environment(\.customAlertConfiguration) private var configuration
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -108,34 +107,36 @@ struct CustomContent: View {
                 Text("Custom Dismiss Button")
             }
             .buttonStyle(.bordered)
-            .tint(configuration.button.tintColor)
         }
     }
 }
 
 extension CustomAlertConfiguration {
-    static let myConfig: CustomAlertConfiguration = .create { configuration in
-        configuration.background = .blurEffect(.dark)
-        configuration.padding = EdgeInsets()
-        configuration.alert = .create { alert in
-            alert.background = .color(.white)
-            alert.cornerRadius = 4
-            alert.contentPadding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
-            alert.minWidth = 300
-            alert.titleFont = .headline
-            alert.contentFont = .subheadline
-            alert.alignment = .leading
-            alert.spacing = 10
-        }
-        configuration.button = .create { button in
-            button.tintColor = .purple
-            button.pressedTintColor = .white
-            button.padding = EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-            button.font = .callout.weight(.semibold)
-            button.hideDivider = true
-            button.pressedBackground = .color(.purple)
-        }
-    }
+    static let myConfig: CustomAlertConfiguration = {
+        CustomAlertConfiguration()
+            .background(.blurEffect(.dark))
+            .padding(EdgeInsets())
+            .alert {
+                CustomAlertConfiguration.Alert()
+                    .background(.color(.white))
+                    .cornerRadius(4)
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20))
+                    .minWidth(300)
+                    .titleFont(.headline)
+                    .contentFont(.subheadline)
+                    .alignment(.leading)
+                    .spacing(10)
+            }
+            .button {
+                CustomAlertConfiguration.Button()
+                    .tintColor(.purple)
+                    .pressedTintColor(.white)
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    .font(.callout.weight(.semibold))
+                    .hideDivider(true)
+                    .pressedBackground(.color(.purple))
+            }
+    }()
 }
 
 #Preview {

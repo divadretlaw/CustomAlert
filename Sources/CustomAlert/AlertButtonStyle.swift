@@ -43,19 +43,15 @@ public struct AlertButtonStyle: ButtonStyle {
                 .truncationMode(.middle)
             Spacer()
         }
-        .padding(padding)
+        .padding(buttonConfiguration.padding(state))
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
         .alertButtonBorderShape(buttonConfiguration.shape)
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    var padding: EdgeInsets {
-        if dynamicTypeSize.isAccessibilitySize {
-            buttonConfiguration.accessibilityPadding
-        } else {
-            buttonConfiguration.padding
-        }
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: false)
     }
 
     @ViewBuilder func label(configuration: Configuration) -> some View {

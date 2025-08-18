@@ -129,36 +129,19 @@ import SwiftUI
             - safeAreaInsets.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
-        
-        if dynamicTypeSize.isAccessibilitySize {
-            // Smallest AlertView should be 329
-            return max(min, configuration.alert.accessibilityMinWidth)
-        } else {
-            // Smallest AlertView should be 270
-            return max(min, configuration.alert.minWidth)
-        }
+        return max(min, configuration.alert.minWidth(state))
     }
-    
-    var alertPadding: EdgeInsets {
-        if dynamicTypeSize.isAccessibilitySize {
-            configuration.alert.accessibilityContentPadding
-        } else if !fitInScreen {
-            configuration.alert.compactContentPadding
-        } else {
-            configuration.alert.contentPadding
-        }
-    }
-    
+
     var alert: some View {
         VStack(spacing: 0) {
             GeometryReader { proxy in
                 ScrollView(.vertical) {
-                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: spacing) {
+                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
                         title?
                             .font(configuration.alert.titleFont)
                             .foregroundStyle(configuration.alert.titleColor)
                             .multilineTextAlignment(configuration.alert.textAlignment)
-                        
+                        Spacer(minLength: configuration.alert.spacing(state))
                         content
                             .font(configuration.alert.contentFont)
                             .foregroundStyle(configuration.alert.contentColor)
@@ -166,7 +149,7 @@ import SwiftUI
                             .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
                     }
                     .foregroundColor(.primary)
-                    .padding(alertPadding)
+                    .padding(configuration.alert.padding(state))
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
                     // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
@@ -194,7 +177,7 @@ import SwiftUI
                 _VariadicView.Tree(ActionLayout()) {
                     actions
                 }
-                .padding(configuration.alert.buttonPadding)
+                .padding(configuration.alert.actionPadding)
             }
             .buttonStyle(.alert)
             .captureSize($actionsSize) 
@@ -228,12 +211,8 @@ import SwiftUI
         calculateAlertId()
     }
 
-    var spacing: CGFloat {
-        if fitInScreen {
-            configuration.alert.spacing
-        } else {
-            configuration.alert.compactSpacing
-        }
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: !fitInScreen)
     }
 }
 

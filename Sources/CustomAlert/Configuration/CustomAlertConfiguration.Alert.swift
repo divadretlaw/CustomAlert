@@ -229,6 +229,9 @@ extension CustomAlertConfiguration {
         }
 
         /// The minimum width of the alert view
+        /// - Parameters:
+        ///   - value: The minimum width for the alert.
+        ///   - accessibility: The minimum width for the alert when using accessibility scaling.
         public func minWidth(_ value: CGFloat, accessibility: CGFloat? = nil) -> Self {
             var configuration = self
             if let accessibility {

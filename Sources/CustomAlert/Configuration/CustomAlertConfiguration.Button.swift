@@ -147,7 +147,14 @@ extension CustomAlertConfiguration {
             return configuration
         }
 
-        public func color(_ color: Color, for role: ButtonRole) -> Self {
+        /// The tint color of the alert button for the given role
+        ///
+        /// - Parameters:
+        ///   - color: The color to use.
+        ///   - role: The role to set the color for.
+        ///
+        /// Takes presedence over ``tintColor(_:)``
+        public func tintColor(_ color: Color, for role: ButtonRole) -> Self {
             guard let type = ButtonType(from: role) else { return self }
             var configuration = self
             configuration.roleColor[type] = color
@@ -173,6 +180,13 @@ extension CustomAlertConfiguration {
             return configuration
         }
 
+        /// The font of the alert button for the given role
+        ///
+        /// - Parameters:
+        ///   - color: The font to use.
+        ///   - role: The role to set the font for.
+        ///
+        /// Takes presedence over ``font(_:)``
         public func font(_ value: Font, for role: ButtonRole) -> Self {
             guard let type = ButtonType(from: role) else { return self }
 
@@ -202,6 +216,13 @@ extension CustomAlertConfiguration {
             return configuration
         }
 
+        /// The background of the alert button for the given role
+        ///
+        /// - Parameters:
+        ///   - color: The background to use.
+        ///   - role: The role to set the background for.
+        ///
+        /// Takes presedence over ``background(_:)``
         public mutating func background(_ value: CustomAlertBackground, for role: ButtonRole) -> Self {
             guard let type = ButtonType(from: role) else { return self }
 

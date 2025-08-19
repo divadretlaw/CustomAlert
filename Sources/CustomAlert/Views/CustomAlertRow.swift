@@ -10,6 +10,8 @@ import SwiftUI
 /// Display a custom alert inlined into a `List`
 public struct CustomAlertRow<Content, Actions>: View where Content: View, Actions: View {
     @Environment(\.customAlertConfiguration) private var configuration
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     @Binding var isPresented: Bool
     
     let content: Content
@@ -17,9 +19,8 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
     
     public var body: some View {
         if isPresented {
-            VStack(spacing: 0) {
+            VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
                 content
-
                 switch configuration.alert.dividerVisibility {
                 case .hidden, .automatic:
                     EmptyView()
@@ -53,6 +54,10 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
         self._isPresented = .constant(true)
         self.content = content()
         self.actions = actions()
+    }
+
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: false)
     }
 
     @MainActor struct ContentLayout: _VariadicView_ViewRoot {

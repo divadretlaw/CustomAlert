@@ -55,7 +55,7 @@ import SwiftUI
 
     /// The default configuration
     public static nonisolated var `default`: CustomAlertConfiguration {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, visionOS 26.0, *) {
             .liquidGlass
         } else {
             .classic
@@ -63,7 +63,7 @@ import SwiftUI
     }
 
     /// The default configuration for a liquid glass alert
-    @available(iOS 26.0, *)
+    @available(iOS 26.0, visionOS 26.0, *)
     public static nonisolated var liquidGlass: CustomAlertConfiguration {
         MainActor.runSync {
             CustomAlertConfiguration(

@@ -24,7 +24,7 @@ public struct MultiButton<Content>: View where Content: View {
     }
     
     public var body: some View {
-        if #available(iOS 18.0, *) {
+        if #available(iOS 18.0, visionOS 2.0, *) {
             HStack(spacing: configuration.button.spacing) {
                 Group(subviews: content) { subviews in
                     subviews.first
@@ -37,7 +37,6 @@ public struct MultiButton<Content>: View where Content: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-            // .buttonStyle(.alert)
             .environment(\.alertButtonHeight, .infinity)
         } else {
             _VariadicView.Tree(ContentLayout()) {
@@ -61,7 +60,6 @@ public struct MultiButton<Content>: View where Content: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-            // .buttonStyle(buttonStyle)
             .environment(\.alertButtonHeight, .infinity)
         }
     }

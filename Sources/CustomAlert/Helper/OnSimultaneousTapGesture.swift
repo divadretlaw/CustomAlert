@@ -38,7 +38,7 @@ private struct SimultaneousTapGestureViewModifier: ViewModifier {
                 )
             )
         #else
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, visionOS 26.0, *) {
             content
                 .overlay(
                     SimultaneousTapGesture(
@@ -46,7 +46,7 @@ private struct SimultaneousTapGestureViewModifier: ViewModifier {
                         action: action
                     )
                 )
-        } else if #available(iOS 18.0, *) {
+        } else if #available(iOS 18.0, visionOS 2.0, *) {
             if ProcessInfo.processInfo.isiOSAppOnOtherPlatform {
                 content
                     .overlay(

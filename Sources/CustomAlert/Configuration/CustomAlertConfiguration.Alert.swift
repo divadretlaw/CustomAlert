@@ -76,7 +76,7 @@ extension CustomAlertConfiguration {
 
         /// The default configuration
         public nonisolated static var `default`: CustomAlertConfiguration.Alert {
-            if #available(iOS 26.0, *) {
+            if #available(iOS 26.0, visionOS 26.0, *) {
                 .liquidGlass
             } else {
                 .classic
@@ -84,6 +84,7 @@ extension CustomAlertConfiguration {
         }
 
         /// The default configuration for a liquid glass alert
+        @available(iOS 26.0, visionOS 26.0, *)
         public nonisolated static var liquidGlass: CustomAlertConfiguration.Alert {
             CustomAlertConfiguration.Alert(
                 background: .glass(),

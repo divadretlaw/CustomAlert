@@ -24,9 +24,8 @@ public struct MultiButton<Content>: View where Content: View {
     }
     
     public var body: some View {
-        #if swift(>=6.0)
-        if #available(iOS 18.0, *) {
-            HStack(spacing: 0) {
+        if #available(iOS 18.0, visionOS 2.0, *) {
+            HStack(spacing: configuration.button.spacing) {
                 Group(subviews: content) { subviews in
                     subviews.first
                     ForEach(subviews.dropFirst()) { child in
@@ -38,25 +37,18 @@ public struct MultiButton<Content>: View where Content: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-            .buttonStyle(.alert)
             .environment(\.alertButtonHeight, .infinity)
         } else {
             _VariadicView.Tree(ContentLayout()) {
                 content
             }
         }
-        #else
-        _VariadicView.Tree(ContentLayout()) {
-            content
-        }
-        #endif
     }
     
     @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
     @MainActor struct ContentLayout: _VariadicView_ViewRoot {
         @Environment(\.customAlertConfiguration) private var configuration
         
-        #if swift(>=6.0)
         func body(children: _VariadicView.Children) -> some View {
             HStack(spacing: 0) {
                 children.first
@@ -68,37 +60,8 @@ public struct MultiButton<Content>: View where Content: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-            .buttonStyle(.alert)
             .environment(\.alertButtonHeight, .infinity)
         }
-        #else
-        nonisolated func body(children: _VariadicView.Children) -> some View {
-            HStack(spacing: 0) {
-                children.first
-                ForEach(children.dropFirst()) { child in
-                    if !hideDivider {
-                        Divider()
-                    }
-                    child
-                }
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            .buttonStyle(buttonStyle)
-            .environment(\.alertButtonHeight, .infinity)
-        }
-        
-        nonisolated var buttonStyle: some ButtonStyle {
-            MainActor.runSync {
-                AlertButtonStyle(triggerDismiss: true)
-            }
-        }
-        
-        nonisolated var hideDivider: Bool {
-            MainActor.runSync {
-                configuration.button.hideDivider
-            }
-        }
-        #endif
     }
 }
 

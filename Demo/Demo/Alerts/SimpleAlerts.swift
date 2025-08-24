@@ -20,6 +20,11 @@ struct SimpleAlerts: View {
                 DetailLabel("Native", detail: "SwiftUI native alert")
             }
             .alert("Native Alert", isPresented: $showNative) {
+                Button {
+                    print("Simple.Native - OK")
+                } label: {
+                    Text("OK")
+                }
                 Button(role: .cancel) {
                     print("Simple.Native - Cancel")
                 } label: {
@@ -37,10 +42,17 @@ struct SimpleAlerts: View {
             .customAlert("Custom Alert", isPresented: $showCustom) {
                 Text("Some Message")
             } actions: {
-                Button(role: .cancel) {
-                    print("Simple.Custom - Cancel")
-                } label: {
-                    Text("Cancel")
+                MultiButton {
+                    Button(role: .cancel) {
+                        print("Simple.Custom - Cancel")
+                    } label: {
+                        Text("Cancel")
+                    }
+                    Button {
+                        print("Simple.Custom - OK")
+                    } label: {
+                        Text("OK")
+                    }
                 }
             }
         } header: {

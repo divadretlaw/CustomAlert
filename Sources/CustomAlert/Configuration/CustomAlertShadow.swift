@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Shadow configuration of the alert
-public struct CustomAlertShadow: Sendable {
+struct CustomAlertShadow: Sendable {
     let color: Color
     let radius: CGFloat
     let x: CGFloat
@@ -22,7 +22,7 @@ public struct CustomAlertShadow: Sendable {
     ///     result in more blur.
     ///   - x: An amount to offset the shadow horizontally from the view.
     ///   - y: An amount to offset the shadow vertically from the view.
-    public init(
+    init(
         color: Color = Color(.sRGBLinear, white: 0, opacity: 0.33),
         radius: CGFloat,
         x: CGFloat = 0,

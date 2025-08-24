@@ -17,8 +17,11 @@ public enum CustomAlertBackground: Sendable {
     case color(Color)
     /// A `UIBlurEffect` as background with a `Color` as background
     case colorBlurEffect(Color, UIBlurEffect.Style)
+    /// Any view a background
     case anyView(AnyView)
-    
+    /// Liquid glass as background
+    case glass(Color? = nil)
+
     @MainActor public static func view<Content>(@ViewBuilder builder: () -> Content) -> CustomAlertBackground where Content: View {
         CustomAlertBackground.anyView(AnyView(builder: builder))
     }

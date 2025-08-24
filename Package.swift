@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "CustomAlert",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v15),
+        .visionOS(.v1)
     ],
     products: [
         .library(
@@ -18,6 +19,12 @@ let package = Package(
         .package(url: "https://github.com/divadretlaw/WindowKit", from: "2.5.2")
     ],
     targets: [
-        .target(name: "CustomAlert", dependencies: ["WindowKit"])
+        .target(
+            name: "CustomAlert",
+            dependencies: ["WindowKit"],
+            swiftSettings: [
+                // .define("CUSTOM_ALERT_DESIGN")
+            ]
+        )
     ]
 )

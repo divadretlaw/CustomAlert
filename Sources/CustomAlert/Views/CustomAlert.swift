@@ -73,6 +73,9 @@ import SwiftUI
                         alert
                             .animation(nil, value: height)
                             .id(alertId)
+                            #if CUSTOM_ALERT_DESIGN
+                            .opacity(0.5)
+                            #endif
                     }
                     
                     if configuration.alignment.hasBottomSpacer {
@@ -101,7 +104,7 @@ import SwiftUI
             - configuration.padding.top
             - configuration.padding.bottom
             - safeAreaInsets.top
-            - safeAreaInsets.bottom
+            - safeAreaInsets.bottom * 2
             - actionsSize.height
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
@@ -126,40 +129,27 @@ import SwiftUI
             - safeAreaInsets.trailing
         // Make sure it fits in the content
         let min = min(maxWidth, contentSize.width)
-        
-        if dynamicTypeSize.isAccessibilitySize {
-            // Smallest AlertView should be 329
-            return max(min, configuration.alert.accessibilityMinWidth)
-        } else {
-            // Smallest AlertView should be 270
-            return max(min, configuration.alert.minWidth)
-        }
+        return max(min, configuration.alert.minWidth(state))
     }
-    
-    var alertPadding: EdgeInsets {
-        if dynamicTypeSize.isAccessibilitySize {
-            configuration.alert.accessibilityPadding
-        } else {
-            configuration.alert.padding
-        }
-    }
-    
+
     var alert: some View {
         VStack(spacing: 0) {
             GeometryReader { proxy in
                 ScrollView(.vertical) {
-                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing) {
+                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
                         title?
                             .font(configuration.alert.titleFont)
+                            .foregroundStyle(configuration.alert.titleColor)
                             .multilineTextAlignment(configuration.alert.textAlignment)
-                        
+                        Spacer(minLength: configuration.alert.spacing(state))
                         content
                             .font(configuration.alert.contentFont)
+                            .foregroundStyle(configuration.alert.contentColor)
                             .multilineTextAlignment(configuration.alert.textAlignment)
                             .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
                     }
                     .foregroundColor(.primary)
-                    .padding(alertPadding)
+                    .padding(configuration.alert.padding(state))
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
                     // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
@@ -172,31 +162,25 @@ import SwiftUI
                 .scrollViewDisabled(fitInScreen)
             }
             .frame(height: height)
-            
-            Group {
-                #if swift(>=6.0)
-                if #available(iOS 18.0, *) {
-                    VStack(spacing: 0) {
-                        ForEach(subviews: actions) { child in
-                            if !configuration.button.hideDivider {
-                                Divider()
-                            }
-                            child
-                        }
+
+            VStack(spacing: 0) {
+                switch configuration.alert.dividerVisibility {
+                case .automatic:
+                    if !fitInScreen {
+                        Divider()
                     }
-                } else {
-                    _VariadicView.Tree(ActionLayout()) {
-                        actions
-                    }
+                case .hidden:
+                    EmptyView()
+                case .visible:
+                    Divider()
                 }
-                #else
                 _VariadicView.Tree(ActionLayout()) {
                     actions
                 }
-                #endif
+                .padding(configuration.alert.actionPadding)
             }
             .buttonStyle(.alert)
-            .captureSize($actionsSize)
+            .captureSize($actionsSize) 
         }
         .onAlertDismiss {
             isPresented = false
@@ -212,7 +196,7 @@ import SwiftUI
             redrawAlert()
         }
     }
-    
+
     func calculateAlertId() {
         var hasher = Hasher()
         hasher.combine(dynamicTypeSize)
@@ -226,41 +210,25 @@ import SwiftUI
         // Force redraw
         calculateAlertId()
     }
+
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: !fitInScreen)
+    }
 }
 
-@available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
 @MainActor struct ActionLayout: _VariadicView_ViewRoot {
     @Environment(\.customAlertConfiguration) private var configuration
     
-    #if swift(>=6.0)
     func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: 0) {
-            ForEach(children) { child in
-                if !configuration.button.hideDivider {
+        VStack(spacing: configuration.button.spacing) {
+            ForEach(Array(children.enumerated()), id: \.offset) { index, child in
+                if index != 0, !configuration.button.hideDivider {
                     Divider()
                 }
                 child
             }
         }
     }
-    #else
-    nonisolated func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: 0) {
-            ForEach(children) { child in
-                if !hideDivider {
-                    Divider()
-                }
-                child
-            }
-        }
-    }
-    
-    nonisolated var hideDivider: Bool {
-        MainActor.runSync {
-            configuration.button.hideDivider
-        }
-    }
-    #endif
 }
 
 private extension VerticalAlignment {
@@ -293,56 +261,30 @@ private extension GeometryProxy {
     }
 }
 
-struct CustomAlert_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomAlert(isPresented: .constant(true)) {
-            Text("Preview")
-        } content: {
-            Text("Content")
-        } actions: {
-            Button {
-            } label: {
-                Text("OK")
-            }
+#if DEBUG
+#Preview("Default") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Preview")
+    } content: {
+        Text("Content")
+    } actions: {
+        Button {
+        } label: {
+            Text("OK")
         }
-        .previewDisplayName("Default")
-        
-        CustomAlert(isPresented: .constant(true)) {
-            Text("Preview")
-        } content: {
-            Text("Content")
-        } actions: {
-            MultiButton {
-                Button {
-                } label: {
-                    Text("Cancel")
-                }
-                Button {
-                } label: {
-                    Text("OK")
-                }
-            }
-        }
-        .environment(\.customAlertConfiguration, .create { configuration in
-            configuration.background = .blurEffect(.dark)
-            configuration.padding = EdgeInsets()
-            configuration.alert = .create { alert in
-                alert.background = .color(.white)
-                alert.cornerRadius = 4
-                alert.padding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
-                alert.minWidth = 300
-                alert.titleFont = .headline
-                alert.contentFont = .subheadline
-                alert.alignment = .leading
-                alert.spacing = 10
-            }
-            configuration.button = .create { button in
-                button.tintColor = .purple
-                button.padding = EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                button.font = .callout.weight(.semibold)
-                button.hideDivider = true
-            }
-        })
-        .previewDisplayName("Custom")
     }
 }
+
+#Preview("Lorem Ipsum") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Preview")
+    } content: {
+        Text(String.loremIpsum)
+    } actions: {
+        Button {
+        } label: {
+            Text("OK")
+        }
+    }
+}
+#endif

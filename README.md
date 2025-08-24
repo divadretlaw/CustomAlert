@@ -13,9 +13,12 @@ If the content is too large because the text is too long or the text doesn't fit
 
 ## Usage
 
-| SwiftUI Alert | Custom Alert |
-|:-:|:-:|
-| ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom.png) |
+| iOS | SwiftUI Alert | Custom Alert |
+|:---:|:-------------:|:------------:|
+| iOS 26+ | ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI_liquidGlass.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom_liquidGlass.png) |
+| iOS 15 - iOS 18 | ![Native Alert](Sources/CustomAlert/Documentation.docc/Resources/SwiftUI_classic.png) | ![Custom Alert](Sources/CustomAlert/Documentation.docc/Resources/Custom_classic.png) |
+
+On iOS 26, the default configuration is based on `CustomAlertConfiguration.liquidGlass` and on previous iOS versions `CustomAlertConfiguration.classic`.
 
 You can easily add an Image or change the Font used in the alert, or anything else to your imagination.
 

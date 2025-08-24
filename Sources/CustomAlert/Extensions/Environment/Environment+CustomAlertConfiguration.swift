@@ -27,7 +27,7 @@ public extension View {
     /// - Parameter configure: Callback to change the current configuration
     ///
     /// - Returns: The view with a customized ``CustomAlertConfiguration``
-    func configureCustomAlert(configure: @escaping (CustomAlertConfiguration) -> CustomAlertConfiguration) -> some View {
+    func configureCustomAlert(configure: @escaping (inout CustomAlertConfiguration) -> Void) -> some View {
         modifier(CustomAlertConfigurator(configure: configure))
     }
     
@@ -43,10 +43,16 @@ public extension View {
 
 private struct CustomAlertConfigurator: ViewModifier {
     @Environment(\.customAlertConfiguration) private var configuration
-    var configure: (CustomAlertConfiguration) -> CustomAlertConfiguration
+    var configure: (inout CustomAlertConfiguration) -> Void
 
     func body(content: Content) -> some View {
         content
-            .environment(\.customAlertConfiguration, configure(configuration))
+            .environment(\.customAlertConfiguration, update(configure: configure))
+    }
+
+    private func update(configure: (inout CustomAlertConfiguration) -> Void) -> CustomAlertConfiguration {
+        var configuration = self.configuration
+        configure(&configuration)
+        return configuration
     }
 }

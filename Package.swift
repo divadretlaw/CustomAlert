@@ -16,7 +16,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/divadretlaw/WindowKit", from: "2.5.2")
+        .package(url: "https://github.com/divadretlaw/WindowKit", from: "3.0.0")
     ],
     targets: [
         .target(

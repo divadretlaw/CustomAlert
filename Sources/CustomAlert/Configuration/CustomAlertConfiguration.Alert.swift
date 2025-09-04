@@ -88,7 +88,7 @@ extension CustomAlertConfiguration {
         public nonisolated static var liquidGlass: CustomAlertConfiguration.Alert {
             CustomAlertConfiguration.Alert(
                 background: .glass(),
-                dividerVisibility: .automatic, // TODO: Allow more divider customization
+                dividerVisibility: .automatic,
                 cornerRadius: 35,
                 padding: .dynamic { state in
                     let top: CGFloat = if state.isScrolling {
@@ -106,7 +106,7 @@ extension CustomAlertConfiguration {
                         trailing: 30
                     )
                 },
-                actionPadding: EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15),
+                actionPadding: EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16),
                 minWidth: .dynamic { state in
                     if state.isAccessibilitySize {
                         379

@@ -26,6 +26,10 @@ public struct ActionBuilder {
         components.flatMap { $0 }
     }
 
+    public static func buildBlock() -> [CustomAlertAction] {
+        []
+    }
+
     // MARK: buildArray
 
     public static func buildArray(_ components: [[CustomAlertAction]]) -> [CustomAlertAction] {

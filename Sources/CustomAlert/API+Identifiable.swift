@@ -264,7 +264,7 @@ public extension View {
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Content: View {
-        customAlert(title, item: item, content: content, actions: { _ in [] })
+        customAlert(title, item: item, content: content, actions: { _ in /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using
@@ -287,7 +287,7 @@ public extension View {
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Content: View {
-        customAlert(Text(title), item: item, content: content, actions: { _ in [] })
+        customAlert(Text(title), item: item, content: content, actions: { _ in /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true
@@ -310,7 +310,7 @@ public extension View {
         item: Binding<Item?>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Title: StringProtocol, Content: View {
-        customAlert(Text(title), item: item, content: content, actions: { _ in [] })
+        customAlert(Text(title), item: item, content: content, actions: { _ in /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -333,6 +333,6 @@ public extension View {
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping (Item) -> Content
     ) -> some View where Item: Identifiable, Content: View {
-        customAlert(title(), item: item, content: content, actions: { _ in [] })
+        customAlert(title(), item: item, content: content, actions: { _ in /* no actions */ })
     }
 }

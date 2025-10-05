@@ -245,7 +245,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Content: View {
-        customAlert(title, isPresented: isPresented, content: content, actions: { [] })
+        customAlert(title, isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using
@@ -265,7 +265,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Content: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: { [] })
+        customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true
@@ -285,7 +285,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Title: StringProtocol, Content: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: { [] })
+        customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -305,6 +305,6 @@ public extension View {
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Content: View {
-        customAlert(title(), isPresented: isPresented, content: content, actions: { [] })
+        customAlert(title(), isPresented: isPresented, content: content, actions: { /* no actions */ })
     }
 }

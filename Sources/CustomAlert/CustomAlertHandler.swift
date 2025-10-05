@@ -9,21 +9,21 @@ import SwiftUI
 import Combine
 import WindowKit
 
-@MainActor struct CustomAlertHandler<AlertContent, AlertActions>: ViewModifier where AlertContent: View, AlertActions: View {
+@MainActor struct CustomAlertHandler<AlertContent>: ViewModifier where AlertContent: View {
     @Environment(\.customAlertConfiguration) private var configuration
     
     @Binding var isPresented: Bool
     var windowScene: UIWindowScene?
     var alertTitle: () -> Text?
     @ViewBuilder var alertContent: () -> AlertContent
-    @ViewBuilder var alertActions: () -> AlertActions
-    
+    @ActionBuilder var alertActions: () -> [CustomAlertAction]
+
     init(
         isPresented: Binding<Bool>,
         windowScene: UIWindowScene? = nil,
         alertTitle: @escaping () -> Text?,
         @ViewBuilder alertContent: @escaping () -> AlertContent,
-        @ViewBuilder alertActions: @escaping () -> AlertActions
+        @ActionBuilder alertActions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.windowScene = windowScene
@@ -80,7 +80,9 @@ import WindowKit
         ZStack {
             alertTitle()
             alertContent()
-            alertActions()
+            ForEach(Array(alertActions().enumerated()), id: \.offset) { _, view in
+                view
+            }
         }
         .accessibilityHidden(true)
         .frame(width: 0, height: 0)

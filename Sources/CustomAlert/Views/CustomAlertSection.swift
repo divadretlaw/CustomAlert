@@ -183,7 +183,7 @@ struct CustomAlertSection_Preview: PreviewProvider {
                 .transition(.move(edge: .leading))
                 
                 Section {
-                    Button {
+                    SwiftUI.Button {
                         isPresented = true
                     } label: {
                         Text("Show Custom Alert Section")

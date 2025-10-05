@@ -21,17 +21,8 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.window) private var window
 
-    var triggerDismiss: Bool
-
     public func makeBody(configuration: Configuration) -> some View {
-        if triggerDismiss {
-            makeLabel(configuration: configuration)
-                .onSimultaneousTapGesture {
-                    alertDismiss()
-                }
-        } else {
-            makeLabel(configuration: configuration)
-        }
+        makeLabel(configuration: configuration)
     }
 
     func makeLabel(configuration: Configuration) -> some View {
@@ -130,14 +121,15 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     ///
     /// A tap on the button will trigger `EnvironmentValues.alertDismiss`
     static var alert: Self {
-        .alert(triggerDismiss: true)
+        AlertButtonStyle()
     }
-    
+
     /// A button style that applies standard alert styling
     ///
     /// - Parameter triggerDismiss: Whether the button should trigger `EnvironmentValues.alertDismiss` or not.
+    @available(*, deprecated, message: "")
     static func alert(triggerDismiss: Bool) -> Self {
-        AlertButtonStyle(triggerDismiss: triggerDismiss)
+        AlertButtonStyle()
     }
 }
 

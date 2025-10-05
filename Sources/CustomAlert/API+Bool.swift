@@ -23,14 +23,14 @@ public extension View {
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
-    func customAlert<Content, Actions>(
+    func customAlert<Content>(
         _ title: @autoclosure @escaping () -> Text? = nil,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Content: View {
         modifier(
             CustomAlertHandler(
                 isPresented: isPresented,
@@ -53,14 +53,14 @@ public extension View {
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
-    func customAlert<Content, Actions>(
+    func customAlert<Content>(
         _ title: LocalizedStringKey,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Content: View {
         customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
     }
     
@@ -74,15 +74,15 @@ public extension View {
     ///     present the alert. When the user presses or taps one of the alert's
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
     @_disfavoredOverload
-    func customAlert<Title, Content, Actions>(
+    func customAlert<Title, Content>(
         _ title: Title,
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Title: StringProtocol, Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Title: StringProtocol, Content: View {
         customAlert(Text(title), isPresented: isPresented, content: content, actions: actions)
     }
     
@@ -97,14 +97,14 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
-    func customAlert<Content, Actions>(
+    func customAlert<Content>(
         isPresented: Binding<Bool>,
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Content: View {
         modifier(
             CustomAlertHandler(
                 isPresented: isPresented,
@@ -132,15 +132,15 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
-    func customAlert<Content, Actions>(
+    func customAlert<Content>(
         _ title: @autoclosure @escaping () -> Text? = nil,
         isPresented: Binding<Bool>,
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Content: View {
         modifier(
             CustomAlertHandler(
                 isPresented: isPresented,
@@ -164,15 +164,15 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
-    func customAlert<Content, Actions>(
+    func customAlert<Content>(
         _ title: LocalizedStringKey,
         isPresented: Binding<Bool>,
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Content: View {
         customAlert(Text(title), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
     
@@ -187,16 +187,16 @@ public extension View {
     ///     actions, the system sets this value to `false` and dismisses.
     ///   - windowScene: The window scene to present the alert on.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
     @_disfavoredOverload
-    func customAlert<Title, Content, Actions>(
+    func customAlert<Title, Content>(
         _ title: Title,
         isPresented: Binding<Bool>,
         on windowScene: UIWindowScene,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Title: StringProtocol, Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Title: StringProtocol, Content: View {
         customAlert(Text(title), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
     
@@ -212,15 +212,15 @@ public extension View {
     ///   - windowScene: The window scene to present the alert on.
     ///   - title: Callback for the optional title of the alert.
     ///   - content: A `ViewBuilder` returing the alerts main view.
-    ///   - actions: A `ViewBuilder` returning the alert's actions.
+    ///   - actions: A `ActionBuilder` returning the alert's actions.
     @MainActor
-    func customAlert<Content, Actions>(
+    func customAlert<Content>(
         isPresented: Binding<Bool>,
         on windowScene: UIWindowScene,
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
-    ) -> some View where Content: View, Actions: View {
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
+    ) -> some View where Content: View {
         customAlert(title(), isPresented: isPresented, on: windowScene, content: content, actions: actions)
     }
 }
@@ -245,7 +245,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Content: View {
-        customAlert(title, isPresented: isPresented, content: content, actions: { /* no actions */ })
+        customAlert(title, isPresented: isPresented, content: content, actions: { [] })
     }
     
     /// Presents an alert when a given condition is true, using
@@ -265,7 +265,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Content: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
+        customAlert(Text(title), isPresented: isPresented, content: content, actions: { [] })
     }
     
     /// Presents an alert when a given condition is true
@@ -285,7 +285,7 @@ public extension View {
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Title: StringProtocol, Content: View {
-        customAlert(Text(title), isPresented: isPresented, content: content, actions: { /* no actions */ })
+        customAlert(Text(title), isPresented: isPresented, content: content, actions: { [] })
     }
     
     /// Presents an alert when a given condition is true, using an optional text view for
@@ -305,6 +305,6 @@ public extension View {
         title: @escaping () -> Text?,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View where Content: View {
-        customAlert(title(), isPresented: isPresented, content: content, actions: { /* no actions */ })
+        customAlert(title(), isPresented: isPresented, content: content, actions: { [] })
     }
 }

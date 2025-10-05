@@ -10,10 +10,10 @@ import CustomAlert
 
 struct CustomAlerts: View {
     @State private var showAlert = false
-    
+
     @State private var showChangingAlert = false
     @State private var next: Int = 0
-    
+
     var body: some View {
         Section {
             Button {
@@ -66,26 +66,21 @@ struct CustomAlerts: View {
                     } label: {
                         Text("Cancel")
                     }
-                    ZStack {
-                        switch next {
-                        case 0, 1:
-                            Button {
-                                next += 1
-                            } label: {
-                                Text("Next")
-                            }
-                            .transition(.opacity)
-                            .buttonStyle(.alert(triggerDismiss: false))
-                        default:
-                            Button(role: .destructive) {
-                                print("CustomStyling.MyConfig - Done")
-                            } label: {
-                                Text("Done")
-                            }
-                            .transition(.opacity)
+                    switch next {
+                    case 0, 1:
+                        Button {
+                            next += 1
+                        } label: {
+                            Text("Next")
+                        }
+                        .triggerDismiss(false)
+                    default:
+                        Button(role: .destructive) {
+                            print("CustomStyling.MyConfig - Done")
+                        } label: {
+                            Text("Done")
                         }
                     }
-                    .animation(.default, value: next)
                 }
             }
         } header: {

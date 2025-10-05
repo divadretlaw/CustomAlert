@@ -23,10 +23,10 @@ struct AlertPreview: View {
 
     var body: some View {
         List {
-            Button("Show Native Alert") {
+            SwiftUI.Button("Show Native Alert") {
                 showNativeAlert = true
             }
-            Button("Show Custom Alert") {
+            SwiftUI.Button("Show Custom Alert") {
                 showCustomAlert = true
             }
         }
@@ -42,11 +42,11 @@ struct AlertPreview: View {
             #endif
         }
         .alert(title, isPresented: $showNativeAlert) {
-            Button(role: .cancel) {
+            SwiftUI.Button(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
-            Button {
+            SwiftUI.Button {
             } label: {
                 Text("OK")
             }

@@ -8,14 +8,14 @@
 import SwiftUI
 
 /// Custom Alert
-@MainActor public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
+@MainActor public struct CustomAlert<Content>: View where Content: View {
     @Environment(\.customAlertConfiguration) private var configuration
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @Binding var isPresented: Bool
     var title: Text?
     var content: Content
-    var actions: Actions
+    var actions: [CustomAlertAction]
     
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
@@ -33,7 +33,7 @@ import SwiftUI
         isPresented: Binding<Bool>,
         title: @escaping () -> Text?,
         @ViewBuilder content: () -> Content,
-        @ViewBuilder actions: () -> Actions
+        @ActionBuilder actions: () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.title = title()
@@ -44,7 +44,7 @@ import SwiftUI
     public init(
         title: @autoclosure @escaping () -> Text?,
         @ViewBuilder content: () -> Content,
-        @ViewBuilder actions: () -> Actions
+        @ViewBuilder actions: () -> [CustomAlertAction]
     ) {
         self._isPresented = .constant(true)
         self.title = title()
@@ -174,8 +174,13 @@ import SwiftUI
                 case .visible:
                     Divider()
                 }
-                _VariadicView.Tree(ActionLayout()) {
-                    actions
+                VStack(spacing: configuration.button.spacing) {
+                    ForEach(Array(actions.enumerated()), id: \.offset) { index, child in
+                        if index != 0, !configuration.button.hideDivider {
+                            Divider()
+                        }
+                        child
+                    }
                 }
                 .padding(configuration.alert.actionPadding)
             }
@@ -213,21 +218,6 @@ import SwiftUI
 
     var state: CustomAlertState {
         CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: !fitInScreen)
-    }
-}
-
-@MainActor struct ActionLayout: _VariadicView_ViewRoot {
-    @Environment(\.customAlertConfiguration) private var configuration
-    
-    func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: configuration.button.spacing) {
-            ForEach(Array(children.enumerated()), id: \.offset) { index, child in
-                if index != 0, !configuration.button.hideDivider {
-                    Divider()
-                }
-                child
-            }
-        }
     }
 }
 

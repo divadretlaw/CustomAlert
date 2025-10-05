@@ -32,7 +32,7 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
                 }
                 .padding(configuration.alert.actionPadding)
             }
-            .buttonStyle(.alert(triggerDismiss: false))
+            .buttonStyle(.alert)
             .listRowInsets(.zero)
         }
     }
@@ -87,7 +87,7 @@ struct CustomAlertRow_Preview: PreviewProvider {
         var body: some View {
             List {
                 Section {
-                    Button {
+                    SwiftUI.Button {
                         isPresented = true
                     } label: {
                         Text("Show Custom Alert Row")

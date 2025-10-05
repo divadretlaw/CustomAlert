@@ -73,7 +73,7 @@ struct CustomAlerts: View {
                         } label: {
                             Text("Next")
                         }
-                        .triggerDismiss(false)
+                        .dismissDisabled(false)
                     default:
                         Button(role: .destructive) {
                             print("CustomStyling.MyConfig - Done")

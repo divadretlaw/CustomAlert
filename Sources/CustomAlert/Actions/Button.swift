@@ -28,7 +28,15 @@ import SwiftUI
         } label: {
             label
         }
-        .disabled(isDisabled ?? !isEnabled)
+        .environment(\.isEnabled, !disabled)
+    }
+
+    private var disabled: Bool {
+        if let isDisabled {
+            isDisabled
+        } else {
+            !isEnabled
+        }
     }
 
     /// Adds a condition that controls whether users can interact with this button.
@@ -47,9 +55,9 @@ import SwiftUI
     /// - Parameter disabled: A Boolean value that determines whether this button triggers a dismiss action.
     ///
     /// - Returns: A button that controls whether a dismiss action is triggered.
-    nonisolated public func triggerDismiss(_ triggerDismiss: Bool) -> Self {
+    nonisolated public func dismissDisabled(_ disabled: Bool) -> Self {
         var view = self
-        view.triggerDismiss = triggerDismiss
+        view.triggerDismiss = !disabled
         return view
     }
 }

@@ -56,15 +56,16 @@ struct MultiButtonAlerts: View {
                     } label: {
                         Text("B")
                     }
-                    .disabled(true)
-                    
+                    .disabled(false)
+
                     Button {
                         print("MultiButton.Complex - C")
                     } label: {
                         Text("C")
                     }
                 }
-                
+                .disabled(true)
+
                 Button(role: .cancel) {
                     print("MultiButton.Complex - Cancel")
                 } label: {

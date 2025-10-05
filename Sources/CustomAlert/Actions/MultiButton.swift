@@ -12,9 +12,10 @@ import SwiftUI
 /// Used to create side by side buttons on a `.customAlert`
 @MainActor public struct MultiButton: View {
     @Environment(\.customAlertConfiguration) private var configuration
-    
+    @Environment(\.isEnabled) private var isEnabled
+
     let actions: [CustomAlertAction]
-    var isEnabled: Bool = true
+    var isDisabled: Bool?
 
     /// Creates multiple buttons within the MultiButton Layout.
     ///
@@ -34,9 +35,17 @@ import SwiftUI
                 child
             }
         }
-        .disabled(!isEnabled)
+        .environment(\.isEnabled, !disabled)
         .fixedSize(horizontal: false, vertical: true)
         .environment(\.alertButtonHeight, .infinity)
+    }
+
+    private var disabled: Bool {
+        if let isDisabled {
+            isDisabled
+        } else {
+            !isEnabled
+        }
     }
 
     /// Adds a condition that controls whether users can interact with this button.
@@ -46,7 +55,7 @@ import SwiftUI
     /// - Returns: A button that controls whether users can interact with this button.
     nonisolated public func disabled(_ disabled: Bool) -> Self {
         var view = self
-        view.isEnabled = !disabled
+        view.isDisabled = disabled
         return view
     }
 }

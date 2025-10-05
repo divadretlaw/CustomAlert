@@ -80,8 +80,8 @@ import WindowKit
         ZStack {
             alertTitle()
             alertContent()
-            ForEach(Array(alertActions().enumerated()), id: \.offset) { _, view in
-                view
+            ForEach(Array(alertActions().enumerated()), id: \.offset) { _, action in
+                action
             }
         }
         .accessibilityHidden(true)

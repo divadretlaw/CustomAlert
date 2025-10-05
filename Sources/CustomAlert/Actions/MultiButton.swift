@@ -28,11 +28,11 @@ import SwiftUI
     public var body: some View {
         HStack(spacing: configuration.button.spacing) {
             actions.first
-            ForEach(Array(actions.dropFirst().enumerated()), id: \.offset) { _, child in
+            ForEach(Array(actions.dropFirst().enumerated()), id: \.offset) { _, action in
                 if !configuration.button.hideDivider {
                     Divider()
                 }
-                child
+                action
             }
         }
         .environment(\.isEnabled, !disabled)

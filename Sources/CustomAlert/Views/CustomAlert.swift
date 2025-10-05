@@ -175,11 +175,11 @@ import SwiftUI
                     Divider()
                 }
                 VStack(spacing: configuration.button.spacing) {
-                    ForEach(Array(actions.enumerated()), id: \.offset) { index, child in
+                    ForEach(Array(actions.enumerated()), id: \.offset) { index, action in
                         if index != 0, !configuration.button.hideDivider {
                             Divider()
                         }
-                        child
+                        action
                     }
                 }
                 .padding(configuration.alert.actionPadding)

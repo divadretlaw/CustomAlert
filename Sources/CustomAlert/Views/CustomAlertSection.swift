@@ -8,11 +8,11 @@
 import SwiftUI
 
 /// Display a custom alert inlined into a `List`
-public struct CustomAlertSection<Content, Actions, Header, Footer>: View where Content: View, Actions: View, Header: View, Footer: View {
+public struct CustomAlertSection<Content, Header, Footer>: View where Content: View, Header: View, Footer: View {
     @Binding var isPresented: Bool
     
     let content: Content
-    let actions: Actions
+    let actions: [CustomAlertAction]
     let header: Header
     let footer: Footer
     
@@ -35,7 +35,7 @@ public struct CustomAlertSection<Content, Actions, Header, Footer>: View where C
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header,
         @ViewBuilder footer: @escaping () -> Footer
     ) {
@@ -48,7 +48,7 @@ public struct CustomAlertSection<Content, Actions, Header, Footer>: View where C
     
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header,
         @ViewBuilder footer: @escaping () -> Footer
     ) {
@@ -58,25 +58,13 @@ public struct CustomAlertSection<Content, Actions, Header, Footer>: View where C
         self.header = header()
         self.footer = footer()
     }
-    
-    @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
-    struct ContentLayout: _VariadicView_ViewRoot {
-        func body(children: _VariadicView.Children) -> some View {
-            VStack(spacing: 0) {
-                ForEach(children) { child in
-                    Divider()
-                    child
-                }
-            }
-        }
-    }
 }
 
 extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.content = content()
@@ -87,7 +75,7 @@ extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
     
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = .constant(true)
         self.content = content()
@@ -101,7 +89,7 @@ extension CustomAlertSection where Footer == EmptyView {
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header
     ) {
         self._isPresented = isPresented
@@ -113,7 +101,7 @@ extension CustomAlertSection where Footer == EmptyView {
     
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header
     ) {
         self._isPresented = .constant(true)
@@ -128,7 +116,7 @@ extension CustomAlertSection where Header == EmptyView {
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder footer: @escaping () -> Footer
     ) {
         self._isPresented = isPresented
@@ -140,7 +128,7 @@ extension CustomAlertSection where Header == EmptyView {
     
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder footer: @escaping () -> Footer
     ) {
         self._isPresented = .constant(true)

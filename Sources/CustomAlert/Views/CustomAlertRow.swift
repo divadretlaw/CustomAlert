@@ -8,15 +8,15 @@
 import SwiftUI
 
 /// Display a custom alert inlined into a `List`
-public struct CustomAlertRow<Content, Actions>: View where Content: View, Actions: View {
+public struct CustomAlertRow<Content>: View where Content: View {
     @Environment(\.customAlertConfiguration) private var configuration
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @Binding var isPresented: Bool
     
     let content: Content
-    let actions: Actions
-    
+    let actions: [CustomAlertAction]
+
     public var body: some View {
         if isPresented {
             VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
@@ -27,8 +27,8 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
                 case .visible:
                     Divider()
                 }
-                _VariadicView.Tree(ContentLayout()) {
-                    actions
+                ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
+                    action
                 }
                 .padding(configuration.alert.actionPadding)
             }
@@ -40,7 +40,7 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.content = content()
@@ -49,7 +49,7 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
     
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = .constant(true)
         self.content = content()
@@ -58,21 +58,6 @@ public struct CustomAlertRow<Content, Actions>: View where Content: View, Action
 
     var state: CustomAlertState {
         CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: false)
-    }
-
-    @MainActor struct ContentLayout: _VariadicView_ViewRoot {
-        @Environment(\.customAlertConfiguration) private var configuration
-
-        func body(children: _VariadicView.Children) -> some View {
-            VStack(spacing: configuration.button.spacing) {
-                ForEach(Array(children.enumerated()), id: \.offset) { index, child in
-                    if index != 0, !configuration.button.hideDivider {
-                        Divider()
-                    }
-                    child
-                }
-            }
-        }
     }
 }
 

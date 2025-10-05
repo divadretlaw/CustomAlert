@@ -99,13 +99,14 @@ import SwiftUI
     }
     
     var height: CGFloat {
-        // View height - padding top and bottom - actions height
+        // View height - padding top and bottom - actions height - extra padding
         let maxHeight = viewSize.height
             - configuration.padding.top
             - configuration.padding.bottom
             - safeAreaInsets.top
-            - safeAreaInsets.bottom * 2
+            - safeAreaInsets.bottom
             - actionsSize.height
+            - 20
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
     }

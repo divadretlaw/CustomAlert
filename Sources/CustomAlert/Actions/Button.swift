@@ -122,7 +122,8 @@ extension Button {
     ) {
         self.role = role
         self.action = action
-        self.label = AnyView(Label(titleKey, systemImage: systemImage))
+        let label = Label(titleKey, systemImage: systemImage)
+        self.label = AnyView(label)
     }
 
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
@@ -134,7 +135,12 @@ extension Button {
     ) {
         self.role = role
         self.action = action
-        self.label = AnyView(Label(titleResource, systemImage: systemImage))
+        let label = Label {
+            Text(titleResource)
+        } icon: {
+            Image(systemName: systemImage)
+        }
+        self.label = AnyView(label)
     }
 
     public init<S>(
@@ -145,6 +151,7 @@ extension Button {
     ) where S: StringProtocol {
         self.role = role
         self.action = action
-        self.label = AnyView(Label(title, systemImage: systemImage))
+        let label = Label(title, systemImage: systemImage)
+        self.label = AnyView(label)
     }
 }

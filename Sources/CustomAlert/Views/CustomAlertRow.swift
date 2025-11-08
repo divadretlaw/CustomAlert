@@ -61,46 +61,38 @@ public struct CustomAlertRow<Content>: View where Content: View {
     }
 }
 
-struct CustomAlertRow_Preview: PreviewProvider {
-    static var previews: some View {
-        Preview()
-    }
-
-    struct Preview: View {
-        @State private var isPresented = false
-
-        var body: some View {
-            List {
-                Section {
-                    SwiftUI.Button {
-                        isPresented = true
+@available(iOS 17.0, visionOS 1.0, *)
+#Preview {
+    @Previewable @State var isPresented = false
+    List {
+        Section {
+            SwiftUI.Button {
+                isPresented = true
+            } label: {
+                Text("Show Custom Alert Row")
+            }
+        }
+        Section {
+            CustomAlertRow(isPresented: $isPresented) {
+                Text("Hello World")
+                    .padding()
+            } actions: {
+                MultiButton {
+                    Button(role: .cancel) {
+                        isPresented = false
+                        print("Cancel")
                     } label: {
-                        Text("Show Custom Alert Row")
+                        Text("Cancel")
                     }
-                }
-                Section {
-                    CustomAlertRow(isPresented: $isPresented) {
-                        Text("Hello World")
-                            .padding()
-                    } actions: {
-                        MultiButton {
-                            Button(role: .cancel) {
-                                isPresented = false
-                                print("Cancel")
-                            } label: {
-                                Text("Cancel")
-                            }
-                            Button {
-                                isPresented = false
-                                print("OK")
-                            } label: {
-                                Text("OK")
-                            }
-                        }
+                    Button {
+                        isPresented = false
+                        print("OK")
+                    } label: {
+                        Text("OK")
                     }
                 }
             }
-            .animation(.default, value: isPresented)
         }
     }
+    .animation(.default, value: isPresented)
 }

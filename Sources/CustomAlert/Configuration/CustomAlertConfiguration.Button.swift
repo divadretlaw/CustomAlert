@@ -71,7 +71,7 @@ extension CustomAlertConfiguration {
         }
 
         /// The default configuration
-        public nonisolated static var `default`: CustomAlertConfiguration.Button {
+        nonisolated public static var `default`: CustomAlertConfiguration.Button {
             if #available(iOS 26.0, visionOS 26.0, *) {
                 .liquidGlass
             } else {
@@ -81,7 +81,7 @@ extension CustomAlertConfiguration {
 
         /// The default configuration for a liquid glass alert
         @available(iOS 26.0, visionOS 26.0, *)
-        public nonisolated static var liquidGlass: CustomAlertConfiguration.Button {
+        nonisolated public static var liquidGlass: CustomAlertConfiguration.Button {
             MainActor.runSync {
                 CustomAlertConfiguration.Button(
                     tintColor: .primary,
@@ -107,7 +107,7 @@ extension CustomAlertConfiguration {
         }
 
         /// The default configuration for a classic alert
-        public nonisolated static var classic: CustomAlertConfiguration.Button {
+        nonisolated public static var classic: CustomAlertConfiguration.Button {
             MainActor.runSync {
                 CustomAlertConfiguration.Button(
                     tintColor: nil,

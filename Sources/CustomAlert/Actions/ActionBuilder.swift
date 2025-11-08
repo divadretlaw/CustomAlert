@@ -8,10 +8,11 @@
 import Foundation
 import SwiftUI
 
+// swiftlint:disable missing_docs
 /// A custom parameter attribute that constructs custom alert actions from closures.
 @MainActor
 @resultBuilder
-public struct ActionBuilder {
+public enum ActionBuilder {
     public static func buildExpression(_ expression: Button) -> [CustomAlertAction] {
         [.button(expression)]
     }
@@ -68,3 +69,4 @@ public struct ActionBuilder {
         components
     }
 }
+// swiftlint:enable missing_docs

@@ -63,6 +63,7 @@ import SwiftUI
                             isPresented = false
                         }
                     }
+                    .accessibilityAddTraits(.isButton)
 
                 VStack(spacing: 0) {
                     if configuration.alignment.hasTopSpacer {

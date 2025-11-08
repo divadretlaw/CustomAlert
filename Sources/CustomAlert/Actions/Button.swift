@@ -65,6 +65,13 @@ import SwiftUI
 // MARK: - Some View
 
 extension Button {
+    /// Creates a button that displays a custom label.
+    ///
+    /// - Parameters:
+    ///     - role: An optional semantic role that describes the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user triggers the button.
+    ///     - label: A view that describes the purpose of the button's `action`.
     public init<Label>(
         role: ButtonRole? = nil,
         action: @escaping @MainActor () -> Void,
@@ -79,6 +86,13 @@ extension Button {
 // MARK: - Text
 
 extension Button {
+    /// Creates a button with a specified role that generates its label from a localized string key.
+    ///
+    /// - Parameters:
+    ///     - titleKey: The key for the button's localized title, that describes the purpose of the button's `action`.
+    ///     - role: An optional semantic role describing the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user triggers the button.
     public init(
         _ titleKey: LocalizedStringKey,
         role: ButtonRole? = nil,
@@ -89,6 +103,13 @@ extension Button {
         self.label = AnyView(Text(titleKey))
     }
 
+    /// Creates a button with a specified role that generates its label from a localized string key.
+    ///
+    /// - Parameters:
+    ///     - titleResource: Text resource for the button's localized title, that describes the purpose of the button's `action`.
+    ///     - role: An optional semantic role describing the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user triggers the button.
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     public init(
         _ titleResource: LocalizedStringResource,
@@ -100,6 +121,13 @@ extension Button {
         self.label = AnyView(Text(titleResource))
     }
 
+    /// Creates a button with a specified role that generates its label from a string.
+    ///
+    /// - Parameters:
+    ///     - title: A string that describes the purpose of the button's `action`.
+    ///     - role: An optional semantic role describing the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user interacts with the button.
     public init<S>(
         _ title: S,
         role: ButtonRole? = nil,
@@ -114,6 +142,14 @@ extension Button {
 // MARK: - Label
 
 extension Button {
+    /// Creates a button with a specified role that generates its label from a localized string key and a system image.
+    ///
+    /// - Parameters:
+    ///     - titleKey: The key for the button's localized title, that describes the purpose of the button's `action`.
+    ///     - systemImage: The name of the image resource to lookup.
+    ///     - role: An optional semantic role describing the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user triggers the button.
     public init(
         _ titleKey: LocalizedStringKey,
         systemImage: String,
@@ -126,6 +162,14 @@ extension Button {
         self.label = AnyView(label)
     }
 
+    /// Creates a button with a specified role that generates its label from a localized string key and a system image.
+    ///
+    /// - Parameters:
+    ///     - titleKey: Text resource for the button's localized title, that describes the purpose of the button's `action`.
+    ///     - systemImage: The name of the image resource to lookup.
+    ///     - role: An optional semantic role describing the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user triggers the button.
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
     public init(
         _ titleResource: LocalizedStringResource,
@@ -143,6 +187,14 @@ extension Button {
         self.label = AnyView(label)
     }
 
+    /// Creates a button with a specified role that generates its label from a localized string key and a system image.
+    ///
+    /// - Parameters:
+    ///     - title: A string that describes the purpose of the button's `action`.
+    ///     - systemImage: The name of the image resource to lookup.
+    ///     - role: An optional semantic role describing the button.
+    ///             A value of `nil` means that the button doesn't have an assigned role.
+    ///     - action: The action to perform when the user triggers the button.
     public init<S>(
         _ title: S,
         systemImage: String,

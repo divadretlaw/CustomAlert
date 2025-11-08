@@ -125,7 +125,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - discouraged_assert
   - discouraged_none_name
   - discouraged_object_literal
-  - discouraged_optional_boolean
+  # - discouraged_optional_boolean
   # - discouraged_optional_collection
   - empty_collection_literal
   - empty_count
@@ -175,7 +175,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - nimble_operator
   # - no_empty_block
   # - no_extension_access_modifier
-  - no_grouping_extension
+  # - no_grouping_extension
   # - no_magic_numbers
   # - non_overridable_class_declaration
   - nslocalizedstring_key
@@ -187,7 +187,7 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - optional_enum_case_matching
   - overridden_super_call
   - override_in_extension
-  - pattern_matching_keywords
+  # - pattern_matching_keywords
   - period_spacing
   # - prefer_key_path
   - prefer_nimble
@@ -247,3 +247,8 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
 
 included:
   - Sources
+
+identifier_name:
+  excluded:
+    - x
+    - y

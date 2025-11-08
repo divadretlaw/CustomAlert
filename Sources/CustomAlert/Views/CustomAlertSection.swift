@@ -139,46 +139,38 @@ extension CustomAlertSection where Header == EmptyView {
     }
 }
 
-struct CustomAlertSection_Preview: PreviewProvider {
-    static var previews: some View {
-        Preview()
-    }
-
-    struct Preview: View {
-        @State private var isPresented = false
-
-        var body: some View {
-            List {
-                CustomAlertSection(isPresented: $isPresented) {
-                    Text("Hello World")
-                        .padding()
-                } actions: {
-                    MultiButton {
-                        Button(role: .cancel) {
-                            isPresented = false
-                            print("Cancel")
-                        } label: {
-                            Text("Cancel")
-                        }
-                        Button {
-                            isPresented = false
-                            print("OK")
-                        } label: {
-                            Text("OK")
-                        }
-                    }
+@available(iOS 17.0, visionOS 1.0, *)
+#Preview {
+    @Previewable @State var isPresented = false
+    List {
+        CustomAlertSection(isPresented: $isPresented) {
+            Text("Hello World")
+                .padding()
+        } actions: {
+            MultiButton {
+                Button(role: .cancel) {
+                    isPresented = false
+                    print("Cancel")
+                } label: {
+                    Text("Cancel")
                 }
-                .transition(.move(edge: .leading))
-
-                Section {
-                    SwiftUI.Button {
-                        isPresented = true
-                    } label: {
-                        Text("Show Custom Alert Section")
-                    }
+                Button {
+                    isPresented = false
+                    print("OK")
+                } label: {
+                    Text("OK")
                 }
             }
-            .animation(.default, value: isPresented)
+        }
+        .transition(.move(edge: .leading))
+
+        Section {
+            SwiftUI.Button {
+                isPresented = true
+            } label: {
+                Text("Show Custom Alert Section")
+            }
         }
     }
+    .animation(.default, value: isPresented)
 }

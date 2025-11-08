@@ -42,7 +42,7 @@ extension CustomAlertConfiguration {
             self = .default
         }
 
-        private init(
+        internal init(
             tintColor: Color?,
             pressedTintColor: Color?,
             roleColor: [ButtonType: Color],
@@ -76,59 +76,6 @@ extension CustomAlertConfiguration {
                 .liquidGlass
             } else {
                 .classic
-            }
-        }
-
-        /// The default configuration for a liquid glass alert
-        @available(iOS 26.0, visionOS 26.0, *)
-        nonisolated public static var liquidGlass: CustomAlertConfiguration.Button {
-            MainActor.runSync {
-                CustomAlertConfiguration.Button(
-                    tintColor: .primary,
-                    pressedTintColor: nil,
-                    roleColor: [.destructive: .red],
-                    padding: .dynamic { state in
-                        if state.isAccessibilitySize {
-                            EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
-                        } else {
-                            EdgeInsets(top: 14, leading: 12, bottom: 14, trailing: 12)
-                        }
-                    },
-                    font: .body.weight(.medium),
-                    roleFont: [:],
-                    hideDivider: true,
-                    background: .color(Color("Background", bundle: .module)),
-                    pressedBackground: .color(.liquidGlassBackgroundColor),
-                    roleBackground: [:],
-                    spacing: 8,
-                    shape: .capsule
-                )
-            }
-        }
-
-        /// The default configuration for a classic alert
-        nonisolated public static var classic: CustomAlertConfiguration.Button {
-            MainActor.runSync {
-                CustomAlertConfiguration.Button(
-                    tintColor: nil,
-                    pressedTintColor: nil,
-                    roleColor: [.destructive: .red],
-                    padding: .dynamic { state in
-                        if state.isAccessibilitySize {
-                            EdgeInsets(top: 20, leading: 12, bottom: 20, trailing: 12)
-                        } else {
-                            EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
-                        }
-                    },
-                    font: .body,
-                    roleFont: [.cancel: .headline],
-                    hideDivider: false,
-                    background: .color(.almostClear),
-                    pressedBackground: .color(.classicBackgroundColor),
-                    roleBackground: [:],
-                    spacing: 0,
-                    shape: .automatic
-                )
             }
         }
 
@@ -264,15 +211,3 @@ enum ButtonType: Hashable {
         }
     }
 }
-
-#if DEBUG
-@available(iOS 17.0, *)
-#Preview("Default") {
-    AlertPreview(title: "Title", content: "Content")
-}
-
-@available(iOS 17.0, *)
-#Preview("Lorem Ipsum") {
-    AlertPreview(title: "Title", content: .loremIpsum)
-}
-#endif

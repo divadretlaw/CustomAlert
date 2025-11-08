@@ -38,7 +38,13 @@ extension CustomAlertConfiguration {
         /// Optional shadow applied to the alert
         var shadow: CustomAlertShadow?
 
-        private init(
+        // MARK: - Init
+
+        public init() {
+            self = .default
+        }
+
+        internal init(
             background: CustomAlertBackground,
             dividerVisibility: Visibility,
             cornerRadius: CGFloat,
@@ -68,12 +74,6 @@ extension CustomAlertConfiguration {
             self.shadow = shadow
         }
 
-        // MARK: - Init
-
-        public init() {
-            self = .default
-        }
-
         /// The default configuration
         nonisolated public static var `default`: CustomAlertConfiguration.Alert {
             if #available(iOS 26.0, visionOS 26.0, *) {
@@ -81,115 +81,6 @@ extension CustomAlertConfiguration {
             } else {
                 .classic
             }
-        }
-
-        /// The default configuration for a liquid glass alert
-        @available(iOS 26.0, visionOS 26.0, *)
-        nonisolated public static var liquidGlass: CustomAlertConfiguration.Alert {
-            CustomAlertConfiguration.Alert(
-                background: .glass(),
-                dividerVisibility: .automatic,
-                cornerRadius: 35,
-                padding: .dynamic { state in
-                    let top: CGFloat = if state.isScrolling {
-                        4
-                    } else if state.isAccessibilitySize {
-                        37.5
-                    } else {
-                        22
-                    }
-
-                    return EdgeInsets(
-                        top: top,
-                        leading: 30,
-                        bottom: 5,
-                        trailing: 30
-                    )
-                },
-                actionPadding: EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16),
-                minWidth: .dynamic { state in
-                    if state.isAccessibilitySize {
-                        379
-                    } else {
-                        320
-                    }
-                },
-                titleFont: .headline,
-                titleColor: .primary,
-                contentFont: .subheadline,
-                contentColor: .secondary,
-                spacing: .dynamic { state in
-                    if state.isScrolling {
-                        0
-                    } else if state.isAccessibilitySize {
-                        30
-                    } else {
-                        8
-                    }
-                },
-                alignment: .leading,
-                shadow: nil
-            )
-        }
-
-        /// The default configuration for a classic alert
-        nonisolated public static var classic: CustomAlertConfiguration.Alert {
-            CustomAlertConfiguration.Alert(
-                background: .blurEffect(.systemThinMaterial),
-                dividerVisibility: .visible,
-                cornerRadius: 13.3333,
-                padding: .dynamic { state in
-                    let top: CGFloat = if state.isScrolling {
-                        4
-                    } else if state.isAccessibilitySize {
-                        37.5
-                    } else {
-                        20
-                    }
-
-                    let horizontal: CGFloat = if state.isAccessibilitySize {
-                        12
-                    } else {
-                        8
-                    }
-
-                    let bottom: CGFloat = if state.isScrolling {
-                        4
-                    } else if state.isAccessibilitySize {
-                        12
-                    } else {
-                        20
-                    }
-
-                    return EdgeInsets(
-                        top: top,
-                        leading: horizontal,
-                        bottom: bottom,
-                        trailing: horizontal
-                    )
-                },
-                actionPadding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
-                minWidth: .dynamic { state in
-                    if state.isAccessibilitySize {
-                        379
-                    } else {
-                        270
-                    }
-                },
-                titleFont: .headline,
-                titleColor: .primary,
-                contentFont: .footnote,
-                contentColor: .primary,
-                spacing: .dynamic { state in
-                    if state.isAccessibilitySize {
-                        0
-                    } else {
-                        4
-                    }
-                },
-                alignment: .center,
-                shadow: nil
-            )
         }
 
         // MARK: - Modifier
@@ -356,15 +247,3 @@ public enum CustomAlertAlignment: Sendable {
     /// The content is aligned on the trailing edge
     case trailing
 }
-
-#if DEBUG
-@available(iOS 17.0, *)
-#Preview("Default") {
-    AlertPreview(title: "Title", content: "Content")
-}
-
-@available(iOS 17.0, *)
-#Preview("Lorem Ipsum") {
-    AlertPreview(title: "Title", content: .loremIpsum)
-}
-#endif

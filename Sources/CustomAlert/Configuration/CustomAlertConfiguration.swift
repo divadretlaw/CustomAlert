@@ -33,7 +33,7 @@ import SwiftUI
         self = .default
     }
 
-    private init(
+    internal init(
         alert: CustomAlertConfiguration.Alert,
         button: CustomAlertConfiguration.Button,
         background: CustomAlertBackground,
@@ -59,39 +59,6 @@ import SwiftUI
             .liquidGlass
         } else {
             .classic
-        }
-    }
-
-    /// The default configuration for a liquid glass alert
-    @available(iOS 26.0, visionOS 26.0, *)
-    nonisolated public static var liquidGlass: CustomAlertConfiguration {
-        MainActor.runSync {
-            CustomAlertConfiguration(
-                alert: .liquidGlass,
-                button: .liquidGlass,
-                background: .color(Color("DimmingBackround", bundle: .module)),
-                padding: EdgeInsets(top: 11, leading: 20, bottom: 11, trailing: 20),
-                transition: .opacity.combined(with: .scale(scale: 1.1)),
-                animateTransition: true,
-                alignment: .center,
-                dismissOnBackgroundTap: false
-            )
-        }
-    }
-
-    /// The default configuration for a classic alert
-    nonisolated public static var classic: CustomAlertConfiguration {
-        MainActor.runSync {
-            CustomAlertConfiguration(
-                alert: .classic,
-                button: .classic,
-                background: .color(Color("DimmingBackround", bundle: .module)),
-                padding: EdgeInsets(top: 11, leading: 30, bottom: 11, trailing: 30),
-                transition: .opacity.combined(with: .scale(scale: 1.1)),
-                animateTransition: true,
-                alignment: .center,
-                dismissOnBackgroundTap: false
-            )
         }
     }
 
@@ -181,15 +148,3 @@ import SwiftUI
         return configuration
     }
 }
-
-#if DEBUG
-@available(iOS 17.0, *)
-#Preview("Default") {
-    AlertPreview(title: "Title", content: "Content")
-}
-
-@available(iOS 17.0, *)
-#Preview("Lorem Ipsum") {
-    AlertPreview(title: "Title", content: .loremIpsum)
-}
-#endif

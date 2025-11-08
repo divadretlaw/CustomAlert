@@ -12,10 +12,10 @@ import WindowKit
     @Environment(\.customAlertConfiguration) private var configuration
 
     @Binding var isPresented: Bool
-    var windowScene: UIWindowScene?
-    var alertTitle: () -> Text?
-    @ViewBuilder var alertContent: () -> AlertContent
-    @ActionBuilder var alertActions: () -> [CustomAlertAction]
+    let windowScene: UIWindowScene?
+    let alertTitle: () -> Text?
+    @ViewBuilder let alertContent: () -> AlertContent
+    @ActionBuilder let alertActions: () -> [CustomAlertAction]
 
     init(
         isPresented: Binding<Bool>,
@@ -32,42 +32,37 @@ import WindowKit
     }
 
     func body(content: Content) -> some View {
-        if let windowScene {
-            content
-                .disabled(isPresented)
-                .windowCover(isPresented: $isPresented, on: windowScene) {
-                    alertView
-                } configure: { configuration in
-                    configuration.tintColor = .customAlertColor
-                    configuration.modalPresentationStyle = .overFullScreen
-                    configuration.modalTransitionStyle = .crossDissolve
+        content
+            .disabled(isPresented)
+            .background {
+                if let windowScene {
+                    alert(on: windowScene)
+                } else {
+                    WindowSceneReader { windowScene in
+                        alert(on: windowScene)
+                    }
                 }
-                .background(alertIdentity)
-        } else {
-            content
-                .disabled(isPresented)
-                .windowCover(isPresented: $isPresented) {
-                    alertView
-                } configure: { configuration in
-                    configuration.tintColor = .customAlertColor
-                    configuration.modalPresentationStyle = .overFullScreen
-                    configuration.modalTransitionStyle = .crossDissolve
-                }
-                .background(alertIdentity)
-        }
+            }
     }
 
-    var alertView: some View {
-        CustomAlert(isPresented: $isPresented) {
-            alertTitle()
-        } content: {
-            alertContent()
-        } actions: {
-            alertActions()
-        }
-        .transformEnvironment(\.self) { environment in
-            environment.isEnabled = true
-        }
+    func alert(on windowScene: UIWindowScene) -> some View {
+        alertIdentity
+            .windowCover(isPresented: $isPresented, on: windowScene) {
+                CustomAlert(isPresented: $isPresented) {
+                    alertTitle()
+                } content: {
+                    alertContent()
+                } actions: {
+                    alertActions()
+                }
+                .transformEnvironment(\.self) { environment in
+                    environment.isEnabled = true
+                }
+            } configure: { configuration in
+                configuration.tintColor = .customAlertColor
+                configuration.modalPresentationStyle = .overFullScreen
+                configuration.modalTransitionStyle = .crossDissolve
+            }
     }
 
     /// The view identity of the alert

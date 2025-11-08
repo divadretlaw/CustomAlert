@@ -49,7 +49,7 @@ import SwiftUI
         view.isDisabled = disabled
         return view
     }
-    
+
     /// Adds a condition that controls whether this button triggers a dismiss action.
     ///
     /// - Parameter disabled: A Boolean value that determines whether this button triggers a dismiss action.
@@ -104,7 +104,7 @@ extension Button {
         _ title: S,
         role: ButtonRole? = nil,
         action: @escaping @MainActor () -> Void
-    ) where S : StringProtocol {
+    ) where S: StringProtocol {
         self.role = role
         self.action = action
         self.label = AnyView(Text(title))

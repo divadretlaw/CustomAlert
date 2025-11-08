@@ -13,7 +13,7 @@ public struct CustomAlertRow<Content>: View where Content: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @Binding var isPresented: Bool
-    
+
     let content: Content
     let actions: [CustomAlertAction]
 
@@ -36,7 +36,7 @@ public struct CustomAlertRow<Content>: View where Content: View {
             .listRowInsets(.zero)
         }
     }
-    
+
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
@@ -46,7 +46,7 @@ public struct CustomAlertRow<Content>: View where Content: View {
         self.content = content()
         self.actions = actions()
     }
-    
+
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction]
@@ -65,10 +65,10 @@ struct CustomAlertRow_Preview: PreviewProvider {
     static var previews: some View {
         Preview()
     }
-    
+
     struct Preview: View {
         @State private var isPresented = false
-        
+
         var body: some View {
             List {
                 Section {

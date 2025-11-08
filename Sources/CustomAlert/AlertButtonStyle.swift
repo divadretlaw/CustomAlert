@@ -123,14 +123,6 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     static var alert: Self {
         AlertButtonStyle()
     }
-
-    /// A button style that applies standard alert styling
-    ///
-    /// - Parameter triggerDismiss: Whether the button should trigger `EnvironmentValues.alertDismiss` or not.
-    @available(*, deprecated, message: "")
-    static func alert(triggerDismiss: Bool) -> Self {
-        AlertButtonStyle()
-    }
 }
 
 #Preview("OK") {

@@ -10,12 +10,12 @@ import SwiftUI
 /// Display a custom alert inlined into a `List`
 public struct CustomAlertSection<Content, Header, Footer>: View where Content: View, Header: View, Footer: View {
     @Binding var isPresented: Bool
-    
+
     let content: Content
     let actions: [CustomAlertAction]
     let header: Header
     let footer: Footer
-    
+
     public var body: some View {
         if isPresented {
             Section {
@@ -31,7 +31,7 @@ public struct CustomAlertSection<Content, Header, Footer>: View where Content: V
             }
         }
     }
-    
+
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
@@ -45,7 +45,7 @@ public struct CustomAlertSection<Content, Header, Footer>: View where Content: V
         self.header = header()
         self.footer = footer()
     }
-    
+
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction],
@@ -72,7 +72,7 @@ extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
         self.header = EmptyView()
         self.footer = EmptyView()
     }
-    
+
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction]
@@ -98,7 +98,7 @@ extension CustomAlertSection where Footer == EmptyView {
         self.header = header()
         self.footer = EmptyView()
     }
-    
+
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction],
@@ -125,7 +125,7 @@ extension CustomAlertSection where Header == EmptyView {
         self.header = EmptyView()
         self.footer = footer()
     }
-    
+
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction],
@@ -143,10 +143,10 @@ struct CustomAlertSection_Preview: PreviewProvider {
     static var previews: some View {
         Preview()
     }
-    
+
     struct Preview: View {
         @State private var isPresented = false
-        
+
         var body: some View {
             List {
                 CustomAlertSection(isPresented: $isPresented) {
@@ -169,7 +169,7 @@ struct CustomAlertSection_Preview: PreviewProvider {
                     }
                 }
                 .transition(.move(edge: .leading))
-                
+
                 Section {
                     SwiftUI.Button {
                         isPresented = true

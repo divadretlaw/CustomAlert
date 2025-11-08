@@ -11,24 +11,24 @@ import SwiftUI
 @MainActor public struct CustomAlert<Content>: View where Content: View {
     @Environment(\.customAlertConfiguration) private var configuration
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    
+
     @Binding var isPresented: Bool
     var title: Text?
     var content: Content
     var actions: [CustomAlertAction]
-    
+
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
     @State private var safeAreaInsets: EdgeInsets = .zero
     @State private var contentSize: CGSize = .zero
     @State private var actionsSize: CGSize = .zero
     @State private var alertId: Int = 0
-    
+
     @State private var fitInScreen = false
-    
+
     // Used to animate the appearance
     @State private var isShowing = false
-    
+
     public init(
         isPresented: Binding<Bool>,
         title: @escaping () -> Text?,
@@ -40,7 +40,7 @@ import SwiftUI
         self.content = content()
         self.actions = actions()
     }
-    
+
     public init(
         title: @autoclosure @escaping () -> Text?,
         @ViewBuilder content: () -> Content,
@@ -51,7 +51,7 @@ import SwiftUI
         self.content = content()
         self.actions = actions()
     }
-    
+
     public var body: some View {
         GeometryReader { proxy in
             ZStack {
@@ -63,12 +63,12 @@ import SwiftUI
                             isPresented = false
                         }
                     }
-                
+
                 VStack(spacing: 0) {
                     if configuration.alignment.hasTopSpacer {
                         Spacer()
                     }
-                    
+
                     if isShowing {
                         alert
                             .animation(nil, value: height)
@@ -77,7 +77,7 @@ import SwiftUI
                             .opacity(0.5)
                             #endif
                     }
-                    
+
                     if configuration.alignment.hasBottomSpacer {
                         Spacer()
                     }
@@ -97,7 +97,7 @@ import SwiftUI
             }
         }
     }
-    
+
     var height: CGFloat {
         // View height - padding top and bottom - actions height - extra padding
         let maxHeight = viewSize.height
@@ -110,7 +110,7 @@ import SwiftUI
         let min = min(maxHeight, contentSize.height)
         return max(min, 0)
     }
-    
+
     var minWidth: CGFloat {
         // View width - padding leading and trailing
         let maxWidth = viewSize.width
@@ -120,7 +120,7 @@ import SwiftUI
         let min = min(maxWidth, contentSize.width)
         return max(min, 0)
     }
-    
+
     var maxWidth: CGFloat {
         // View width - padding leading and trailing
         let maxWidth = viewSize.width
@@ -186,7 +186,7 @@ import SwiftUI
                 .padding(configuration.alert.actionPadding)
             }
             .buttonStyle(.alert)
-            .captureSize($actionsSize) 
+            .captureSize($actionsSize)
         }
         .onAlertDismiss {
             isPresented = false
@@ -208,7 +208,7 @@ import SwiftUI
         hasher.combine(dynamicTypeSize)
         alertId = hasher.finalize()
     }
-    
+
     func redrawAlert() {
         // Reset calculated sizes
         contentSize = .zero
@@ -231,7 +231,7 @@ private extension VerticalAlignment {
             return true
         }
     }
-    
+
     var hasBottomSpacer: Bool {
         switch self {
         case .bottom, .lastTextBaseline:
@@ -246,7 +246,7 @@ private extension GeometryProxy {
     var totalWidth: CGFloat {
         size.width + safeAreaInsets.leading + safeAreaInsets.trailing
     }
-    
+
     var totalHeight: CGFloat {
         size.height + safeAreaInsets.top + safeAreaInsets.bottom
     }

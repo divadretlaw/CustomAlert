@@ -252,7 +252,7 @@ extension CustomAlertConfiguration {
 enum ButtonType: Hashable {
     case destructive
     case cancel
-    
+
     init?(from role: ButtonRole) {
         switch role {
         case .destructive:

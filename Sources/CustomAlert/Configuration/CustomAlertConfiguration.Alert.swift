@@ -322,7 +322,7 @@ extension CustomAlertConfiguration {
                 return .center
             }
         }
-        
+
         var horizontalAlignment: HorizontalAlignment {
             switch alignment {
             case .leading:
@@ -333,7 +333,7 @@ extension CustomAlertConfiguration {
                 return .center
             }
         }
-        
+
         var frameAlignment: Alignment {
             switch alignment {
             case .leading:

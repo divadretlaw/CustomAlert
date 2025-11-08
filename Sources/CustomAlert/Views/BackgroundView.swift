@@ -11,21 +11,21 @@ struct BackgroundView: View {
     @Environment(\.customAlertConfiguration) private var configuration
 
     var background: CustomAlertBackground
-    
+
     var body: some View {
         switch background {
-        case let .blurEffect(style):
+        case .blurEffect(let style):
             BlurView(style: style)
-        case let .color(color):
+        case .color(let color):
             color
-        case let .colorBlurEffect(color, style):
+        case .colorBlurEffect(let color, let style):
             ZStack {
                 color
                 BlurView(style: style)
             }
-        case let .anyView(view):
+        case .anyView(let view):
             view
-        case let .glass(color):
+        case .glass(let color):
             #if swift(>=6.2) && !os(visionOS)
             if #available(iOS 26.0, *) {
                 Color.clear.glassEffect(.regular.tint(color), in: RoundedRectangle(cornerRadius: configuration.alert.cornerRadius))

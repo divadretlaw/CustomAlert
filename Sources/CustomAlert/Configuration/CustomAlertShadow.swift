@@ -13,7 +13,7 @@ struct CustomAlertShadow: Sendable {
     let radius: CGFloat
     let x: CGFloat
     let y: CGFloat
-    
+
     /// Create a custom alert shadow
     ///
     /// - Parameters:

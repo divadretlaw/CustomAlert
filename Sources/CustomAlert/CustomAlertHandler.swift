@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
-import Combine
 import WindowKit
 
 @MainActor struct CustomAlertHandler<AlertContent>: ViewModifier where AlertContent: View {
     @Environment(\.customAlertConfiguration) private var configuration
-    
+
     @Binding var isPresented: Bool
     var windowScene: UIWindowScene?
     var alertTitle: () -> Text?
@@ -31,7 +30,7 @@ import WindowKit
         self.alertContent = alertContent
         self.alertActions = alertActions
     }
-    
+
     func body(content: Content) -> some View {
         if let windowScene {
             content
@@ -57,7 +56,7 @@ import WindowKit
                 .background(alertIdentity)
         }
     }
-    
+
     var alertView: some View {
         CustomAlert(isPresented: $isPresented) {
             alertTitle()
@@ -70,7 +69,7 @@ import WindowKit
             environment.isEnabled = true
         }
     }
-    
+
     /// The view identity of the alert
     ///
     /// The `alertIdentity` represents the individual parts of the alert but combined into a single view.

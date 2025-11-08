@@ -30,7 +30,7 @@ public extension View {
     func configureCustomAlert(configure: @escaping (inout CustomAlertConfiguration) -> Void) -> some View {
         modifier(CustomAlertConfigurator(configure: configure))
     }
-    
+
     /// Create a custom alert configuration
     ///
     /// - Parameter configuration: The custom alert configuration

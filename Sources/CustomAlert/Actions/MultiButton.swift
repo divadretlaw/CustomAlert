@@ -24,7 +24,7 @@ import SwiftUI
     public init(@ActionBuilder content: () -> [CustomAlertAction]) {
         self.actions = content()
     }
-    
+
     public var body: some View {
         HStack(spacing: configuration.button.spacing) {
             actions.first

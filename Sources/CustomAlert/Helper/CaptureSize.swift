@@ -9,7 +9,7 @@ import SwiftUI
 
 private struct IntrinsicContentSizePreferenceKey: PreferenceKey {
     static let defaultValue: CGSize = .zero
-    
+
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
         value = nextValue()
     }
@@ -17,7 +17,7 @@ private struct IntrinsicContentSizePreferenceKey: PreferenceKey {
 
 private struct IntrinsicSafeAreaPreferenceKey: PreferenceKey {
     static let defaultValue: EdgeInsets = .zero
-    
+
     static func reduce(value: inout EdgeInsets, nextValue: () -> EdgeInsets) {
         value = nextValue()
     }
@@ -33,7 +33,7 @@ extension View {
                 }
         }
     }
-    
+
     func captureTotalSize(_ size: Binding<CGSize>) -> some View {
         captureSize { anchor, proxy in
             anchor
@@ -47,7 +47,7 @@ extension View {
                 }
         }
     }
-    
+
     func captureSafeAreaInsets(_ safeArea: Binding<EdgeInsets>) -> some View {
         captureSize { anchor, proxy in
             anchor
@@ -69,13 +69,13 @@ private extension View {
 
 private struct CaptureSize<Result>: ViewModifier where Result: View {
     let builder: (_ anchor: AnyView, _ proxy: SendableGeometryProxy) -> Result
-    
+
     init(
         @ViewBuilder builder: @escaping (_ anchor: AnyView, _ proxy: SendableGeometryProxy) -> Result
     ) {
         self.builder = builder
     }
-    
+
     func body(content: Content) -> some View {
         content
             .background {
@@ -89,7 +89,7 @@ private struct CaptureSize<Result>: ViewModifier where Result: View {
 private struct SendableGeometryProxy: Sendable {
     let size: CGSize
     let safeAreaInsets: EdgeInsets
-    
+
     init(proxy: GeometryProxy) {
         self.size = proxy.size
         self.safeAreaInsets = proxy.safeAreaInsets

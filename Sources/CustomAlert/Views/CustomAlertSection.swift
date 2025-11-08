@@ -32,6 +32,14 @@ public struct CustomAlertSection<Content, Header, Footer>: View where Content: V
         }
     }
 
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
+    ///     - footer: A view to use as the section's footer.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
@@ -46,6 +54,13 @@ public struct CustomAlertSection<Content, Header, Footer>: View where Content: V
         self.footer = footer()
     }
 
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
+    ///     - footer: A view to use as the section's footer.
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction],
@@ -61,6 +76,12 @@ public struct CustomAlertSection<Content, Header, Footer>: View where Content: V
 }
 
 extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
@@ -73,6 +94,11 @@ extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
         self.footer = EmptyView()
     }
 
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction]
@@ -86,6 +112,13 @@ extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
 }
 
 extension CustomAlertSection where Footer == EmptyView {
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
@@ -99,6 +132,12 @@ extension CustomAlertSection where Footer == EmptyView {
         self.footer = EmptyView()
     }
 
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction],
@@ -113,6 +152,13 @@ extension CustomAlertSection where Footer == EmptyView {
 }
 
 extension CustomAlertSection where Header == EmptyView {
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - footer: A view to use as the section's footer.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
@@ -126,6 +172,12 @@ extension CustomAlertSection where Header == EmptyView {
         self.footer = footer()
     }
 
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - footer: A view to use as the section's footer.
     public init(
         @ViewBuilder content: @escaping () -> Content,
         @ActionBuilder actions: @escaping () -> [CustomAlertAction],

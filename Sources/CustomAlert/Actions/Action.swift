@@ -1,5 +1,5 @@
 //
-//  Button.swift
+//  Action.swift
 //  CustomAlert
 //
 //  Created by David Walter on 05.10.25.
@@ -8,7 +8,9 @@
 import SwiftUI
 
 /// A control that initiates a custom alert action.
-@MainActor public struct Button: View {
+public typealias Button = Action
+/// A control that initiates a custom alert action.
+@MainActor public struct Action: View {
     @Environment(\.alertDismiss) private var alertDismiss
     @Environment(\.isEnabled) private var isEnabled
 
@@ -64,7 +66,7 @@ import SwiftUI
 
 // MARK: - Some View
 
-extension Button {
+extension Action {
     /// Creates a button that displays a custom label.
     ///
     /// - Parameters:
@@ -72,7 +74,7 @@ extension Button {
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
     ///     - label: A view that describes the purpose of the button's `action`.
-    public init<Label>(
+    @_disfavoredOverload public init<Label>(
         role: ButtonRole? = nil,
         action: @escaping @MainActor () -> Void,
         @ViewBuilder label: () -> Label
@@ -85,7 +87,7 @@ extension Button {
 
 // MARK: - Text
 
-extension Button {
+extension Action {
     /// Creates a button with a specified role that generates its label from a localized string key.
     ///
     /// - Parameters:
@@ -93,7 +95,7 @@ extension Button {
     ///     - role: An optional semantic role describing the button.
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
-    public init(
+    @_disfavoredOverload public init(
         _ titleKey: LocalizedStringKey,
         role: ButtonRole? = nil,
         action: @escaping @MainActor () -> Void
@@ -111,7 +113,7 @@ extension Button {
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    public init(
+    @_disfavoredOverload public init(
         _ titleResource: LocalizedStringResource,
         role: ButtonRole? = nil,
         action: @escaping @MainActor () -> Void
@@ -128,7 +130,7 @@ extension Button {
     ///     - role: An optional semantic role describing the button.
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user interacts with the button.
-    public init<S>(
+    @_disfavoredOverload public init<S>(
         _ title: S,
         role: ButtonRole? = nil,
         action: @escaping @MainActor () -> Void
@@ -141,7 +143,7 @@ extension Button {
 
 // MARK: - Label
 
-extension Button {
+extension Action {
     /// Creates a button with a specified role that generates its label from a localized string key and a system image.
     ///
     /// - Parameters:
@@ -150,7 +152,7 @@ extension Button {
     ///     - role: An optional semantic role describing the button.
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
-    public init(
+    @_disfavoredOverload public init(
         _ titleKey: LocalizedStringKey,
         systemImage: String,
         role: ButtonRole? = nil,
@@ -171,7 +173,7 @@ extension Button {
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
     @available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
-    public init(
+    @_disfavoredOverload public init(
         _ titleResource: LocalizedStringResource,
         systemImage: String,
         role: ButtonRole? = nil,
@@ -195,7 +197,7 @@ extension Button {
     ///     - role: An optional semantic role describing the button.
     ///             A value of `nil` means that the button doesn't have an assigned role.
     ///     - action: The action to perform when the user triggers the button.
-    public init<S>(
+    @_disfavoredOverload public init<S>(
         _ title: S,
         systemImage: String,
         role: ButtonRole? = nil,

@@ -45,13 +45,13 @@ The API is very similar to the SwiftUI Alerts
 }
 ```
 
-You can create Side by Side Buttons using `MultiButton`
+You can create Side by Side Buttons using `ActionHStack`
 
 ```swift
 .customAlert("Alert with Side by Side Buttons", isPresented: $showAlert) {
     Text("Choose left or right")
 } actions: {
-    MultiButton {
+    ActionHStack {
         Button {
             // some Action
         } label: {

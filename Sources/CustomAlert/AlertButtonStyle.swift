@@ -130,7 +130,7 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     } content: {
         Text("Some Message")
     } actions: {
-        MultiButton {
+        HActionStack {
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")

@@ -10,6 +10,7 @@ import CustomAlert
 
 struct CustomAlerts: View {
     @State private var showAlert = false
+    @State private var showClassicAlert = false
 
     @State private var showChangingAlert = false
     @State private var next: Int = 0
@@ -24,7 +25,7 @@ struct CustomAlerts: View {
             .customAlert("Preview", isPresented: $showAlert) {
                 CustomContent()
             } actions: {
-                MultiButton {
+                HActionStack {
                     Button {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
@@ -38,6 +39,7 @@ struct CustomAlerts: View {
                 }
             }
             .configureCustomAlert(.myConfig)
+
             Button {
                 next = 0
                 showChangingAlert = true
@@ -60,7 +62,7 @@ struct CustomAlerts: View {
                 }
                 .animation(.default, value: next)
             } actions: {
-                MultiButton {
+                HActionStack {
                     Button(role: .cancel) {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
@@ -83,6 +85,29 @@ struct CustomAlerts: View {
                     }
                 }
             }
+
+            Button {
+                showClassicAlert = true
+            } label: {
+                DetailLabel("Classic Alert", detail: "Enforced Classic Alert Styling")
+            }
+            .customAlert("Classic", isPresented: $showClassicAlert) {
+                Text("Classic Styling")
+            } actions: {
+                HActionStack {
+                    Button(role: .cancel) {
+                        print("ClassicAlert - Cancel")
+                    } label: {
+                        Text("Cancel")
+                    }
+                    Button {
+                        print("ClassicAlert - OK")
+                    } label: {
+                        Text("OK")
+                    }
+                }
+            }
+            .environment(\.customAlertConfiguration, .classic)
         } header: {
             Text("Custom Styling")
         }
@@ -109,7 +134,7 @@ struct CustomContent: View {
 extension CustomAlertConfiguration {
     static let myConfig: CustomAlertConfiguration = {
         CustomAlertConfiguration()
-            .background(.blurEffect(.dark))
+            .background(.blurEffect(.regular))
             .padding(EdgeInsets())
             .alert {
                 CustomAlertConfiguration.Alert()

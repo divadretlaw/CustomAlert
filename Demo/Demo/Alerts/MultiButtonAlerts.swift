@@ -22,7 +22,7 @@ struct MultiButtonAlerts: View {
             .customAlert("Multibutton Alert", isPresented: $showSimple) {
                 Text("Simple MultiButton")
             } actions: {
-                MultiButton {
+                HActionStack {
                     Button {
                         print("MultiButton.Simple - OK")
                     } label: {
@@ -44,7 +44,7 @@ struct MultiButtonAlerts: View {
             .customAlert("MultiButton Alert", isPresented: $showComplex) {
                 Text("Complex MultiButton")
             } actions: {
-                MultiButton {
+                HActionStack {
                     Button {
                         print("MultiButton.Complex - A")
                     } label: {

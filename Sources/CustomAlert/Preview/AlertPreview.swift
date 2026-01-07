@@ -56,7 +56,7 @@ struct AlertPreview: View {
         .customAlert(title, isPresented: $showCustomAlert) {
             Text(content)
         } actions: {
-            MultiButton {
+            HActionStack {
                 Button(role: .cancel) {
                 } label: {
                     Text("Cancel")

@@ -13,19 +13,21 @@ import SwiftUI
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @Binding var isPresented: Bool
-    var title: Text?
-    var content: Content
-    var actions: [CustomAlertAction]
+
+    let title: Text?
+    let content: Content
+    let actions: [CustomAlertAction]
 
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
     @State private var safeAreaInsets: EdgeInsets = .zero
     @State private var contentSize: CGSize = .zero
     @State private var actionsSize: CGSize = .zero
+
+    // ID to redraw the alert if needed
     @State private var alertId: Int = 0
-
+    // Tracks if the alert content fits in screen
     @State private var fitInScreen = false
-
     // Used to animate the appearance
     @State private var isShowing = false
 
@@ -66,12 +68,12 @@ import SwiftUI
                     .accessibilityAddTraits(.isButton)
 
                 VStack(spacing: 0) {
-                    if configuration.alignment.hasTopSpacer {
+                    if configuration.alignment.isTop {
                         Spacer()
                     }
 
                     if isShowing {
-                        alert
+                        makeAlert()
                             .animation(nil, value: height)
                             .id(alertId)
                             #if CUSTOM_ALERT_DESIGN
@@ -79,7 +81,7 @@ import SwiftUI
                             #endif
                     }
 
-                    if configuration.alignment.hasBottomSpacer {
+                    if configuration.alignment.isBottom {
                         Spacer()
                     }
                 }
@@ -98,6 +100,90 @@ import SwiftUI
             }
         }
     }
+
+    func makeAlert() -> some View {
+        VStack(spacing: 0) {
+            GeometryReader { proxy in
+                ScrollView(.vertical) {
+                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing(state)) {
+                        if let title {
+                            title
+                                .font(configuration.alert.titleFont)
+                                .foregroundStyle(configuration.alert.titleColor)
+                                .multilineTextAlignment(configuration.alert.textAlignment)
+                        }
+                        content
+                            .font(configuration.alert.contentFont)
+                            .foregroundStyle(configuration.alert.contentColor)
+                            .multilineTextAlignment(configuration.alert.textAlignment)
+                            .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
+                    }
+                    .foregroundColor(.primary)
+                    .padding(configuration.alert.padding(state))
+                    .frame(maxWidth: .infinity)
+                    .captureSize($contentSize)
+                    // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
+                    .environment(\.isEnabled, true)
+                }
+                .frame(height: height)
+                .onChange(of: contentSize) { contentSize in
+                    fitInScreen = contentSize.height <= proxy.size.height
+                }
+                .scrollViewDisabled(fitInScreen)
+            }
+            .frame(height: height)
+
+            makeActions()
+                .captureSize($actionsSize)
+        }
+        .onAlertDismiss {
+            isPresented = false
+        }
+        .frame(minWidth: minWidth, maxWidth: maxWidth)
+        .background(BackgroundView(background: configuration.alert.background))
+        .cornerRadius(configuration.alert.cornerRadius)
+        .shadow(configuration.alert.shadow)
+        .padding(configuration.padding)
+        .transition(configuration.transition)
+        .animation(.default, value: isPresented)
+        .onChange(of: dynamicTypeSize) { _ in
+            redrawAlert()
+        }
+    }
+
+    func makeActions() -> some View {
+        VStack(spacing: 0) {
+            switch configuration.alert.dividerVisibility {
+            case .automatic:
+                if !fitInScreen {
+                    Divider()
+                }
+            case .hidden:
+                EmptyView()
+            case .visible:
+                Divider()
+            }
+
+            Group {
+                if actions.count <= 2, #available(iOS 16.0, visionOS 1.0, *) {
+                    ViewThatFits(in: .horizontal) {
+                        HActionStack(actions: actions.reversed())
+                        VActionStack(actions: actions)
+                    }
+                } else {
+                    VActionStack(actions: actions)
+                }
+            }
+            .padding(configuration.alert.actionPadding)
+        }
+        .buttonStyle(.alert)
+    }
+
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: !fitInScreen)
+    }
+
+    // MARK: Sizes
 
     var height: CGFloat {
         // View height - padding top and bottom - actions height - extra padding
@@ -134,75 +220,7 @@ import SwiftUI
         return max(min, configuration.alert.minWidth(state))
     }
 
-    var alert: some View {
-        VStack(spacing: 0) {
-            GeometryReader { proxy in
-                ScrollView(.vertical) {
-                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
-                        title?
-                            .font(configuration.alert.titleFont)
-                            .foregroundStyle(configuration.alert.titleColor)
-                            .multilineTextAlignment(configuration.alert.textAlignment)
-                        Spacer(minLength: configuration.alert.spacing(state))
-                        content
-                            .font(configuration.alert.contentFont)
-                            .foregroundStyle(configuration.alert.contentColor)
-                            .multilineTextAlignment(configuration.alert.textAlignment)
-                            .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
-                    }
-                    .foregroundColor(.primary)
-                    .padding(configuration.alert.padding(state))
-                    .frame(maxWidth: .infinity)
-                    .captureSize($contentSize)
-                    // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
-                    .environment(\.isEnabled, true)
-                }
-                .frame(height: height)
-                .onChange(of: contentSize) { contentSize in
-                    fitInScreen = contentSize.height <= proxy.size.height
-                }
-                .scrollViewDisabled(fitInScreen)
-            }
-            .frame(height: height)
-
-            VStack(spacing: 0) {
-                switch configuration.alert.dividerVisibility {
-                case .automatic:
-                    if !fitInScreen {
-                        Divider()
-                    }
-                case .hidden:
-                    EmptyView()
-                case .visible:
-                    Divider()
-                }
-                VStack(spacing: configuration.button.spacing) {
-                    ForEach(Array(actions.enumerated()), id: \.offset) { index, action in
-                        if index != 0, !configuration.button.hideDivider {
-                            Divider()
-                        }
-                        action
-                    }
-                }
-                .padding(configuration.alert.actionPadding)
-            }
-            .buttonStyle(.alert)
-            .captureSize($actionsSize)
-        }
-        .onAlertDismiss {
-            isPresented = false
-        }
-        .frame(minWidth: minWidth, maxWidth: maxWidth)
-        .background(BackgroundView(background: configuration.alert.background))
-        .cornerRadius(configuration.alert.cornerRadius)
-        .shadow(configuration.alert.shadow)
-        .padding(configuration.padding)
-        .transition(configuration.transition)
-        .animation(.default, value: isPresented)
-        .onChange(of: dynamicTypeSize) { _ in
-            redrawAlert()
-        }
-    }
+    // MARK: - Helper
 
     func calculateAlertId() {
         var hasher = Hasher()
@@ -217,40 +235,6 @@ import SwiftUI
         // Force redraw
         calculateAlertId()
     }
-
-    var state: CustomAlertState {
-        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: !fitInScreen)
-    }
-}
-
-private extension VerticalAlignment {
-    var hasTopSpacer: Bool {
-        switch self {
-        case .top, .firstTextBaseline:
-            return false
-        default:
-            return true
-        }
-    }
-
-    var hasBottomSpacer: Bool {
-        switch self {
-        case .bottom, .lastTextBaseline:
-            return false
-        default:
-            return true
-        }
-    }
-}
-
-private extension GeometryProxy {
-    var totalWidth: CGFloat {
-        size.width + safeAreaInsets.leading + safeAreaInsets.trailing
-    }
-
-    var totalHeight: CGFloat {
-        size.height + safeAreaInsets.top + safeAreaInsets.bottom
-    }
 }
 
 #if DEBUG
@@ -263,6 +247,10 @@ private extension GeometryProxy {
         Button {
         } label: {
             Text("OK")
+        }
+        Button {
+        } label: {
+            Text("Cancel")
         }
     }
 }

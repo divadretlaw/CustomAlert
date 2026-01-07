@@ -77,7 +77,7 @@ public struct CustomAlertRow<Content>: View where Content: View {
                 Text("Hello World")
                     .padding()
             } actions: {
-                MultiButton {
+                HActionStack {
                     Button(role: .cancel) {
                         isPresented = false
                         print("Cancel")

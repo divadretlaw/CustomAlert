@@ -47,7 +47,7 @@ The API is very similar to the SwiftUI Alerts
     } label: {
         Label("Swift", systemImage: "swift")
     }
-    
+
     Button(role: .cancel) {
         // some Action
     } label: {
@@ -56,13 +56,13 @@ The API is very similar to the SwiftUI Alerts
 }
 ```
 
-You can create Side by Side Buttons using `MultiButton`
+You can create Side by Side Buttons using `HActionStack`
 
 ```swift
 .customAlert("Alert with Side by Side Buttons", isPresented: $showAlert) {
     Text("Choose left or right")
 } actions: {
-    MultiButton {
+    HActionStack {
         Button {
             // some Action
         } label: {

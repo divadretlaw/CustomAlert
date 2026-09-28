@@ -8,110 +8,91 @@
 import SwiftUI
 
 /// Display a custom alert inlined into a `List`
-public struct CustomAlertRow<Content, Actions>: View where Content: View, Actions: View {
+public struct CustomAlertRow<Content>: View where Content: View {
+    @Environment(\.customAlertConfiguration) private var configuration
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     @Binding var isPresented: Bool
-    
+
     let content: Content
-    let actions: Actions
-    
+    let actions: [CustomAlertAction]
+
     public var body: some View {
         if isPresented {
-            VStack(spacing: 0) {
+            VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
                 content
-                
-                #if swift(>=6.0)
-                if #available(iOS 18.0, *) {
-                    ForEach(subviews: actions) { child in
-                        Divider()
-                        child
-                    }
-                } else {
-                    _VariadicView.Tree(ContentLayout()) {
-                        actions
-                    }
+                switch configuration.alert.dividerVisibility {
+                case .hidden, .automatic:
+                    EmptyView()
+                case .visible:
+                    Divider()
                 }
-                #else
-                _VariadicView.Tree(ContentLayout()) {
-                    actions
+                ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
+                    action
                 }
-                #endif
+                .padding(configuration.alert.actionPadding)
             }
-            .buttonStyle(.alert(triggerDismiss: false))
+            .buttonStyle(.alert)
             .listRowInsets(.zero)
         }
     }
-    
+
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.content = content()
         self.actions = actions()
     }
-    
+
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = .constant(true)
         self.content = content()
         self.actions = actions()
     }
-    
-    @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
-    struct ContentLayout: _VariadicView_ViewRoot {
-        func body(children: _VariadicView.Children) -> some View {
-            VStack(spacing: 0) {
-                ForEach(children) { child in
-                    Divider()
-                    child
-                }
-            }
-        }
+
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: false)
     }
 }
 
-struct CustomAlertRow_Preview: PreviewProvider {
-    static var previews: some View {
-        Preview()
-    }
-    
-    struct Preview: View {
-        @State private var isPresented = false
-        
-        var body: some View {
-            List {
-                Section {
-                    Button {
-                        isPresented = true
+@available(iOS 17.0, visionOS 1.0, *)
+#Preview {
+    @Previewable @State var isPresented = false
+    List {
+        Section {
+            SwiftUI.Button {
+                isPresented = true
+            } label: {
+                Text("Show Custom Alert Row")
+            }
+        }
+        Section {
+            CustomAlertRow(isPresented: $isPresented) {
+                Text("Hello World")
+                    .padding()
+            } actions: {
+                ActionHStack {
+                    Button(role: .cancel) {
+                        isPresented = false
+                        print("Cancel")
                     } label: {
-                        Text("Show Custom Alert Row")
+                        Text("Cancel")
                     }
-                    
-                    CustomAlertRow(isPresented: $isPresented) {
-                        Text("Hello World")
-                            .padding()
-                    } actions: {
-                        MultiButton {
-                            Button(role: .cancel) {
-                                isPresented = false
-                                print("Cancel")
-                            } label: {
-                                Text("Cancel")
-                            }
-                            Button {
-                                isPresented = false
-                                print("OK")
-                            } label: {
-                                Text("OK")
-                            }
-                        }
+                    Button {
+                        isPresented = false
+                        print("OK")
+                    } label: {
+                        Text("OK")
                     }
                 }
             }
-            .animation(.default, value: isPresented)
         }
     }
+    .animation(.default, value: isPresented)
 }

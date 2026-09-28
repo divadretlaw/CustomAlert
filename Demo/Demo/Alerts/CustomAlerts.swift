@@ -10,10 +10,11 @@ import CustomAlert
 
 struct CustomAlerts: View {
     @State private var showAlert = false
-    
+    @State private var showClassicAlert = false
+
     @State private var showChangingAlert = false
     @State private var next: Int = 0
-    
+
     var body: some View {
         Section {
             Button {
@@ -24,7 +25,7 @@ struct CustomAlerts: View {
             .customAlert("Preview", isPresented: $showAlert) {
                 CustomContent()
             } actions: {
-                MultiButton {
+                ActionHStack {
                     Button {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
@@ -38,6 +39,7 @@ struct CustomAlerts: View {
                 }
             }
             .configureCustomAlert(.myConfig)
+
             Button {
                 next = 0
                 showChangingAlert = true
@@ -60,34 +62,52 @@ struct CustomAlerts: View {
                 }
                 .animation(.default, value: next)
             } actions: {
-                MultiButton {
+                ActionHStack {
                     Button(role: .cancel) {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
                         Text("Cancel")
                     }
-                    ZStack {
-                        switch next {
-                        case 0, 1:
-                            Button {
-                                next += 1
-                            } label: {
-                                Text("Next")
-                            }
-                            .transition(.opacity)
-                            .buttonStyle(.alert(triggerDismiss: false))
-                        default:
-                            Button(role: .destructive) {
-                                print("CustomStyling.MyConfig - Done")
-                            } label: {
-                                Text("Done")
-                            }
-                            .transition(.opacity)
+                    switch next {
+                    case 0, 1:
+                        Button {
+                            next += 1
+                        } label: {
+                            Text("Next")
+                        }
+                        .dismissDisabled(true)
+                    default:
+                        Button(role: .destructive) {
+                            print("CustomStyling.MyConfig - Done")
+                        } label: {
+                            Text("Done")
                         }
                     }
-                    .animation(.default, value: next)
                 }
             }
+
+            Button {
+                showClassicAlert = true
+            } label: {
+                DetailLabel("Classic Alert", detail: "Enforced Classic Alert Styling")
+            }
+            .customAlert("Classic", isPresented: $showClassicAlert) {
+                Text("Classic Styling")
+            } actions: {
+                ActionHStack {
+                    Button(role: .cancel) {
+                        print("ClassicAlert - Cancel")
+                    } label: {
+                        Text("Cancel")
+                    }
+                    Button {
+                        print("ClassicAlert - OK")
+                    } label: {
+                        Text("OK")
+                    }
+                }
+            }
+            .environment(\.customAlertConfiguration, .classic)
         } header: {
             Text("Custom Styling")
         }
@@ -96,7 +116,6 @@ struct CustomAlerts: View {
 
 struct CustomContent: View {
     @Environment(\.alertDismiss) private var alertDismiss
-    @Environment(\.customAlertConfiguration) private var configuration
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -108,34 +127,36 @@ struct CustomContent: View {
                 Text("Custom Dismiss Button")
             }
             .buttonStyle(.bordered)
-            .tint(configuration.button.tintColor)
         }
     }
 }
 
 extension CustomAlertConfiguration {
-    static let myConfig: CustomAlertConfiguration = .create { configuration in
-        configuration.background = .blurEffect(.dark)
-        configuration.padding = EdgeInsets()
-        configuration.alert = .create { alert in
-            alert.background = .color(.white)
-            alert.cornerRadius = 4
-            alert.padding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
-            alert.minWidth = 300
-            alert.titleFont = .headline
-            alert.contentFont = .subheadline
-            alert.alignment = .leading
-            alert.spacing = 10
-        }
-        configuration.button = .create { button in
-            button.tintColor = .purple
-            button.pressedTintColor = .white
-            button.padding = EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-            button.font = .callout.weight(.semibold)
-            button.hideDivider = true
-            button.pressedBackground = .color(.purple)
-        }
-    }
+    static let myConfig: CustomAlertConfiguration = {
+        CustomAlertConfiguration()
+            .background(.blurEffect(.regular))
+            .padding(EdgeInsets())
+            .alert {
+                CustomAlertConfiguration.Alert()
+                    .background(.color(.white))
+                    .cornerRadius(4)
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20))
+                    .minWidth(300)
+                    .titleFont(.headline)
+                    .contentFont(.subheadline)
+                    .alignment(.leading)
+                    .spacing(10)
+            }
+            .button {
+                CustomAlertConfiguration.Button()
+                    .tintColor(.purple)
+                    .pressedTintColor(.white)
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    .font(.callout.weight(.semibold))
+                    .hideDivider(true)
+                    .pressedBackground(.color(.purple))
+            }
+    }()
 }
 
 #Preview {

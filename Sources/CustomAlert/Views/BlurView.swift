@@ -7,25 +7,21 @@
 
 import SwiftUI
 
-// Using UIViewRepresentable BlurView for backwards compatibility
-struct BlurView: UIViewRepresentable {
-    let style: UIBlurEffect.Style
+struct BlurView: View {
+    let style: Material
 
-    func makeUIView(context: UIViewRepresentableContext<BlurView>) -> UIView {
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .clear
-        let blurEffect = UIBlurEffect(style: style)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.translatesAutoresizingMaskIntoConstraints = false
-        view.insertSubview(blurView, at: 0)
-        NSLayoutConstraint.activate([
-            blurView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            blurView.widthAnchor.constraint(equalTo: view.widthAnchor)
-        ])
-        return view
+    var body: some View {
+        Color.clear.background(style)
     }
+}
 
-    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<BlurView>) {
-        // empty
+#Preview {
+    VStack(spacing: 8) {
+        BlurView(style: .regular)
+        BlurView(style: .bar)
+        BlurView(style: .thin)
+        BlurView(style: .thick)
     }
+    .background(.tint)
+    .ignoresSafeArea()
 }

@@ -105,7 +105,7 @@ struct OtherAlerts: View {
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             } actions: {
-                MultiButton {
+                ActionHStack {
                     Button(role: .cancel) {
                         message = ""
                         print("Other.Fancy - Cancel")

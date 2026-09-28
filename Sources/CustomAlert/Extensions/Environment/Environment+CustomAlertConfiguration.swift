@@ -30,7 +30,7 @@ public extension View {
     func configureCustomAlert(configure: @escaping (inout CustomAlertConfiguration) -> Void) -> some View {
         modifier(CustomAlertConfigurator(configure: configure))
     }
-    
+
     /// Create a custom alert configuration
     ///
     /// - Parameter configuration: The custom alert configuration
@@ -44,12 +44,12 @@ public extension View {
 private struct CustomAlertConfigurator: ViewModifier {
     @Environment(\.customAlertConfiguration) private var configuration
     var configure: (inout CustomAlertConfiguration) -> Void
-    
+
     func body(content: Content) -> some View {
         content
             .environment(\.customAlertConfiguration, update(configure: configure))
     }
-    
+
     private func update(configure: (inout CustomAlertConfiguration) -> Void) -> CustomAlertConfiguration {
         var configuration = self.configuration
         configure(&configuration)

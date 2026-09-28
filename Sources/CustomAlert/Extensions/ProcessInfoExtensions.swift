@@ -11,7 +11,7 @@ extension ProcessInfo {
     var isiOSAppOnVision: Bool {
         NSClassFromString("UIWindowSceneGeometryPreferencesVision") != nil
     }
-    
+
     var isiOSAppOnOtherPlatform: Bool {
         isiOSAppOnMac || isMacCatalystApp || isiOSAppOnVision
     }

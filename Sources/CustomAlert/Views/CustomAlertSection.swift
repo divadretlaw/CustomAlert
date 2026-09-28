@@ -8,14 +8,14 @@
 import SwiftUI
 
 /// Display a custom alert inlined into a `List`
-public struct CustomAlertSection<Content, Actions, Header, Footer>: View where Content: View, Actions: View, Header: View, Footer: View {
+public struct CustomAlertSection<Content, Header, Footer>: View where Content: View, Header: View, Footer: View {
     @Binding var isPresented: Bool
-    
+
     let content: Content
-    let actions: Actions
+    let actions: [CustomAlertAction]
     let header: Header
     let footer: Footer
-    
+
     public var body: some View {
         if isPresented {
             Section {
@@ -31,11 +31,19 @@ public struct CustomAlertSection<Content, Actions, Header, Footer>: View where C
             }
         }
     }
-    
+
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
+    ///     - footer: A view to use as the section's footer.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header,
         @ViewBuilder footer: @escaping () -> Footer
     ) {
@@ -45,10 +53,17 @@ public struct CustomAlertSection<Content, Actions, Header, Footer>: View where C
         self.header = header()
         self.footer = footer()
     }
-    
+
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
+    ///     - footer: A view to use as the section's footer.
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header,
         @ViewBuilder footer: @escaping () -> Footer
     ) {
@@ -58,25 +73,19 @@ public struct CustomAlertSection<Content, Actions, Header, Footer>: View where C
         self.header = header()
         self.footer = footer()
     }
-    
-    @available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
-    struct ContentLayout: _VariadicView_ViewRoot {
-        func body(children: _VariadicView.Children) -> some View {
-            VStack(spacing: 0) {
-                ForEach(children) { child in
-                    Divider()
-                    child
-                }
-            }
-        }
-    }
 }
 
 extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.content = content()
@@ -84,10 +93,15 @@ extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
         self.header = EmptyView()
         self.footer = EmptyView()
     }
-    
+
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction]
     ) {
         self._isPresented = .constant(true)
         self.content = content()
@@ -98,10 +112,17 @@ extension CustomAlertSection where Header == EmptyView, Footer == EmptyView {
 }
 
 extension CustomAlertSection where Footer == EmptyView {
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header
     ) {
         self._isPresented = isPresented
@@ -110,10 +131,16 @@ extension CustomAlertSection where Footer == EmptyView {
         self.header = header()
         self.footer = EmptyView()
     }
-    
+
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - header: A view to use as the section's header.
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder header: @escaping () -> Header
     ) {
         self._isPresented = .constant(true)
@@ -125,10 +152,17 @@ extension CustomAlertSection where Footer == EmptyView {
 }
 
 extension CustomAlertSection where Header == EmptyView {
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - isPresented: A binding to a Boolean value that determines whether to present the alert.
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - footer: A view to use as the section's footer.
     public init(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder footer: @escaping () -> Footer
     ) {
         self._isPresented = isPresented
@@ -137,10 +171,16 @@ extension CustomAlertSection where Header == EmptyView {
         self.header = EmptyView()
         self.footer = footer()
     }
-    
+
+    /// Create a custom alert section
+    ///
+    /// - Parameters:
+    ///     - content: A `ViewBuilder` returing the alerts main view.
+    ///     - actions: A `ActionBuilder` returning the alert's actions.
+    ///     - footer: A view to use as the section's footer.
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        @ViewBuilder actions: @escaping () -> Actions,
+        @ActionBuilder actions: @escaping () -> [CustomAlertAction],
         @ViewBuilder footer: @escaping () -> Footer
     ) {
         self._isPresented = .constant(true)
@@ -151,46 +191,38 @@ extension CustomAlertSection where Header == EmptyView {
     }
 }
 
-struct CustomAlertSection_Preview: PreviewProvider {
-    static var previews: some View {
-        Preview()
-    }
-    
-    struct Preview: View {
-        @State private var isPresented = false
-        
-        var body: some View {
-            List {
-                CustomAlertSection(isPresented: $isPresented) {
-                    Text("Hello World")
-                        .padding()
-                } actions: {
-                    MultiButton {
-                        Button(role: .cancel) {
-                            isPresented = false
-                            print("Cancel")
-                        } label: {
-                            Text("Cancel")
-                        }
-                        Button {
-                            isPresented = false
-                            print("OK")
-                        } label: {
-                            Text("OK")
-                        }
-                    }
+@available(iOS 17.0, visionOS 1.0, *)
+#Preview {
+    @Previewable @State var isPresented = false
+    List {
+        CustomAlertSection(isPresented: $isPresented) {
+            Text("Hello World")
+                .padding()
+        } actions: {
+            ActionHStack {
+                Button(role: .cancel) {
+                    isPresented = false
+                    print("Cancel")
+                } label: {
+                    Text("Cancel")
                 }
-                .transition(.move(edge: .leading))
-                
-                Section {
-                    Button {
-                        isPresented = true
-                    } label: {
-                        Text("Show Custom Alert Section")
-                    }
+                Button {
+                    isPresented = false
+                    print("OK")
+                } label: {
+                    Text("OK")
                 }
             }
-            .animation(.default, value: isPresented)
+        }
+        .transition(.move(edge: .leading))
+
+        Section {
+            SwiftUI.Button {
+                isPresented = true
+            } label: {
+                Text("Show Custom Alert Section")
+            }
         }
     }
+    .animation(.default, value: isPresented)
 }

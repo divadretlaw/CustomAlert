@@ -16,17 +16,15 @@ public struct AlertButtonStyle: ButtonStyle {
     @Environment(\.alertDismiss) private var alertDismiss
     @Environment(\.alertButtonHeight) private var maxHeight
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    
+
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.window) private var window
-    
-    var triggerDismiss: Bool
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         makeLabel(configuration: configuration)
     }
-    
+
     func makeLabel(configuration: Configuration) -> some View {
         HStack {
             Spacer()
@@ -36,20 +34,17 @@ public struct AlertButtonStyle: ButtonStyle {
                 .truncationMode(.middle)
             Spacer()
         }
-        .padding(padding)
+        .padding(buttonConfiguration.padding(state))
         .frame(maxHeight: maxHeight)
         .background(background(configuration: configuration))
+        .alertButtonBorderShape(buttonConfiguration.shape)
         .fixedSize(horizontal: false, vertical: true)
     }
-    
-    var padding: EdgeInsets {
-        if dynamicTypeSize.isAccessibilitySize {
-            buttonConfiguration.accessibilityPadding
-        } else {
-            buttonConfiguration.padding
-        }
+
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: false)
     }
-    
+
     @ViewBuilder func label(configuration: Configuration) -> some View {
         switch configuration.role {
         case .some(.destructive):
@@ -66,15 +61,23 @@ public struct AlertButtonStyle: ButtonStyle {
                 .foregroundColor(resolvedColor(isPressed: configuration.isPressed))
         }
     }
-    
-    @ViewBuilder func background(configuration: Self.Configuration) -> some View {
-        if configuration.isPressed {
-            BackgroundView(background: buttonConfiguration.pressedBackground)
-        } else {
-            BackgroundView(background: buttonConfiguration.background)
+
+    func background(configuration: Self.Configuration) -> some View {
+        ZStack {
+            switch configuration.role {
+            case .some(.destructive):
+                BackgroundView(background: resolvedBackground(role: .destructive))
+            case .some(.cancel):
+                BackgroundView(background: resolvedBackground(role: .cancel))
+            default:
+                BackgroundView(background: resolvedBackground())
+            }
+            if configuration.isPressed {
+                BackgroundView(background: buttonConfiguration.pressedBackground)
+            }
         }
     }
-    
+
     func resolvedColor(role: ButtonType? = nil, isPressed: Bool) -> Color {
         if isEnabled {
             if isPressed, let color = buttonConfiguration.pressedTintColor {
@@ -84,23 +87,30 @@ public struct AlertButtonStyle: ButtonStyle {
             } else if let color = buttonConfiguration.tintColor {
                 return color
             }
-            
+
             // Fallback
-            guard let color = window?.tintColor else {
-                return .accentColor
+            if let color = window?.tintColor {
+                return Color(uiColor: color)
             }
-            
-            return Color(uiColor: color)
+            return Color.accentColor
         } else {
             return Color("Disabled", bundle: .module)
         }
     }
-    
+
     func resolvedFont(role: ButtonType? = nil) -> Font {
         if let role, let font = buttonConfiguration.roleFont[role] {
             return font
         } else {
             return buttonConfiguration.font
+        }
+    }
+
+    func resolvedBackground(role: ButtonType? = nil) -> CustomAlertBackground {
+        if let role, let background = buttonConfiguration.roleBackground[role] {
+            return background
+        } else {
+            return buttonConfiguration.background
         }
     }
 }
@@ -110,13 +120,42 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     ///
     /// A tap on the button will trigger `EnvironmentValues.alertDismiss`
     static var alert: Self {
-        AlertButtonStyle(triggerDismiss: true)
+        AlertButtonStyle()
     }
-    
-    /// A button style that applies standard alert styling
-    ///
-    /// - Parameter triggerDismiss: Whether the button should trigger `EnvironmentValues.alertDismiss` or not.
-    static func alert(triggerDismiss: Bool) -> Self {
-        AlertButtonStyle(triggerDismiss: triggerDismiss)
+}
+
+#Preview("OK") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Custom Alert")
+    } content: {
+        Text("Some Message")
+    } actions: {
+        ActionHStack {
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+            Button {
+            } label: {
+                Text("OK")
+            }
+        }
+    }
+}
+
+#Preview("Destructive") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Custom Alert")
+    } content: {
+        Text("Some Message")
+    } actions: {
+        Button(role: .destructive) {
+        } label: {
+            Text("Delete")
+        }
+        Button(role: .cancel) {
+        } label: {
+            Text("Cancel")
+        }
     }
 }

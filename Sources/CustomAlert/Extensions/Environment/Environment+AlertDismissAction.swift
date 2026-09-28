@@ -16,7 +16,7 @@ import SwiftUI
 /// method that Swift calls when you call the instance.
 public struct AlertDismissAction {
     let action: () -> Void
-    
+
     /// Dismisses the alert if it is currently presented.
     ///
     /// Don't call this method directly. SwiftUI calls it for you when you

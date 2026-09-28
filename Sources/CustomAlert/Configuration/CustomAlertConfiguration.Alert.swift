@@ -12,58 +12,197 @@ extension CustomAlertConfiguration {
     /// The custom alert configuration
     public struct Alert: Sendable {
         /// The background of the alert view
-        public var background: CustomAlertBackground
+        var background: CustomAlertBackground
+        /// The visibility of the divider between content and actions
+        var dividerVisibility: Visibility
         /// The corner radius of the alert view
-        public var cornerRadius: CGFloat
+        var cornerRadius: CGFloat
         /// The padding of the content of the alert view
-        public var padding: EdgeInsets
-        /// The padding of the content of the alert view when using accessibility scaling
-        public var accessibilityPadding: EdgeInsets
+        var padding: Value<EdgeInsets>
+        /// The padding of the actions of the alert view
+        var actionPadding: EdgeInsets
         /// The minimum width of the alert view
-        public var minWidth: CGFloat
-        /// The minimum width of the alert view when using accessibility scaling
-        public var accessibilityMinWidth: CGFloat
+        var minWidth: Value<CGFloat>
         /// The default font of the title of the alert view
-        public var titleFont: Font
+        var titleFont: Font
+        /// The default color of the title of the alert view
+        var titleColor: Color
         /// The default font of the content of the alert view
-        public var contentFont: Font
+        var contentFont: Font
+        /// The default font of the content of the alert view
+        var contentColor: Color
         /// The spacing of the content of the alert view
-        public var spacing: CGFloat
+        var spacing: Value<CGFloat>
         /// The alignment of the content of the alert view
-        public var alignment: CustomAlertAlignment
+        var alignment: CustomAlertAlignment
         /// Optional shadow applied to the alert
-        public var shadow: CustomAlertShadow?
-        
-        init() {
-            self.background = .blurEffect(.systemMaterial)
-            self.cornerRadius = 13.3333
-            self.padding = EdgeInsets(top: 20, leading: 8, bottom: 20, trailing: 8)
-            self.accessibilityPadding = EdgeInsets(top: 37.5, leading: 12, bottom: 37.5, trailing: 12)
-            self.minWidth = 270
-            self.accessibilityMinWidth = 329
-            self.titleFont = .headline
-            self.contentFont = .footnote
-            self.spacing = 4
-            self.alignment = .center
-            self.shadow = nil
+        var shadow: CustomAlertShadow?
+
+        // MARK: - Init
+
+        public init() {
+            self = .default
         }
-        
-        /// Create a custom configuration
-        ///
-        /// - Parameter configure: Callback to change the default configuration
-        ///
-        /// - Returns: The customized ``CustomAlertConfiguration/Alert`` configuration
-        public static func create(configure: (inout Self) -> Void) -> Self {
-            var configuration = Self()
-            configure(&configuration)
+
+        internal init(
+            background: CustomAlertBackground,
+            dividerVisibility: Visibility,
+            cornerRadius: CGFloat,
+            padding: Value<EdgeInsets>,
+            actionPadding: EdgeInsets,
+            minWidth: Value<CGFloat>,
+            titleFont: Font,
+            titleColor: Color,
+            contentFont: Font,
+            contentColor: Color,
+            spacing: Value<CGFloat>,
+            alignment: CustomAlertAlignment,
+            shadow: CustomAlertShadow?
+        ) {
+            self.background = background
+            self.dividerVisibility = dividerVisibility
+            self.cornerRadius = cornerRadius
+            self.padding = padding
+            self.actionPadding = actionPadding
+            self.minWidth = minWidth
+            self.titleFont = titleFont
+            self.titleColor = titleColor
+            self.contentFont = contentFont
+            self.contentColor = contentColor
+            self.spacing = spacing
+            self.alignment = alignment
+            self.shadow = shadow
+        }
+
+        /// The default configuration
+        nonisolated public static var `default`: CustomAlertConfiguration.Alert {
+            if #available(iOS 26.0, visionOS 26.0, *) {
+                .liquidGlass
+            } else {
+                .classic
+            }
+        }
+
+        // MARK: - Modifier
+
+        /// The background of the alert view
+        public func background(_ value: CustomAlertBackground) -> Self {
+            var configuration = self
+            configuration.background = value
             return configuration
         }
-        
-        /// The default configuration
-        @MainActor public static var `default`: CustomAlertConfiguration {
-            CustomAlertConfiguration()
+
+        /// The visibility of the divider between content and actions
+        public func dividerVisibility(_ value: Visibility) -> Self {
+            var configuration = self
+            configuration.dividerVisibility = value
+            return configuration
         }
-        
+
+        /// The corner radius of the alert view
+        public func cornerRadius(_ value: CGFloat) -> Self {
+            var configuration = self
+            configuration.cornerRadius = value
+            return configuration
+        }
+
+        /// The padding of the content of the alert view
+        public func padding(_ value: EdgeInsets) -> Self {
+            var configuration = self
+            configuration.padding = .static(value)
+            return configuration
+        }
+
+        /// The padding of the actions of the alert view
+        public func actionPadding(_ value: EdgeInsets) -> Self {
+            var configuration = self
+            configuration.actionPadding = value
+            return configuration
+        }
+
+        /// The minimum width of the alert view
+        /// - Parameters:
+        ///   - value: The minimum width for the alert.
+        ///   - accessibility: The minimum width for the alert when using accessibility scaling.
+        public func minWidth(_ value: CGFloat, accessibility: CGFloat? = nil) -> Self {
+            var configuration = self
+            if let accessibility {
+                configuration.minWidth = .dynamic { state in
+                    if state.isAccessibilitySize {
+                        accessibility
+                    } else {
+                        value
+                    }
+                }
+            } else {
+                configuration.minWidth = .static(value)
+            }
+            return configuration
+        }
+
+        /// The default font of the title of the alert view
+        public func titleFont(_ value: Font) -> Self {
+            var configuration = self
+            configuration.titleFont = value
+            return configuration
+        }
+
+        /// The default color of the title of the alert view
+        public func titleColor(_ value: Color) -> Self {
+            var configuration = self
+            configuration.titleColor = value
+            return configuration
+        }
+
+        /// The default font of the content of the alert view
+        public func contentFont(_ value: Font) -> Self {
+            var configuration = self
+            configuration.contentFont = value
+            return configuration
+        }
+
+        /// The default font of the content of the alert view
+        public func contentColor(_ value: Color) -> Self {
+            var configuration = self
+            configuration.contentColor = value
+            return configuration
+        }
+
+        /// The spacing of the content of the alert view
+        public func spacing(_ value: CGFloat) -> Self {
+            var configuration = self
+            configuration.spacing = .static(value)
+            return configuration
+        }
+
+        /// The spacing of the content of the alert view
+        public func spacing(_ value: @Sendable @escaping (CustomAlertState) -> CGFloat) -> Self {
+            var configuration = self
+            configuration.spacing = .dynamic(value)
+            return configuration
+        }
+
+        /// The alignment of the content of the alert view
+        public func alignment(_ value: CustomAlertAlignment) -> Self {
+            var configuration = self
+            configuration.alignment = value
+            return configuration
+        }
+
+        /// Optional shadow applied to the alert
+        public func shadow(
+            color: Color = Color(.sRGBLinear, white: 0, opacity: 0.33),
+            radius: CGFloat,
+            x: CGFloat = 0,
+            y: CGFloat = 0
+        ) -> Self {
+            var configuration = self
+            configuration.shadow = CustomAlertShadow(color: color, radius: radius, x: x, y: y)
+            return configuration
+        }
+
+        // MARK: - Helper
+
         var textAlignment: TextAlignment {
             switch alignment {
             case .leading:
@@ -74,7 +213,7 @@ extension CustomAlertConfiguration {
                 return .center
             }
         }
-        
+
         var horizontalAlignment: HorizontalAlignment {
             switch alignment {
             case .leading:
@@ -85,7 +224,7 @@ extension CustomAlertConfiguration {
                 return .center
             }
         }
-        
+
         var frameAlignment: Alignment {
             switch alignment {
             case .leading:

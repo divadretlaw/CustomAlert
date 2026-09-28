@@ -22,7 +22,7 @@ struct MultiButtonAlerts: View {
             .customAlert("Multibutton Alert", isPresented: $showSimple) {
                 Text("Simple MultiButton")
             } actions: {
-                MultiButton {
+                ActionHStack {
                     Button {
                         print("MultiButton.Simple - OK")
                     } label: {
@@ -44,7 +44,7 @@ struct MultiButtonAlerts: View {
             .customAlert("MultiButton Alert", isPresented: $showComplex) {
                 Text("Complex MultiButton")
             } actions: {
-                MultiButton {
+                ActionHStack {
                     Button {
                         print("MultiButton.Complex - A")
                     } label: {
@@ -56,15 +56,16 @@ struct MultiButtonAlerts: View {
                     } label: {
                         Text("B")
                     }
-                    .disabled(true)
-                    
+                    .disabled(false)
+
                     Button {
                         print("MultiButton.Complex - C")
                     } label: {
                         Text("C")
                     }
                 }
-                
+                .disabled(true)
+
                 Button(role: .cancel) {
                     print("MultiButton.Complex - Cancel")
                 } label: {

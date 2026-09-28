@@ -8,27 +8,53 @@
 import SwiftUI
 
 struct BackgroundView: View {
+    @Environment(\.customAlertConfiguration) private var configuration
+
     var background: CustomAlertBackground
-    
+
     var body: some View {
         switch background {
-        case let .blurEffect(style):
+        case .blurEffect(let style):
             BlurView(style: style)
-        case let .color(color):
+        case .color(let color):
             color
-        case let .colorBlurEffect(color, style):
+        case .colorBlurEffect(let color, let style):
             ZStack {
                 color
                 BlurView(style: style)
             }
-        case let .anyView(view):
+        case .anyView(let view):
             view
+        case .glass(let color):
+            #if swift(>=6.2) && !os(visionOS)
+            if #available(iOS 26.0, *) {
+                Color.clear.glassEffect(.regular.tint(color), in: RoundedRectangle(cornerRadius: configuration.alert.cornerRadius))
+            } else {
+                if let color {
+                    ZStack {
+                        color
+                        BlurView(style: .regular)
+                    }
+                } else {
+                    BlurView(style: .regular)
+                }
+            }
+            #else
+            if let color {
+                ZStack {
+                    color
+                    BlurView(style: .regular)
+                }
+            } else {
+                BlurView(style: .regular)
+            }
+            #endif
         }
     }
 }
 
-struct BackgroundView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    VStack {
         BackgroundView(background: .blurEffect(.regular))
         BackgroundView(background: .color(.blue))
         BackgroundView(background: .colorBlurEffect(.blue, .regular))

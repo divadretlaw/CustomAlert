@@ -6,24 +6,23 @@
 //
 
 import SwiftUI
-import Combine
 import WindowKit
 
-@MainActor struct CustomAlertItemHandler<AlertItem, AlertContent, AlertActions>: ViewModifier where AlertItem: Identifiable, AlertContent: View, AlertActions: View {
+@MainActor struct CustomAlertItemHandler<AlertItem, AlertContent>: ViewModifier where AlertItem: Identifiable, AlertContent: View {
     @Environment(\.customAlertConfiguration) private var configuration
-    
+
     @Binding var item: AlertItem?
-    var windowScene: UIWindowScene?
-    var alertTitle: () -> Text?
-    @ViewBuilder var alertContent: (AlertItem) -> AlertContent
-    @ViewBuilder var alertActions: (AlertItem) -> AlertActions
-    
+    let windowScene: UIWindowScene?
+    let alertTitle: () -> Text?
+    @ViewBuilder let alertContent: (AlertItem) -> AlertContent
+    @ActionBuilder let alertActions: (AlertItem) -> [CustomAlertAction]
+
     init(
         item: Binding<AlertItem?>,
         windowScene: UIWindowScene? = nil,
         alertTitle: @escaping () -> Text?,
         @ViewBuilder alertContent: @escaping (AlertItem) -> AlertContent,
-        @ViewBuilder alertActions: @escaping (AlertItem) -> AlertActions
+        @ActionBuilder alertActions: @escaping (AlertItem) -> [CustomAlertAction]
     ) {
         self._item = item
         self.windowScene = windowScene
@@ -31,46 +30,41 @@ import WindowKit
         self.alertContent = alertContent
         self.alertActions = alertActions
     }
-    
+
     func body(content: Content) -> some View {
-        if let windowScene {
-            content
-                .disabled(item != nil)
-                .windowCover(item: $item, on: windowScene) { item in
-                    alertView(for: item)
-                } configure: { configuration in
-                    configuration.tintColor = .customAlertColor
-                    configuration.modalPresentationStyle = .overFullScreen
-                    configuration.modalTransitionStyle = .crossDissolve
+        content
+            .disabled(item != nil)
+            .background {
+                if let windowScene {
+                    alert(on: windowScene)
+                } else {
+                    WindowSceneReader { windowScene in
+                        alert(on: windowScene)
+                    }
                 }
-                .background(alertIdentity)
-        } else {
-            content
-                .disabled(item != nil)
-                .windowCover(item: $item) { item in
-                    alertView(for: item)
-                } configure: { configuration in
-                    configuration.tintColor = .customAlertColor
-                    configuration.modalPresentationStyle = .overFullScreen
-                    configuration.modalTransitionStyle = .crossDissolve
+            }
+    }
+
+    func alert(on windowScene: UIWindowScene) -> some View {
+        alertIdentity
+            .windowCover(item: $item, on: windowScene) { item in
+                CustomAlert(isPresented: isPresented) {
+                    alertTitle()
+                } content: {
+                    alertContent(item)
+                } actions: {
+                    alertActions(item)
                 }
-                .background(alertIdentity)
-        }
+                .transformEnvironment(\.self) { environment in
+                    environment.isEnabled = true
+                }
+            } configure: { configuration in
+                configuration.tintColor = .customAlertColor
+                configuration.modalPresentationStyle = .overFullScreen
+                configuration.modalTransitionStyle = .crossDissolve
+            }
     }
-    
-    func alertView(for item: AlertItem) -> some View {
-        CustomAlert(isPresented: isPresented) {
-            alertTitle()
-        } content: {
-            alertContent(item)
-        } actions: {
-            alertActions(item)
-        }
-        .transformEnvironment(\.self) { environment in
-            environment.isEnabled = true
-        }
-    }
-    
+
     /// The view identity of the alert
     ///
     /// The `alertIdentity` represents the individual parts of the alert but combined into a single view.
@@ -81,14 +75,18 @@ import WindowKit
             ZStack {
                 alertTitle()
                 alertContent(item)
-                alertActions(item)
+                ForEach(Array(alertActions(item).enumerated()), id: \.offset) { _, action in
+                    action
+                }
             }
             .accessibilityHidden(true)
             .frame(width: 0, height: 0)
             .hidden()
+        } else {
+            Color.clear
         }
     }
-    
+
     private var isPresented: Binding<Bool> {
         Binding {
             item != nil

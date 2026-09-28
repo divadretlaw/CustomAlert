@@ -15,7 +15,7 @@ extension View {
 
 private struct ShadowApplier: ViewModifier {
     let shadow: CustomAlertShadow?
-    
+
     func body(content: Content) -> some View {
         if let shadow {
             content.shadow(color: shadow.color, radius: shadow.radius, x: shadow.x, y: shadow.y)

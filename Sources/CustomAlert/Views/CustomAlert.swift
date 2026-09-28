@@ -8,50 +8,52 @@
 import SwiftUI
 
 /// Custom Alert
-@MainActor public struct CustomAlert<Content, Actions>: View where Content: View, Actions: View {
+@MainActor public struct CustomAlert<Content>: View where Content: View {
     @Environment(\.customAlertConfiguration) private var configuration
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    
+
     @Binding var isPresented: Bool
-    var title: Text?
-    var content: Content
-    var actions: Actions
-    
+
+    let title: Text?
+    let content: Content
+    let actions: [CustomAlertAction]
+
     // Size holders to enable scrolling of the content if needed
     @State private var viewSize: CGSize = .zero
     @State private var safeAreaInsets: EdgeInsets = .zero
     @State private var contentSize: CGSize = .zero
     @State private var actionsSize: CGSize = .zero
+
+    // ID to redraw the alert if needed
     @State private var alertId: Int = 0
-    
+    // Tracks if the alert content fits in screen
     @State private var fitInScreen = false
-    
     // Used to animate the appearance
     @State private var isShowing = false
-    
+
     public init(
         isPresented: Binding<Bool>,
         title: @escaping () -> Text?,
         @ViewBuilder content: () -> Content,
-        @ViewBuilder actions: () -> Actions
+        @ActionBuilder actions: () -> [CustomAlertAction]
     ) {
         self._isPresented = isPresented
         self.title = title()
         self.content = content()
         self.actions = actions()
     }
-    
+
     public init(
         title: @autoclosure @escaping () -> Text?,
         @ViewBuilder content: () -> Content,
-        @ViewBuilder actions: () -> Actions
+        @ViewBuilder actions: () -> [CustomAlertAction]
     ) {
         self._isPresented = .constant(true)
         self.title = title()
         self.content = content()
         self.actions = actions()
     }
-    
+
     public var body: some View {
         GeometryReader { proxy in
             ZStack {
@@ -63,19 +65,23 @@ import SwiftUI
                             isPresented = false
                         }
                     }
-                
+                    .accessibilityAddTraits(.isButton)
+
                 VStack(spacing: 0) {
-                    if configuration.alignment.hasTopSpacer {
+                    if configuration.alignment.isTop {
                         Spacer()
                     }
-                    
+
                     if isShowing {
-                        alert
+                        makeAlert()
                             .animation(nil, value: height)
                             .id(alertId)
+                            #if CUSTOM_ALERT_DESIGN
+                            .opacity(0.5)
+                            #endif
                     }
-                    
-                    if configuration.alignment.hasBottomSpacer {
+
+                    if configuration.alignment.isBottom {
                         Spacer()
                     }
                 }
@@ -94,72 +100,26 @@ import SwiftUI
             }
         }
     }
-    
-    var height: CGFloat {
-        // View height - padding top and bottom - actions height
-        let maxHeight = viewSize.height
-            - configuration.padding.top
-            - configuration.padding.bottom
-            - safeAreaInsets.top
-            - safeAreaInsets.bottom
-            - actionsSize.height
-        let min = min(maxHeight, contentSize.height)
-        return max(min, 0)
-    }
-    
-    var minWidth: CGFloat {
-        // View width - padding leading and trailing
-        let maxWidth = viewSize.width
-            - configuration.padding.leading
-            - configuration.padding.trailing
-        // Make sure it fits in the content
-        let min = min(maxWidth, contentSize.width)
-        return max(min, 0)
-    }
-    
-    var maxWidth: CGFloat {
-        // View width - padding leading and trailing
-        let maxWidth = viewSize.width
-            - configuration.padding.leading
-            - configuration.padding.trailing
-            - safeAreaInsets.leading
-            - safeAreaInsets.trailing
-        // Make sure it fits in the content
-        let min = min(maxWidth, contentSize.width)
-        
-        if dynamicTypeSize.isAccessibilitySize {
-            // Smallest AlertView should be 329
-            return max(min, configuration.alert.accessibilityMinWidth)
-        } else {
-            // Smallest AlertView should be 270
-            return max(min, configuration.alert.minWidth)
-        }
-    }
-    
-    var alertPadding: EdgeInsets {
-        if dynamicTypeSize.isAccessibilitySize {
-            configuration.alert.accessibilityPadding
-        } else {
-            configuration.alert.padding
-        }
-    }
-    
-    var alert: some View {
+
+    func makeAlert() -> some View {
         VStack(spacing: 0) {
             GeometryReader { proxy in
                 ScrollView(.vertical) {
-                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing) {
-                        title?
-                            .font(configuration.alert.titleFont)
-                            .multilineTextAlignment(configuration.alert.textAlignment)
-                        
+                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing(state)) {
+                        if let title {
+                            title
+                                .font(configuration.alert.titleFont)
+                                .foregroundStyle(configuration.alert.titleColor)
+                                .multilineTextAlignment(configuration.alert.textAlignment)
+                        }
                         content
                             .font(configuration.alert.contentFont)
+                            .foregroundStyle(configuration.alert.contentColor)
                             .multilineTextAlignment(configuration.alert.textAlignment)
                             .frame(maxWidth: .infinity, alignment: configuration.alert.frameAlignment)
                     }
                     .foregroundColor(.primary)
-                    .padding(alertPadding)
+                    .padding(configuration.alert.padding(state))
                     .frame(maxWidth: .infinity)
                     .captureSize($contentSize)
                     // Force `Environment.isEnabled` to `true` because outer ScrollView is most likely disabled
@@ -172,35 +132,9 @@ import SwiftUI
                 .scrollViewDisabled(fitInScreen)
             }
             .frame(height: height)
-            
-            Group {
-                #if swift(>=6.0)
-                if #available(iOS 18.0, *) {
-                    VStack(spacing: 0) {
-                        ForEach(subviews: actions) { child in
-                            if !configuration.button.hideDivider {
-                                Divider()
-                            }
-                            // iOS 26 beta compatibility wrapper
-                            // Fixes documented SwiftUI button action bug in modal presentations
-                            iOS26CompatibleButtonWrapper(isPresented: $isPresented) {
-                                child
-                            }
-                        }
-                    }
-                } else {
-                    _VariadicView.Tree(ActionLayout()) {
-                        actions
-                    }
-                }
-                #else
-                _VariadicView.Tree(ActionLayout()) {
-                    actions
-                }
-                #endif
-            }
-            .buttonStyle(.alert)
-            .captureSize($actionsSize)
+
+            makeActions()
+                .captureSize($actionsSize)
         }
         .onAlertDismiss {
             isPresented = false
@@ -216,13 +150,84 @@ import SwiftUI
             redrawAlert()
         }
     }
-    
+
+    func makeActions() -> some View {
+        VStack(spacing: 0) {
+            switch configuration.alert.dividerVisibility {
+            case .automatic:
+                if !fitInScreen {
+                    Divider()
+                }
+            case .hidden:
+                EmptyView()
+            case .visible:
+                Divider()
+            }
+
+            Group {
+                if actions.count <= 2, #available(iOS 16.0, visionOS 1.0, *) {
+                    ViewThatFits(in: .horizontal) {
+                        ActionHStack(actions: actions.reversed())
+                        ActionVStack(actions: actions)
+                    }
+                } else {
+                    ActionVStack(actions: actions)
+                }
+            }
+            .padding(configuration.alert.actionPadding)
+        }
+        .buttonStyle(.alert)
+    }
+
+    var state: CustomAlertState {
+        CustomAlertState(dynamicTypeSize: dynamicTypeSize, isScrolling: !fitInScreen)
+    }
+
+    // MARK: Sizes
+
+    var height: CGFloat {
+        // View height - padding top and bottom - actions height - extra padding
+        let maxHeight = viewSize.height
+            - configuration.padding.top
+            - configuration.padding.bottom
+            - safeAreaInsets.top
+            - safeAreaInsets.bottom
+            - actionsSize.height
+            - 20
+        let min = min(maxHeight, contentSize.height)
+        return max(min, 0)
+    }
+
+    var minWidth: CGFloat {
+        // View width - padding leading and trailing
+        let maxWidth = viewSize.width
+            - configuration.padding.leading
+            - configuration.padding.trailing
+        // Make sure it fits in the content
+        let min = min(maxWidth, contentSize.width)
+        return max(min, 0)
+    }
+
+    var maxWidth: CGFloat {
+        // View width - padding leading and trailing
+        let maxWidth = viewSize.width
+            - configuration.padding.leading
+            - configuration.padding.trailing
+            - safeAreaInsets.leading
+            - safeAreaInsets.trailing
+        // Make sure it fits in the content
+        let min = min(maxWidth, contentSize.width)
+        return max(min, configuration.alert.minWidth(state))
+    }
+
+    // MARK: - Helper
+
     func calculateAlertId() {
         var hasher = Hasher()
         hasher.combine(dynamicTypeSize)
         alertId = hasher.finalize()
     }
-    
+
     func redrawAlert() {
         // Reset calculated sizes
         contentSize = .zero
@@ -232,121 +237,34 @@ import SwiftUI
     }
 }
 
-@available(iOS, introduced: 14.0, deprecated: 18.0, message: "Use `ForEach(subviewOf:content:)` instead")
-@MainActor struct ActionLayout: _VariadicView_ViewRoot {
-    @Environment(\.customAlertConfiguration) private var configuration
-    
-    #if swift(>=6.0)
-    func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: 0) {
-            ForEach(children) { child in
-                if !configuration.button.hideDivider {
-                    Divider()
-                }
-                child
-            }
+#if DEBUG
+#Preview("Default") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Preview")
+    } content: {
+        Text("Content")
+    } actions: {
+        Button {
+        } label: {
+            Text("OK")
         }
-    }
-    #else
-    nonisolated func body(children: _VariadicView.Children) -> some View {
-        VStack(spacing: 0) {
-            ForEach(children) { child in
-                if !hideDivider {
-                    Divider()
-                }
-                child
-            }
-        }
-    }
-    
-    nonisolated var hideDivider: Bool {
-        MainActor.runSync {
-            configuration.button.hideDivider
-        }
-    }
-    #endif
-}
-
-private extension VerticalAlignment {
-    var hasTopSpacer: Bool {
-        switch self {
-        case .top, .firstTextBaseline:
-            return false
-        default:
-            return true
-        }
-    }
-    
-    var hasBottomSpacer: Bool {
-        switch self {
-        case .bottom, .lastTextBaseline:
-            return false
-        default:
-            return true
+        Button {
+        } label: {
+            Text("Cancel")
         }
     }
 }
 
-private extension GeometryProxy {
-    var totalWidth: CGFloat {
-        size.width + safeAreaInsets.leading + safeAreaInsets.trailing
-    }
-    
-    var totalHeight: CGFloat {
-        size.height + safeAreaInsets.top + safeAreaInsets.bottom
+#Preview("Lorem Ipsum") {
+    CustomAlert(isPresented: .constant(true)) {
+        Text("Preview")
+    } content: {
+        Text(String.loremIpsum)
+    } actions: {
+        Button {
+        } label: {
+            Text("OK")
+        }
     }
 }
-
-struct CustomAlert_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomAlert(isPresented: .constant(true)) {
-            Text("Preview")
-        } content: {
-            Text("Content")
-        } actions: {
-            Button {
-            } label: {
-                Text("OK")
-            }
-        }
-        .previewDisplayName("Default")
-        
-        CustomAlert(isPresented: .constant(true)) {
-            Text("Preview")
-        } content: {
-            Text("Content")
-        } actions: {
-            MultiButton {
-                Button {
-                } label: {
-                    Text("Cancel")
-                }
-                Button {
-                } label: {
-                    Text("OK")
-                }
-            }
-        }
-        .environment(\.customAlertConfiguration, .create { configuration in
-            configuration.background = .blurEffect(.dark)
-            configuration.padding = EdgeInsets()
-            configuration.alert = .create { alert in
-                alert.background = .color(.white)
-                alert.cornerRadius = 4
-                alert.padding = EdgeInsets(top: 20, leading: 20, bottom: 15, trailing: 20)
-                alert.minWidth = 300
-                alert.titleFont = .headline
-                alert.contentFont = .subheadline
-                alert.alignment = .leading
-                alert.spacing = 10
-            }
-            configuration.button = .create { button in
-                button.tintColor = .purple
-                button.padding = EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                button.font = .callout.weight(.semibold)
-                button.hideDivider = true
-            }
-        })
-        .previewDisplayName("Custom")
-    }
-}
+#endif

@@ -78,13 +78,13 @@ public struct CustomAlertRow<Content>: View where Content: View {
                     .padding()
             } actions: {
                 ActionHStack {
-                    Button(role: .cancel) {
+                    CustomAlertButton(role: .cancel) {
                         isPresented = false
                         print("Cancel")
                     } label: {
                         Text("Cancel")
                     }
-                    Button {
+                    CustomAlertButton {
                         isPresented = false
                         print("OK")
                     } label: {

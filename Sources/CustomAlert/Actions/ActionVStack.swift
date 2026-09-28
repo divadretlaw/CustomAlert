@@ -56,12 +56,12 @@ import SwiftUI
         Text("Hello World")
     } actions: {
         ActionVStack {
-            Button {
+            CustomAlertButton {
                 print("OK")
             } label: {
                 Text("OK")
             }
-            Button(role: .cancel) {
+            CustomAlertButton(role: .cancel) {
                 print("Cancel")
             } label: {
                 Text("Cancel")

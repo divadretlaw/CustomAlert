@@ -23,12 +23,12 @@ struct MultiButtonAlerts: View {
                 Text("Simple MultiButton")
             } actions: {
                 ActionHStack {
-                    Button {
+                    CustomAlertButton {
                         print("MultiButton.Simple - OK")
                     } label: {
                         Text("OK")
                     }
-                    Button(role: .cancel) {
+                    CustomAlertButton(role: .cancel) {
                         print("MultiButton.Simple - Cancel")
                     } label: {
                         Text("Cancel")
@@ -45,20 +45,20 @@ struct MultiButtonAlerts: View {
                 Text("Complex MultiButton")
             } actions: {
                 ActionHStack {
-                    Button {
+                    CustomAlertButton {
                         print("MultiButton.Complex - A")
                     } label: {
                         Text("A")
                     }
 
-                    Button {
+                    CustomAlertButton {
                         print("MultiButton.Complex - B")
                     } label: {
                         Text("B")
                     }
                     .disabled(false)
 
-                    Button {
+                    CustomAlertButton {
                         print("MultiButton.Complex - C")
                     } label: {
                         Text("C")
@@ -66,7 +66,7 @@ struct MultiButtonAlerts: View {
                 }
                 .disabled(true)
 
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                     print("MultiButton.Complex - Cancel")
                 } label: {
                     Text("Cancel")

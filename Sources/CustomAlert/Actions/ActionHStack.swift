@@ -61,12 +61,12 @@ public typealias MultiButton = ActionHStack
         Text("Hello World")
     } actions: {
         ActionHStack {
-            Button(role: .cancel) {
+            CustomAlertButton(role: .cancel) {
                 print("Cancel")
             } label: {
                 Text("Cancel")
             }
-            Button {
+            CustomAlertButton {
                 print("OK")
             } label: {
                 Text("OK")
@@ -82,12 +82,12 @@ public typealias MultiButton = ActionHStack
         Text("Hello World")
     } actions: {
         [
-            Button {
+            CustomAlertButton {
                 print("OK")
             } label: {
                 Text("OK")
             },
-            Button(role: .cancel) {
+            CustomAlertButton(role: .cancel) {
                 print("Cancel")
             } label: {
                 Text("Cancel")

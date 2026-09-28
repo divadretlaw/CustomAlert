@@ -31,13 +31,13 @@ The API is very similar to the SwiftUI Alerts
         .frame(maxHeight: 100)
         .foregroundColor(.blue)
 } actions: {
-    Button {
+    CustomAlertButton {
         // some Action
     } label: {
         Label("Swift", systemImage: "swift")
     }
     
-    Button(role: .cancel) {
+    CustomAlertButton(role: .cancel) {
         // some Action
     } label: {
         Text("Cancel")
@@ -52,13 +52,13 @@ You can create Side by Side Buttons using `ActionHStack`
     Text("Choose left or right")
 } actions: {
     ActionHStack {
-        Button {
+        CustomAlertButton {
             // some Action
         } label: {
             Text("Left")
         }
         
-        Button {
+        CustomAlertButton {
             // some Action
         } label: {
             Text("Right")

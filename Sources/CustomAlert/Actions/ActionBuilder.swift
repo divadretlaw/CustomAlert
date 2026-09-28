@@ -13,11 +13,11 @@ import SwiftUI
 @MainActor
 @resultBuilder
 public enum ActionBuilder {
-    public static func buildExpression(_ expression: Button) -> [CustomAlertAction] {
+    public static func buildExpression(_ expression: CustomAlertButton) -> [CustomAlertAction] {
         [.view(expression)]
     }
 
-    public static func buildExpression(_ expression: [Button]) -> [CustomAlertAction] {
+    public static func buildExpression(_ expression: [CustomAlertButton]) -> [CustomAlertAction] {
         [.viewThatFits(expression)]
     }
 

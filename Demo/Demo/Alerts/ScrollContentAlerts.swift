@@ -53,7 +53,7 @@ struct ScrollContentAlerts: View {
                     """
                 )
             } actions: {
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                     print("Simple.Custom - Cancel")
                 } label: {
                     Text("Cancel")

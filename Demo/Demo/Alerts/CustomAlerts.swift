@@ -26,12 +26,12 @@ struct CustomAlerts: View {
                 CustomContent()
             } actions: {
                 ActionHStack {
-                    Button {
+                    CustomAlertButton {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
                         Text("Cancel")
                     }
-                    Button(role: .destructive) {
+                    CustomAlertButton(role: .destructive) {
                         print("CustomStyling.MyConfig - Delete")
                     } label: {
                         Text("Delete")
@@ -63,21 +63,21 @@ struct CustomAlerts: View {
                 .animation(.default, value: next)
             } actions: {
                 ActionHStack {
-                    Button(role: .cancel) {
+                    CustomAlertButton(role: .cancel) {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
                         Text("Cancel")
                     }
                     switch next {
                     case 0, 1:
-                        Button {
+                        CustomAlertButton {
                             next += 1
                         } label: {
                             Text("Next")
                         }
                         .dismissDisabled(true)
                     default:
-                        Button(role: .destructive) {
+                        CustomAlertButton(role: .destructive) {
                             print("CustomStyling.MyConfig - Done")
                         } label: {
                             Text("Done")
@@ -95,12 +95,12 @@ struct CustomAlerts: View {
                 Text("Classic Styling")
             } actions: {
                 ActionHStack {
-                    Button(role: .cancel) {
+                    CustomAlertButton(role: .cancel) {
                         print("ClassicAlert - Cancel")
                     } label: {
                         Text("Cancel")
                     }
-                    Button {
+                    CustomAlertButton {
                         print("ClassicAlert - OK")
                     } label: {
                         Text("OK")

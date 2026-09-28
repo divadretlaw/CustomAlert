@@ -57,11 +57,11 @@ struct AlertPreview: View {
             Text(content)
         } actions: {
             ActionHStack {
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                 } label: {
                     Text("Cancel")
                 }
-                Button {
+                CustomAlertButton {
                 } label: {
                     Text("OK")
                 }

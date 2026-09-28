@@ -42,19 +42,23 @@ The API is very similar to the SwiftUI Alerts
         .frame(maxHeight: 100)
         .foregroundColor(.blue)
 } actions: {
-    Button {
+    CustomAlertButton {
         // some Action
     } label: {
         Label("Swift", systemImage: "swift")
     }
     
-    Button(role: .cancel) {
+    CustomAlertButton(role: .cancel) {
         // some Action
     } label: {
         Text("Cancel")
     }
 }
 ```
+
+Alert actions are built with `CustomAlertButton`, which dismisses the alert when triggered. A plain `Button` in a file that imports `CustomAlert` is always `SwiftUI.Button`, so it keeps SwiftUI's behavior and string localization.
+
+> **Migrating:** earlier versions exposed the alert action as `Button` / `Action`, which shadowed `SwiftUI.Button` in every file importing `CustomAlert`. Rename those usages inside `actions:` to `CustomAlertButton`.
 
 You can create Side by Side Buttons using `ActionHStack`
 
@@ -63,13 +67,13 @@ You can create Side by Side Buttons using `ActionHStack`
     Text("Choose left or right")
 } actions: {
     ActionHStack {
-        Button {
+        CustomAlertButton {
             // some Action
         } label: {
             Text("Left")
         }
 
-        Button {
+        CustomAlertButton {
             // some Action
         } label: {
             Text("Right")

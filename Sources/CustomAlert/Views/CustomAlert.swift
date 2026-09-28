@@ -244,11 +244,11 @@ import SwiftUI
     } content: {
         Text("Content")
     } actions: {
-        Button {
+        CustomAlertButton {
         } label: {
             Text("OK")
         }
-        Button {
+        CustomAlertButton {
         } label: {
             Text("Cancel")
         }
@@ -261,7 +261,7 @@ import SwiftUI
     } content: {
         Text(String.loremIpsum)
     } actions: {
-        Button {
+        CustomAlertButton {
         } label: {
             Text("OK")
         }

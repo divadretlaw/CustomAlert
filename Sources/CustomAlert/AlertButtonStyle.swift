@@ -131,11 +131,11 @@ public extension ButtonStyle where Self == AlertButtonStyle {
         Text("Some Message")
     } actions: {
         ActionHStack {
-            Button(role: .cancel) {
+            CustomAlertButton(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
-            Button {
+            CustomAlertButton {
             } label: {
                 Text("OK")
             }
@@ -149,11 +149,11 @@ public extension ButtonStyle where Self == AlertButtonStyle {
     } content: {
         Text("Some Message")
     } actions: {
-        Button(role: .destructive) {
+        CustomAlertButton(role: .destructive) {
         } label: {
             Text("Delete")
         }
-        Button(role: .cancel) {
+        CustomAlertButton(role: .cancel) {
         } label: {
             Text("Cancel")
         }

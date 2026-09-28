@@ -69,7 +69,7 @@ struct OtherAlerts: View {
                     .font(.custom("Noteworthy", size: 20))
                 }
             } actions: {
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                     print("Other.Stacked - Cancel")
                 } label: {
                     Text("Cancel")
@@ -106,14 +106,14 @@ struct OtherAlerts: View {
                 }
             } actions: {
                 ActionHStack {
-                    Button(role: .cancel) {
+                    CustomAlertButton(role: .cancel) {
                         message = ""
                         print("Other.Fancy - Cancel")
                     } label: {
                         Text("Cancel")
                     }
                     
-                    Button {
+                    CustomAlertButton {
                         message = ""
                         print("Other.Fancy - Send")
                     } label: {

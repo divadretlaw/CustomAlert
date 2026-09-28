@@ -43,12 +43,12 @@ struct SimpleAlerts: View {
                 Text("Some Message")
             } actions: {
                 ActionHStack {
-                    Button(role: .cancel) {
+                    CustomAlertButton(role: .cancel) {
                         print("Simple.Custom - Cancel")
                     } label: {
                         Text("Cancel")
                     }
-                    Button {
+                    CustomAlertButton {
                         print("Simple.Custom - OK")
                     } label: {
                         Text("OK")
@@ -61,8 +61,9 @@ struct SimpleAlerts: View {
     }
 }
 
-#Preview {
-    List {
-        SimpleAlerts()
-    }
+/// Compile-time guard: importing `CustomAlert` must not shadow `SwiftUI.Button`,
+/// otherwise plain buttons lose SwiftUI's behavior and string localization.
+@MainActor private func plainButtonIsSwiftUIButton() {
+    let button = Button("OK") {}
+    let _: SwiftUI.Button<Text> = button
 }

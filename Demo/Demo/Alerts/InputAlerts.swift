@@ -24,7 +24,7 @@ struct InputAlerts: View {
             .customAlert("TextField", isPresented: $showTextField) {
                 MyInputAlert(text: $text)
             } actions: {
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                     print("Input.TextField - Cancel")
                 } label: {
                     Text("Cancel")
@@ -46,7 +46,7 @@ struct InputAlerts: View {
                             .fill(Color(uiColor: .systemBackground))
                     }
             } actions: {
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                     print("Input.TextEditor - Cancel")
                 } label: {
                     Text("Cancel")

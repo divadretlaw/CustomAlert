@@ -200,13 +200,13 @@ extension CustomAlertSection where Header == EmptyView {
                 .padding()
         } actions: {
             ActionHStack {
-                Button(role: .cancel) {
+                CustomAlertButton(role: .cancel) {
                     isPresented = false
                     print("Cancel")
                 } label: {
                     Text("Cancel")
                 }
-                Button {
+                CustomAlertButton {
                     isPresented = false
                     print("OK")
                 } label: {

@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 public enum CustomAlertAction: View {
-    case view(Button)
-    case viewThatFits([Button])
+    case view(CustomAlertButton)
+    case viewThatFits([CustomAlertButton])
     case hstack(ActionHStack)
     case vstack(ActionVStack)
 

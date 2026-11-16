@@ -19,7 +19,7 @@ public struct CustomAlertRow<Content>: View where Content: View {
 
     public var body: some View {
         if isPresented {
-            VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
+            SwiftUI.VStack(alignment: configuration.alert.horizontalAlignment, spacing: 0) {
                 content
                 switch configuration.alert.dividerVisibility {
                 case .hidden, .automatic:

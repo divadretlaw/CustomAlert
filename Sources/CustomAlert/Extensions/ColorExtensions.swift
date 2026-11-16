@@ -56,7 +56,7 @@ private extension UIColor {
     ZStack {
         Color(.displayP3, red: 0.23, green: 0.53, blue: 0.97, opacity: 1)
         // 27 56 97
-        VStack(spacing: 0) {
+        SwiftUI.VStack(spacing: 0) {
             Color.clear
             Color.liquidGlassBackgroundColor
         }
@@ -66,7 +66,7 @@ private extension UIColor {
 #Preview("Classic Glass") {
     ZStack {
         Color.blue
-        VStack(spacing: 0) {
+        SwiftUI.VStack(spacing: 0) {
             Color.classicBackgroundColor
             Color.clear
         }

@@ -47,7 +47,7 @@ public enum CustomAlertBackground: Sendable {
 }
 
 #Preview {
-    VStack(spacing: 0) {
+    SwiftUI.VStack(spacing: 0) {
         BackgroundView(background: .color(.red))
         BackgroundView(background: .glass())
         BackgroundView(background: .blurEffect(.regular))

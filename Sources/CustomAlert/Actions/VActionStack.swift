@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/// A view that arranges its actions in a vertical line.
+public typealias VStack = VActionStack
+
 @available(*, deprecated, renamed: "VActionStack")
 public typealias ActionVStack = VActionStack
 

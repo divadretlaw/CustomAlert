@@ -26,7 +26,7 @@ public struct AlertButtonStyle: ButtonStyle {
     }
 
     func makeLabel(configuration: Configuration) -> some View {
-        HStack {
+        SwiftUI.HStack {
             Spacer()
             label(configuration: configuration)
                 .lineLimit(0)

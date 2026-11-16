@@ -67,7 +67,7 @@ import SwiftUI
                     }
                     .accessibilityAddTraits(.isButton)
 
-                VStack(spacing: 0) {
+                SwiftUI.VStack(spacing: 0) {
                     if configuration.alignment.isTop {
                         Spacer()
                     }
@@ -102,10 +102,10 @@ import SwiftUI
     }
 
     func makeAlert() -> some View {
-        VStack(spacing: 0) {
+        SwiftUI.VStack(spacing: 0) {
             GeometryReader { proxy in
                 ScrollView(.vertical) {
-                    VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing(state)) {
+                    SwiftUI.VStack(alignment: configuration.alert.horizontalAlignment, spacing: configuration.alert.spacing(state)) {
                         if let title {
                             title
                                 .font(configuration.alert.titleFont)
@@ -152,7 +152,7 @@ import SwiftUI
     }
 
     func makeActions() -> some View {
-        VStack(spacing: 0) {
+        SwiftUI.VStack(spacing: 0) {
             switch configuration.alert.dividerVisibility {
             case .automatic:
                 if !fitInScreen {

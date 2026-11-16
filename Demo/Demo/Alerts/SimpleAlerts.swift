@@ -42,7 +42,7 @@ struct SimpleAlerts: View {
             .customAlert("Custom Alert", isPresented: $showCustom) {
                 Text("Some Message")
             } actions: {
-                HActionStack {
+                HStack {
                     Button(role: .cancel) {
                         print("Simple.Custom - Cancel")
                     } label: {

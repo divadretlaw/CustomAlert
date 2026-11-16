@@ -16,7 +16,7 @@ struct BlurView: View {
 }
 
 #Preview {
-    VStack(spacing: 8) {
+    SwiftUI.VStack(spacing: 8) {
         BlurView(style: .regular)
         BlurView(style: .bar)
         BlurView(style: .thin)

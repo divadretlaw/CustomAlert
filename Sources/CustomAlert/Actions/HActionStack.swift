@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/// A view that arranges its actions in a horizontal line.
+public typealias HStack = HActionStack
+
 @available(*, deprecated, renamed: "HActionStack")
 public typealias MultiButton = HActionStack
 

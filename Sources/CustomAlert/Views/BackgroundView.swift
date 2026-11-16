@@ -54,7 +54,7 @@ struct BackgroundView: View {
 }
 
 #Preview {
-    VStack {
+    SwiftUI.VStack {
         BackgroundView(background: .blurEffect(.regular))
         BackgroundView(background: .color(.blue))
         BackgroundView(background: .colorBlurEffect(.blue, .regular))

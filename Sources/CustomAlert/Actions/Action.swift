@@ -9,6 +9,7 @@ import SwiftUI
 
 /// A control that initiates a custom alert action.
 public typealias Button = Action
+
 /// A control that initiates a custom alert action.
 @MainActor public struct Action: View {
     @Environment(\.alertDismiss) private var alertDismiss

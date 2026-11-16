@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import CustomAlert
 
-/// Compile-time guards: importing `CustomAlert` must not shadow `SwiftUI` types.
+/// Compile-time guards: importing `CustomAlert` must not shadow `SwiftUI` type inits.
 struct CompileTests {
     @MainActor private func button() {
         let button = Button("OK") {}

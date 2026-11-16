@@ -25,7 +25,7 @@ struct CustomAlerts: View {
             .customAlert("Preview", isPresented: $showAlert) {
                 CustomContent()
             } actions: {
-                HActionStack {
+                HStack {
                     Button {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
@@ -62,7 +62,7 @@ struct CustomAlerts: View {
                 }
                 .animation(.default, value: next)
             } actions: {
-                HActionStack {
+                HStack {
                     Button(role: .cancel) {
                         print("CustomStyling.MyConfig - Cancel")
                     } label: {
@@ -94,7 +94,7 @@ struct CustomAlerts: View {
             .customAlert("Classic", isPresented: $showClassicAlert) {
                 Text("Classic Styling")
             } actions: {
-                HActionStack {
+                HStack {
                     Button(role: .cancel) {
                         print("ClassicAlert - Cancel")
                     } label: {
